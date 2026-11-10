@@ -138,6 +138,33 @@ select.tam{flex:1;min-width:0;padding:8px;border:1px solid var(--line);border-ra
 .corl{display:grid;gap:4px;font-size:12px;color:var(--muted);margin:6px 0 2px}
 .corl select{padding:8px 10px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink);font-size:14px;width:100%}
 .info{cursor:pointer}
+.admbar{background:#141312;color:#f4f1ec;border-bottom:1px solid #2a2826}
+.admwrap{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding-block:10px}
+.admbar strong{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--gold)}
+.admbtn{display:inline-flex;align-items:center;background:var(--accent);color:#fff;border:1px solid var(--accent);border-radius:8px;padding:8px 12px;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;font-family:inherit}
+.admbtn.ghost{background:transparent;color:#f4f1ec;border-color:#3a3835}
+.admbar input{width:76px;padding:7px 8px;border-radius:8px;border:1px solid #3a3835;background:#0d0c0b;color:#f4f1ec;font:inherit}
+.admlab{display:flex;gap:6px;align-items:center;font-size:13px;color:#c9c3ba}
+.admsep{flex:1}
+.tagpromo{display:inline-block;align-self:flex-start;background:var(--accent);color:#fff;border-radius:999px;padding:2px 9px;font-size:12px;font-weight:700;margin-top:6px}
+.tagoc{display:inline-block;align-self:flex-start;background:#3a3835;color:#f4f1ec;border-radius:999px;padding:2px 9px;font-size:11px;margin-top:6px}
+.btn-ed{background:none;border:1px dashed var(--accent);color:var(--accent);border-radius:8px;padding:7px;cursor:pointer;font-weight:700;font-size:13px;margin-top:8px;font-family:inherit}
+.caixa{background:var(--surface);color:var(--ink);border-radius:14px;padding:26px;max-width:460px;width:100%;position:relative;max-height:90vh;overflow:auto}
+.caixa.largo{max-width:680px}
+.caixa-t{margin:0 0 16px;font-family:var(--display);font-weight:500;letter-spacing:.04em;font-size:22px}
+.campos{display:grid;gap:12px}
+.campos label{display:grid;gap:4px;font-size:13px;color:var(--muted)}
+.campos input,.campos select,.campos textarea{padding:9px 10px;border:1px solid var(--line);border-radius:8px;font:inherit;color:var(--ink);background:#fff;width:100%}
+.g2e{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.erro{color:#a12a2a;font-size:13px;margin:0;min-height:16px}
+.row-ed{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.muted{color:var(--muted);font-size:13px}
+.danger{color:#a12a2a;background:none;border:0;cursor:pointer;font-weight:700;font-family:inherit}
+.fotos-ed{display:flex;gap:8px;flex-wrap:wrap}
+.fotos-ed .f{position:relative;width:80px;height:80px}
+.fotos-ed img{width:100%;height:100%;object-fit:cover;border-radius:8px}
+.fotos-ed button{position:absolute;top:3px;right:3px;background:rgba(0,0,0,.7);color:#fff;border:0;border-radius:999px;width:22px;height:22px;cursor:pointer}
+@media (max-width:720px){.g2e{grid-template-columns:1fr}.admsep{display:none}}
 @media (max-width:820px){
   .layout .wrap{grid-template-columns:minmax(0,1fr);gap:0;padding-block:12px 40px}
   .hero .wrap{grid-template-columns:minmax(0,1fr);gap:18px;padding-block:24px 0}
@@ -164,8 +191,20 @@ select.tam{flex:1;min-width:0;padding:8px;border:1px solid var(--line);border-ra
 <header class="top"><div class="wrap">
   <a class="brand" href="#"><span class="mark" aria-hidden="true"></span><span><b>RM STORE</b><small>Calçados</small></span></a>
   <span class="spacer"></span>
+  <button class="admbtn ghost" id="btnAdm" type="button">Admin</button>
   <button class="sacola" id="abrir" type="button">Sacola <span id="qtd">0</span></button>
 </div></header>
+
+<div class="admbar" id="admbar" hidden role="region" aria-label="Painel do administrador"><div class="wrap admwrap">
+  <strong>Modo administrador</strong>
+  <button type="button" class="admbtn" id="novoProd">+ Novo produto</button>
+  <span class="admsep"></span>
+  <label class="admlab">Promoção <input type="number" id="promoPct" min="1" max="90" inputmode="numeric" placeholder="%" aria-label="Percentual de desconto"> % em todos</label>
+  <button type="button" class="admbtn" id="aplicarPromo">Aplicar promoção</button>
+  <button type="button" class="admbtn ghost" id="removerPromo">Remover promoções</button>
+  <a class="admbtn ghost" href="painel.html">Textos do site</a>
+  <button type="button" class="admbtn ghost" id="sairAdm">Sair</button>
+</div></div>
 
 <section class="hero"><div class="wrap">
   <div class="hero-txt">
@@ -222,6 +261,53 @@ select.tam{flex:1;min-width:0;padding:8px;border:1px solid var(--line);border-ra
   <p class="aviso">Pedido enviado pelo WhatsApp (48) 9637-4837. Se o botão não abrir, copie o texto e envie no número.</p>
 </aside>
 <div class="toast" id="toast" role="status"></div>
+
+<div class="modal" id="modalLogin" hidden>
+  <div class="caixa" role="dialog" aria-modal="true" aria-labelledby="tLogin">
+    <button class="mclose" type="button" id="fecharLogin" aria-label="Fechar">×</button>
+    <h2 class="caixa-t" id="tLogin">Entrar no painel</h2>
+    <form id="formAdm" class="campos">
+      <label>E-mail<input type="email" id="admEmail" required autocomplete="username"></label>
+      <label>Senha<input type="password" id="admSenha" required autocomplete="current-password"></label>
+      <button class="btn" type="submit" id="btnEntrarAdm">Entrar</button>
+      <p class="erro" id="admErro" role="alert"></p>
+    </form>
+  </div>
+</div>
+
+<div class="modal" id="modalEd" hidden>
+  <div class="caixa largo" role="dialog" aria-modal="true" aria-labelledby="edTitulo">
+    <button class="mclose" type="button" id="fecharEd" aria-label="Fechar">×</button>
+    <h2 class="caixa-t" id="edTitulo">Novo produto</h2>
+    <form id="formEd" class="campos">
+      <div class="g2e">
+        <label>Marca<input id="edMarca" required></label>
+        <label>Modelo<input id="edModelo" required></label>
+        <label>Nome do produto<input id="edNome" required></label>
+        <label>Cor<input id="edCor" placeholder="ex: preto/branco"></label>
+        <label>Gênero<select id="edGenero"><option value="Masculino">Masculino</option><option value="Feminino">Feminino</option><option value="Kids">Infantil</option><option value="Unissex">Unissex</option></select></label>
+        <label>Numeração (separe por vírgula)<input id="edSizes" placeholder="34,35,36,37"></label>
+        <label>Preço de tabela<input id="edPreco" type="number" step="0.01" min="0"></label>
+        <label>Preço à vista<input id="edAvista" type="number" step="0.01" min="0" required></label>
+        <label>Parcela (6x sem juros)<input id="edParcela" type="number" step="0.01" min="0"></label>
+        <label style="align-content:end"><span><input id="edAtivo" type="checkbox" style="width:auto"> Mostrar na loja</span></label>
+      </div>
+      <label>Descrição<textarea id="edDesc" rows="2"></textarea></label>
+      <div>
+        <b>Fotos</b> <span class="muted">até 4; a foto é reduzida automaticamente</span>
+        <div class="fotos-ed" id="edFotos" style="margin:8px 0"></div>
+        <input type="file" id="edUpload" accept="image/*" multiple>
+      </div>
+      <div class="row-ed">
+        <button class="btn" type="submit">Salvar produto</button>
+        <button class="ghost" type="button" id="cancelarEd">Cancelar</button>
+        <span style="flex:1"></span>
+        <button class="danger" type="button" id="edExcluir" hidden>Excluir produto</button>
+      </div>
+      <p class="erro" id="edMsg" role="status"></p>
+    </form>
+  </div>
+</div>
 
 <div class="modal" id="modal" hidden>
   <div class="mbox" role="dialog" aria-modal="true" aria-label="Detalhe do produto">
@@ -310,7 +396,8 @@ function card(key, vars){
       <span class="tagm">${esc(p.marca)} · ${esc(p.modelo)}</span>
       <h3 class="nome">${esc(titulo(p))}</h3>
       ${cores}
-      <div class="preco">${BRL(p.avista)}</div>
+      ${ADMIN?`<button class="btn-ed" type="button" data-edit="${esc(p.id)}">Editar produto</button>`:''}
+      ${p.promo?`<span class="tagpromo">−${p.promo}% em todos</span>`:''}${ADMIN && !p.ativo?'<span class="tagoc">Oculto na loja</span>':''}<div class="preco">${BRL(p.avista)}</div>
       ${p.preco>p.avista?`<span class="cor"><s>${BRL(p.preco)}</s></span>`:''}
       <span class="parc">ou 6x de ${BRL(p.parcela)} sem juros</span>
       <div class="add-row">${sel}<button class="btn" type="button" data-add="${esc(p.id)}">Adicionar à sacola</button></div>
@@ -386,6 +473,7 @@ function toast(t){ const el=$('#toast'); el.textContent=t; el.classList.add('on'
 
 document.addEventListener('click', e=>{
   const t = e.target;
+  const ed = t.closest('[data-edit]'); if(ed) return abrirEditor(ed.dataset.edit);
   const op = t.closest('[data-open]'); if(op && (op.classList.contains('th') || !t.closest('button,select,input,label'))) return abrirProduto(op.dataset.open, op.dataset.i);
   const mt = t.closest('#mThumbs [data-mi]'); if(mt){ mi=+mt.dataset.mi; return renderModal(); }
   if(t.closest('#mPrev')) return passo(-1);
@@ -448,24 +536,178 @@ function aplicarConfig(c){
   if(c.hero_texto) $('#heroTexto').textContent = c.hero_texto;
 }
 // Lê produtos e textos do banco; se falhar, segue com os dados embutidos.
+let ADMIN = false, SBC = null, ALL = [], edAtual = null, novoIdEd = null, fotosEd = [];
+
+// Lê produtos e textos do banco; se falhar, segue com os dados embutidos.
+// Modo administrador vê também os produtos ocultos.
 async function carregar(){
   try{
-    const sb = supabase.createClient(SB_URL, SB_KEY);
-    const [p, c] = await Promise.all([
-      sb.from('produtos').select('*').eq('ativo', true).order('id'),
-      sb.from('config').select('*')
-    ]);
+    if(!SBC) SBC = supabase.createClient(SB_URL, SB_KEY);
+    let q = SBC.from('produtos').select('*').order('id');
+    if(!ADMIN) q = q.eq('ativo', true);
+    const [p, c] = await Promise.all([q, SBC.from('config').select('*')]);
     if(!p.error && p.data && p.data.length){
-      P = p.data.map(r=>({id:r.id, marca:r.marca, modelo:r.modelo, genero:r.genero, nome:r.nome, cor:r.cor||'',
-        fotos:r.fotos||[], sizes:r.sizes||[], preco:+r.preco||0, avista:+r.avista||0, parcela:+r.parcela||0, desc:r.descricao||''}));
+      ALL = p.data;
+      P = p.data.map(r=>{
+        const base = +r.avista||0, pct = +r.promo||0;
+        return {id:r.id, marca:r.marca, modelo:r.modelo, genero:r.genero, nome:r.nome, cor:r.cor||'',
+          fotos:r.fotos||[], sizes:r.sizes||[], preco:+r.preco||0,
+          avista: pct ? Math.round(base*(100-pct))/100 : base,
+          parcela:+r.parcela||0, desc:r.descricao||'', promo:pct, ativo:!!r.ativo};
+      });
       recalc();
     }
     if(!c.error && c.data) aplicarConfig(Object.fromEntries(c.data.map(r=>[r.chave, r.valor])));
     refresh(); renderCart();
   }catch(e){}
 }
+function aplicarModoAdmin(){
+  $('#admbar').hidden = !ADMIN;
+  $('#btnAdm').hidden = ADMIN;
+  document.body.classList.toggle('adm', ADMIN);
+}
+async function verSessao(){
+  if(!SBC) SBC = supabase.createClient(SB_URL, SB_KEY);
+  const { data } = await SBC.auth.getSession();
+  ADMIN = !!data.session;
+  aplicarModoAdmin();
+}
+
+// ---------- login
+$('#btnAdm').addEventListener('click', ()=>{ $('#modalLogin').hidden=false; $('#admEmail').focus(); });
+$('#fecharLogin').addEventListener('click', ()=>{ $('#modalLogin').hidden=true; });
+$('#formAdm').addEventListener('submit', async e=>{
+  e.preventDefault();
+  const btn = $('#btnEntrarAdm');
+  btn.disabled = true; btn.textContent = 'Entrando…'; $('#admErro').textContent = '';
+  const { error } = await SBC.auth.signInWithPassword({ email: $('#admEmail').value.trim(), password: $('#admSenha').value });
+  btn.disabled = false; btn.textContent = 'Entrar';
+  if(error){ $('#admErro').textContent = 'E-mail ou senha não conferem. Tente de novo.'; $('#admSenha').value=''; $('#admSenha').focus(); return; }
+  ADMIN = true; $('#modalLogin').hidden = true; $('#admSenha').value = '';
+  aplicarModoAdmin(); carregar();
+});
+$('#sairAdm').addEventListener('click', async ()=>{
+  await SBC.auth.signOut(); ADMIN = false; aplicarModoAdmin(); carregar();
+});
+
+// ---------- promoção para todos os produtos
+async function setPromo(pct){
+  const { error } = await SBC.from('produtos').update({ promo: pct }).neq('id', '');
+  if(error){ toast('Não foi possível atualizar as promoções: ' + error.message); return false; }
+  await carregar(); return true;
+}
+$('#aplicarPromo').addEventListener('click', async ()=>{
+  const pct = Math.round(+$('#promoPct').value);
+  if(!(pct >= 1 && pct <= 90)){ toast('Informe um desconto entre 1% e 90%.'); return; }
+  if(!confirm(`Aplicar ${pct}% de desconto em todos os produtos? Os preços à vista mudam na loja na hora.`)) return;
+  if(await setPromo(pct)) toast(`Promoção de ${pct}% aplicada em todos os produtos.`);
+});
+$('#removerPromo').addEventListener('click', async ()=>{
+  if(!confirm('Remover a promoção de todos os produtos? Os preços voltam ao valor à vista cadastrado.')) return;
+  if(await setPromo(null)) toast('Promoções removidas.');
+});
+
+// ---------- editor de produto
+function fecharEditor(){ $('#modalEd').hidden = true; edAtual = null; }
+function desenharFotosEd(){
+  $('#edFotos').innerHTML = fotosEd.map((u,i)=>`<div class="f"><img src="${esc(u)}" alt=""><button type="button" data-rm="${i}" aria-label="Remover foto">×</button></div>`).join('');
+}
+function abrirEditor(id){
+  const r = id ? ALL.find(x=>x.id===id) : null;
+  edAtual = r || null;
+  novoIdEd = r ? null : 'p' + Date.now().toString(36);
+  fotosEd = r ? [...(r.fotos||[])] : [];
+  $('#edTitulo').textContent = r ? 'Editar produto' : 'Novo produto';
+  $('#edMarca').value = r?.marca || '';
+  $('#edModelo').value = r?.modelo || '';
+  $('#edNome').value = r?.nome || '';
+  $('#edCor').value = r?.cor || '';
+  $('#edGenero').value = r?.genero || 'Unissex';
+  $('#edSizes').value = (r?.sizes || []).join(',');
+  $('#edPreco').value = r?.preco ?? '';
+  $('#edAvista').value = r?.avista ?? '';
+  $('#edParcela').value = r?.parcela ?? '';
+  $('#edDesc').value = r?.descricao || '';
+  $('#edAtivo').checked = r ? !!r.ativo : true;
+  $('#edExcluir').hidden = !r;
+  $('#edMsg').textContent = '';
+  desenharFotosEd();
+  $('#modalEd').hidden = false;
+  $('#edNome').focus();
+}
+$('#novoProd').addEventListener('click', ()=>abrirEditor(null));
+$('#fecharEd').addEventListener('click', fecharEditor);
+$('#cancelarEd').addEventListener('click', fecharEditor);
+$('#edFotos').addEventListener('click', e=>{
+  const b = e.target.closest('[data-rm]'); if(!b) return;
+  fotosEd.splice(+b.dataset.rm, 1); desenharFotosEd();
+});
+function reduzirImg(file){
+  return new Promise((res, rej)=>{
+    const img = new Image();
+    img.onload = ()=>{
+      const k = Math.min(1, 720 / Math.max(img.width, img.height));
+      const c = document.createElement('canvas');
+      c.width = Math.round(img.width*k); c.height = Math.round(img.height*k);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(img.src);
+      c.toBlob(b=> b ? res(b) : rej(new Error('não foi possível reduzir a foto')), 'image/jpeg', 0.78);
+    };
+    img.onerror = ()=>rej(new Error('arquivo de imagem inválido'));
+    img.src = URL.createObjectURL(file);
+  });
+}
+$('#edUpload').addEventListener('change', async e=>{
+  const id = edAtual?.id || novoIdEd;
+  for(const f of [...e.target.files]){
+    if(fotosEd.length >= 4){ $('#edMsg').textContent = 'Máximo de 4 fotos por produto.'; break; }
+    try{
+      $('#edMsg').textContent = `Enviando foto ${fotosEd.length+1}…`;
+      const blob = await reduzirImg(f);
+      const caminho = `${id}/${Date.now()}_${fotosEd.length+1}.jpg`;
+      const { error } = await SBC.storage.from('fotos').upload(caminho, blob, { contentType: 'image/jpeg' });
+      if(error) throw error;
+      fotosEd.push(SBC.storage.from('fotos').getPublicUrl(caminho).data.publicUrl);
+      desenharFotosEd();
+    }catch(err){ $('#edMsg').textContent = 'Não foi possível enviar esta foto: ' + err.message; }
+  }
+  $('#edMsg').textContent = '';
+  e.target.value = '';
+});
+$('#formEd').addEventListener('submit', async e=>{
+  e.preventDefault();
+  const sizes = $('#edSizes').value.split(',').map(s=>Number(s.trim())).filter(n=>n>0);
+  if(sizes.length === 0){ $('#edMsg').textContent = 'Informe pelo menos uma numeração, separada por vírgula. Ex: 34,35,36.'; $('#edSizes').focus(); return; }
+  if(fotosEd.length === 0 && !confirm('Este produto não tem foto. Na loja ele aparece sem imagem. Salvar mesmo assim?')) return;
+  const num = v => v === '' ? null : Number(v);
+  const row = {
+    id: edAtual?.id || novoIdEd,
+    marca: $('#edMarca').value.trim(), modelo: $('#edModelo').value.trim(), nome: $('#edNome').value.trim(),
+    cor: $('#edCor').value.trim(), genero: $('#edGenero').value, sizes,
+    preco: num($('#edPreco').value), avista: num($('#edAvista').value), parcela: num($('#edParcela').value),
+    descricao: $('#edDesc').value.trim(), fotos: fotosEd, ativo: $('#edAtivo').checked
+  };
+  $('#edMsg').textContent = 'Salvando…';
+  const { error } = await SBC.from('produtos').upsert(row);
+  if(error){ $('#edMsg').textContent = 'Não foi possível salvar: ' + error.message + '. Nada foi perdido, tente de novo.'; return; }
+  fecharEditor(); await carregar(); toast(`"${row.nome}" salvo.`);
+});
+$('#edExcluir').addEventListener('click', async ()=>{
+  if(!edAtual) return;
+  if(!confirm(`Excluir "${edAtual.nome}"? Não dá para desfazer. Se quiser só esconder da loja, desmarque "Mostrar na loja".`)) return;
+  const { error } = await SBC.from('produtos').delete().eq('id', edAtual.id);
+  if(error){ $('#edMsg').textContent = 'Não foi possível excluir: ' + error.message; return; }
+  const nome = edAtual.nome;
+  fecharEditor(); await carregar(); toast(`"${nome}" excluído.`);
+});
+document.addEventListener('keydown', e=>{
+  if(e.key !== 'Escape') return;
+  if(!$('#modalEd').hidden) fecharEditor();
+  if(!$('#modalLogin').hidden) $('#modalLogin').hidden = true;
+});
+
 renderFiltros(); renderGrid(); renderCart();
-carregar();
+verSessao().then(carregar);
 </script>
 </body>
 </html>
