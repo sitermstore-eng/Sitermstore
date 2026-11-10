@@ -53,6 +53,7 @@ header.top .wrap{display:flex;align-items:center;gap:10px;padding-block:12px}
 .abtn.vazio{background:transparent;color:#f4f1ec;border-color:#3f3b37}
 .admbar label{display:flex;gap:6px;align-items:center;font-size:13px;color:#c9c3ba}
 .admbar input{width:74px;padding:7px 8px;border-radius:8px;border:1px solid #3f3b37;background:#0d0c0b;color:#f4f1ec}
+.aviso-banco{margin:0 0 12px;padding:10px 13px;border-radius:8px;background:#3a2a16;color:#f3e2c4;border:1px solid #6b5126;font-size:13px}
 
 /* ---------- vitrine de abertura ---------- */
 .hero{background:var(--band);color:var(--band-ink)}
@@ -251,6 +252,7 @@ header.top .wrap{display:flex;align-items:center;gap:10px;padding-block:12px}
     <button type="button" class="abtn vazio" id="btnTextos">Textos do site</button>
     <button type="button" class="abtn vazio" id="sairAdm">Sair</button>
   </div>
+  <div class="wrap"><p class="aviso-banco" id="avisoBanco" role="status" hidden></p></div>
 </div>
 
 <section class="hero"><div class="wrap">
@@ -373,7 +375,7 @@ header.top .wrap{display:flex;align-items:center;gap:10px;padding-block:12px}
         <label>Preço à vista<input id="edAvista" type="number" step="0.01" min="0" required inputmode="decimal"></label>
       </div>
       <label>Descrição<textarea id="edDesc" rows="2"></textarea></label>
-      <label class="linha" style="gap:8px"><input type="checkbox" id="edAtivo" style="width:auto"> <span>Mostrar na loja</span></label>
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" id="edAtivo" style="width:auto;flex:0 0 auto"> <span style="color:var(--ink)">Mostrar na loja</span></label>
       <div>
         <b>Fotos</b> <span class="muted">a foto é reduzida automaticamente antes de subir</span>
         <div class="fotos-ed" id="edFotos" style="margin:9px 0"></div>
@@ -866,6 +868,18 @@ document.addEventListener('keydown', e => {
 
 // ---------------------------------------------------------------- banco de dados
 let ADMIN = false, SO_SEM_FOTO = false, SBC = null, TODOS = [], edAtual = null, edNovoId = null, edFotos = [];
+const CATALOGO_ARQUIVO = P.map(p => ({ ...p }));
+
+function doBanco(x){
+  const base = +x.avista || 0, pct = +x.promo || 0;
+  return {
+    id: x.id, marca: x.marca, colecao: x.colecao || `${x.marca} ${x.modelo}`.trim(),
+    modelo: x.modelo, nome: x.nome, cor: x.cor || '', genero: x.genero || 'Unissex',
+    fotos: x.fotos || [], sizes: x.sizes || [], preco: +x.preco || 0,
+    avista: pct ? Math.round(base * (100 - pct)) / 100 : base,
+    parcela: +x.parcela || 0, desc: x.descricao || '', promo: pct, ativo: x.ativo !== false,
+  };
+}
 
 function cliente(){
   if (!SBC && window.supabase) SBC = window.supabase.createClient(SB_URL, SB_KEY);
@@ -880,22 +894,26 @@ async function carregar(){
     let q = sb.from('produtos').select('*').order('id');
     if (!ADMIN) q = q.eq('ativo', true);
     const [r, c] = await Promise.all([q, sb.from('config').select('*')]);
-    if (!r.error && r.data && r.data.length){
-      TODOS = r.data;
-      P = r.data.map(x => {
-        const base = +x.avista || 0, pct = +x.promo || 0;
-        return {
-          id: x.id, marca: x.marca, colecao: x.colecao || `${x.marca} ${x.modelo}`.trim(),
-          modelo: x.modelo, nome: x.nome, cor: x.cor || '', genero: x.genero || 'Unissex',
-          fotos: x.fotos || [], sizes: x.sizes || [], preco: +x.preco || 0,
-          avista: pct ? Math.round(base * (100 - pct)) / 100 : base,
-          parcela: +x.parcela || 0, desc: x.descricao || '', promo: pct, ativo: x.ativo !== false,
-        };
-      });
-      recalc();
+    const cfg = (!c.error && c.data) ? Object.fromEntries(c.data.map(x => [x.chave, x.valor])) : {};
+    const importado = cfg.catalogo_importado === 'sim';
+    TODOS = (!r.error && r.data) ? r.data : [];
+
+    if (importado){
+      // Catálogo já está no banco: o banco manda, inclusive para excluir produto.
+      P = TODOS.map(doBanco);
+    } else if (TODOS.length){
+      // Ainda não importado: o catálogo do arquivo continua de pé e o banco
+      // entra por cima, para que uma edição solta não apague a loja.
+      const porId = new Map(TODOS.map(x => [x.id, doBanco(x)]));
+      P = CATALOGO_ARQUIVO.map(p => porId.get(p.id) || p);
+      porId.forEach((v, k) => { if (!CATALOGO_ARQUIVO.some(p => p.id === k)) P.push(v); });
+    } else {
+      P = CATALOGO_ARQUIVO.map(p => ({ ...p }));
     }
-    if (!c.error && c.data) aplicarConfig(Object.fromEntries(c.data.map(x => [x.chave, x.valor])));
+    recalc();
+    aplicarConfig(cfg);
     refresh(); renderSacola();
+    avisarBanco(r.error ? -1 : TODOS.length, importado);
   } catch {}
 }
 
@@ -904,9 +922,23 @@ async function carregar(){
 function querAdmin(){
   try { return location.hash.toLowerCase() === '#admin'; } catch { return false; }
 }
+// A vitrine usa o banco quando ele tem produtos; senão usa o catálogo do arquivo.
+// Enquanto o banco estiver vazio, nada que a loja salvar aparece para o cliente.
+function avisarBanco(nBanco, importado){
+  const alvo = $('#avisoBanco');
+  if (!ADMIN || importado){ alvo.hidden = true; return; }
+  alvo.hidden = false;
+  alvo.textContent = nBanco < 0
+    ? 'Não consegui falar com o banco de dados. A loja está mostrando o catálogo do arquivo e nada que você salvar vai ser guardado.'
+    : nBanco === 0
+      ? `O catálogo ainda não foi importado. A loja está mostrando as ${CATALOGO_ARQUIVO.length} cores do arquivo. Rode o importar_catalogo.sql no Supabase: até lá, o que você salvar vale só para quem está com o painel aberto.`
+      : `O catálogo ainda não foi importado por completo: ${nBanco} de ${CATALOGO_ARQUIVO.length} cores estão no banco. Rode o importar_catalogo.sql no Supabase.`;
+}
+
 function modoAdmin(){
   $('#admbar').hidden = !ADMIN;
   $('#btnAdm').hidden = ADMIN || !querAdmin();
+  if (!ADMIN) $('#avisoBanco').hidden = true;
   if (!ADMIN){ SO_SEM_FOTO = false; $('#soSemFoto').setAttribute('aria-pressed', 'false'); }
 }
 async function verSessao(){
@@ -994,7 +1026,14 @@ function pintarFotosEd(){
     || '<span class="muted">Nenhuma foto ainda.</span>';
 }
 function abrirEditor(id){
-  const r = id ? TODOS.find(x => x.id === id) : null;
+  let r = id ? TODOS.find(x => x.id === id) : null;
+  // Produto ainda não importado para o banco: abre com os dados do catálogo da página.
+  if (!r && id){
+    const p = P.find(x => x.id === id);
+    if (p) r = { id: p.id, marca: p.marca, modelo: p.modelo, nome: p.nome, cor: p.cor,
+                 genero: p.genero, sizes: p.sizes, preco: p.preco, avista: p.avista,
+                 parcela: p.parcela, descricao: p.desc, fotos: p.fotos, ativo: p.ativo !== false };
+  }
   edAtual = r; edNovoId = r ? null : 'p' + Date.now().toString(36);
   edFotos = r ? [...(r.fotos || [])] : [];
   $('#edTitulo').textContent = r ? 'Editar produto' : 'Novo produto';
