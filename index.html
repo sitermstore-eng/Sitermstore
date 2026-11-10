@@ -171,7 +171,7 @@ select.tam{flex:1;min-width:0;padding:8px;border:1px solid var(--line);border-ra
   <div class="hero-txt">
     <span class="hero-k">Calçados · RM Store</span>
     <h1>RM<br>STORE</h1>
-    <p>Tênis para homem, mulher e kids. Escolha e feche o pedido pelo WhatsApp.</p>
+    <p>Tênis para homem, mulher e infantil. Escolha e feche o pedido pelo WhatsApp.</p>
   </div>
   <div class="hero-img" aria-hidden="true"><img src="fotos/p011_1.jpg" alt=""><img src="fotos/p019_1.jpg" alt=""></div>
   <nav class="hnav" id="hNav" aria-label="Categorias"></nav>
@@ -272,7 +272,7 @@ function renderFiltros(){
   const lista = [...cont.entries()].filter(([m])=>!q || m.toLowerCase().includes(q)).sort((a,b)=>a[0].localeCompare(b[0],'pt'));
   $('#modelos').innerHTML = lista.map(([m,n])=>`<label class="opt"><input type="checkbox" data-m="${esc(m)}" ${S.modelo.has(m)?'checked':''}> ${esc(m)}<span class="n">${n}</span></label>`).join('') || '<p class="cor">Nenhum modelo encontrado.</p>';
   $('#tams').innerHTML = TAMS.map(t=>`<button type="button" class="chip" data-t="${t}" aria-pressed="${String(S.tam==t)}">${t}</button>`).join('');
-  const CATS = [['','Todos'],['Masculino','Homem'],['Feminino','Mulher'],['Kids','Kids']];
+  const CATS = [['','Todos'],['Masculino','Homem'],['Feminino','Mulher'],['Kids','Infantil']];
   $('#hNav').innerHTML = CATS.map(([g,l])=>`<button type="button" data-gq="${g}" aria-pressed="${g ? S.genero.has(g) && S.genero.size===1 : S.genero.size===0}">${l}</button>`).join('');
   const nAtivos = (S.marca?1:0)+S.genero.size+S.modelo.size+(S.tam?1:0)+(S.faixa?1:0);
   $('#fCount').textContent = nAtivos ? `(${nAtivos})` : '';
@@ -293,7 +293,7 @@ function card(key, vars){
   const sel = tams.length
     ? `<select class="tam" id="t-${esc(p.id)}" aria-label="Numeração de ${esc(p.nome)}">${tams.map(t=>`<option ${String(S.tam)===String(t)?'selected':''}>${t}</option>`).join('')}</select>`
     : '<span class="cor">Consulte a numeração</span>';
-  const cores = vars.length>1 ? `<label class="corl">Cor<select class="cor-sel" data-key="${esc(key)}" aria-label="Cor de ${esc(p.nome)}">${vars.map(v=>`<option value="${esc(v.id)}" ${v.id===id?'selected':''}>${esc(v.cor||v.genero)}</option>`).join('')}</select></label>` : '';
+  const cores = vars.length>1 ? `<label class="corl">Cor<select class="cor-sel" data-key="${esc(key)}" aria-label="Cor de ${esc(p.nome)}">${vars.map((v,i)=>`<option value="${esc(v.id)}" ${v.id===id?'selected':''}>${esc(v.cor||(i?'Padrão '+(i+1):'Padrão'))}</option>`).join('')}</select></label>` : '';
   const fotos = p.fotos||[];
   const main = fotos.length ? `<img src="${esc(fotos[0])}" alt="${esc(titulo(p))}" loading="lazy">` : `<div class="ph">RM<br>${esc(p.marca)}</div>`;
   const thumbs = fotos.length>1 ? `<div class="thumbs">${fotos.map((f,i)=>`<button type="button" class="th" data-open="${esc(p.id)}" data-i="${i}" aria-label="Foto ${i+1}"><img src="${esc(f)}" alt="" loading="lazy"></button>`).join('')}</div>` : '';
