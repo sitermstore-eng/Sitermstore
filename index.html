@@ -362,14 +362,30 @@ header.top .wrap{display:flex;align-items:center;gap:10px;padding-block:12px}
     <h2 class="ctit" id="edTitulo">Novo produto</h2>
     <form id="formEd" class="campos">
       <div class="g2">
-        <label>Marca<input id="edMarca" required></label>
-        <label>Modelo<input id="edModelo" required></label>
+        <label>Marca
+          <select id="edMarca"></select>
+          <input id="edMarcaNova" placeholder="Nome da marca nova" hidden>
+        </label>
+        <label>Modelo
+          <select id="edModelo"></select>
+          <input id="edModeloNovo" placeholder="Nome do modelo novo" hidden>
+        </label>
         <label>Nome do produto<input id="edNome" required></label>
         <label>Cor<input id="edCor" placeholder="ex: preto/branco"></label>
         <label>Gênero<select id="edGenero"><option>Masculino</option><option>Feminino</option><option>Kids</option><option>Unissex</option></select></label>
-        <label>Tamanhos (separe por vírgula)<input id="edSizes" placeholder="34,35,36,37" inputmode="numeric"></label>
-        <label>Preço de tabela<input id="edPreco" type="number" step="0.01" min="0" inputmode="decimal"></label>
-        <label>Preço à vista<input id="edAvista" type="number" step="0.01" min="0" required inputmode="decimal"></label>
+        <label>Preço de tabela<input id="edPreco" type="number" step="0.01" min="0" inputmode="decimal" placeholder="259,90"></label>
+        <label>Preço à vista<input id="edAvista" type="number" step="0.01" min="0" required inputmode="decimal" placeholder="240,00"></label>
+      </div>
+      <p class="muted" id="edParcela" style="margin:-4px 0 0"></p>
+      <div>
+        <b>Tamanhos</b> <span class="muted">toque para marcar e desmarcar</span>
+        <div class="chips" id="edTams" style="margin:9px 0"></div>
+        <div class="linha">
+          <button type="button" class="chip" data-faixa="34-39">Feminino 34 a 39</button>
+          <button type="button" class="chip" data-faixa="38-43">Masculino 38 a 43</button>
+          <button type="button" class="chip" data-faixa="34-43">Unissex 34 a 43</button>
+          <button type="button" class="chip" data-faixa="">Limpar</button>
+        </div>
       </div>
       <label>Descrição<textarea id="edDesc" rows="2"></textarea></label>
       <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" id="edAtivo" style="width:auto;flex:0 0 auto"> <span style="color:var(--ink)">Mostrar na loja</span></label>
@@ -405,7 +421,9 @@ const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
 const BRL = v => Number(v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
-const chaveGrupo = p => `${p.marca}|${p.colecao}`;
+// Agrupa ignorando maiúscula e acento, senão "Speedcat" e "speedcat"
+// viram dois grupos do mesmo tênis.
+const chaveGrupo = p => semAcento(`${p.marca}|${p.colecao}`);
 // Busca sem acento: "bordo" encontra "bordô", "lilas" encontra "lilás".
 const semAcento = s => String(s).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 
@@ -428,11 +446,10 @@ const curto = m => { const b = MARCAS.find(x => m.startsWith(x)); return b ? (m.
 // A loja abre na seleção feminina, que é a maior parte do catálogo.
 const S = { marca:'', genero:new Set(['Feminino']), modelo:new Set(), tam:'', faixa:'', q:'', ord:'rel' };
 
-// Homem e Mulher incluem o que é unissex; Unissex sozinho mostra só o unissex.
+// Cada opção mostra só o seu gênero: em Femininos não entra unissex, senão
+// apareceriam tamanhos até o 43 numa lista que vai só até o 39.
 function generoBate(p){
-  if (!S.genero.size) return true;
-  if (S.genero.has(p.genero)) return true;
-  return p.genero === 'Unissex' && (S.genero.has('Masculino') || S.genero.has('Feminino'));
+  return !S.genero.size || S.genero.has(p.genero);
 }
 
 // pular = filtro a ignorar, para a contagem mostrar o que cada opção acrescenta
@@ -443,7 +460,7 @@ function passa(p, pular){
   }
   if (pular !== 'marca'  && S.marca && p.marca !== S.marca) return false;
   if (pular !== 'genero' && !generoBate(p)) return false;
-  if (pular !== 'modelo' && S.modelo.size && !S.modelo.has(p.colecao)) return false;
+  if (pular !== 'modelo' && S.modelo.size && !S.modelo.has(semAcento(p.colecao))) return false;
   if (pular !== 'tam'    && S.tam && !(p.sizes || []).includes(+S.tam)) return false;
   if (pular !== 'faixa'  && S.faixa){ const [a, b] = FAIXAS[S.faixa]; if (!(p.avista >= a && p.avista < b)) return false; }
   if (SO_SEM_FOTO && (p.fotos || []).length) return false;
@@ -472,14 +489,19 @@ function renderFiltros(){
   }).join('');
 
   const q = semAcento($('#buscaModelo').value.trim());
-  const cont = new Map();
-  P.forEach(p => { if (passa(p, 'modelo')) cont.set(p.colecao, (cont.get(p.colecao) || 0) + 1); });
-  S.modelo.forEach(m => { if (!cont.has(m)) cont.set(m, 0); });
+  const cont = new Map();   // chave sem acento -> { rotulo, n }
+  P.forEach(p => {
+    if (!passa(p, 'modelo')) return;
+    const k = semAcento(p.colecao);
+    const j = cont.get(k) || { rotulo: p.colecao, n: 0 };
+    j.n++; cont.set(k, j);
+  });
+  S.modelo.forEach(k => { if (!cont.has(k)) cont.set(k, { rotulo: k, n: 0 }); });
   const lista = [...cont.entries()]
-    .filter(([m]) => !q || semAcento(m).includes(q))
-    .sort((a, b) => a[0].localeCompare(b[0], 'pt'));
+    .filter(([k]) => !q || k.includes(q))
+    .sort((a, b) => a[1].rotulo.localeCompare(b[1].rotulo, 'pt'));
   $('#fModelo').innerHTML = lista.length
-    ? lista.map(([m, n]) => `<label class="opt" title="${esc(m)}"><input type="checkbox" data-m="${esc(m)}"${S.modelo.has(m) ? ' checked' : ''}><span class="t">${esc(curto(m))}</span><span class="n">${n}</span></label>`).join('')
+    ? lista.map(([k, j]) => `<label class="opt" title="${esc(j.rotulo)}"><input type="checkbox" data-m="${esc(k)}"${S.modelo.has(k) ? ' checked' : ''}><span class="t">${esc(curto(j.rotulo))}</span><span class="n">${j.n}</span></label>`).join('')
     : '<p class="muted">Nenhum modelo com esse nome.</p>';
 
   $('#fTam').innerHTML = TAMS.map(t => `<button type="button" class="chip" data-t="${t}" aria-pressed="${S.tam == t}">${t}</button>`).join('');
@@ -882,6 +904,21 @@ document.addEventListener('keydown', e => {
 
 // ---------------------------------------------------------------- banco de dados
 let ADMIN = false, SO_SEM_FOTO = false, SBC = null, TODOS = [], edAtual = null, edNovoId = null, edFotos = [];
+let edTams = [];
+const NOVO = '__novo__';
+const TAMANHOS_ED = [33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46];
+
+// Marcas e modelos já existentes, para ela escolher em vez de digitar de novo
+// e acabar criando "Speedcat", "speedcat" e "Puma speedcat" como três grupos.
+// Junta as grafias: "speedcat" e "Speedcat" viram uma opção só.
+function unicos(valores){
+  const m = new Map();
+  valores.filter(Boolean).forEach(v => { const k = semAcento(v); if (!m.has(k)) m.set(k, v); });
+  return [...m.values()].sort((a, b) => a.localeCompare(b, 'pt'));
+}
+const marcasConhecidas = () => unicos(P.map(x => x.marca));
+const modelosDe = marca =>
+  unicos(P.filter(x => semAcento(x.marca) === semAcento(marca || '')).map(x => x.modelo));
 const CATALOGO_ARQUIVO = P.map(p => ({ ...p }));
 
 function doBanco(x){
@@ -1039,6 +1076,77 @@ function pintarFotosEd(){
     `<div class="f"><img src="${esc(u)}" alt=""><button type="button" data-tirar="${i}" aria-label="Tirar foto ${i + 1}">×</button></div>`).join('')
     || '<span class="muted">Nenhuma foto ainda.</span>';
 }
+function pintarMarcas(sel){
+  const lista = marcasConhecidas();
+  const achou = lista.find(m => semAcento(m) === semAcento(sel || ''));
+  $('#edMarca').innerHTML =
+    '<option value="">Escolha a marca</option>' +
+    lista.map(m => `<option value="${esc(m)}"${m === achou ? ' selected' : ''}>${esc(m)}</option>`).join('') +
+    `<option value="${NOVO}">+ Nova marca</option>`;
+  const nova = !!sel && !achou;
+  $('#edMarca').value = nova ? NOVO : (achou || '');
+  $('#edMarcaNova').hidden = !nova;
+  $('#edMarcaNova').value = nova ? sel : '';
+}
+function pintarModelos(sel){
+  const marca = marcaEscolhida();
+  const lista = marca ? modelosDe(marca) : [];
+  const achou = lista.find(m => semAcento(m) === semAcento(sel || ''));
+  $('#edModelo').innerHTML =
+    '<option value="">Escolha o modelo</option>' +
+    lista.map(m => `<option value="${esc(m)}"${m === achou ? ' selected' : ''}>${esc(m)}</option>`).join('') +
+    `<option value="${NOVO}">+ Novo modelo</option>`;
+  const novo = !!sel && !achou;
+  $('#edModelo').value = novo ? NOVO : (achou || '');
+  $('#edModeloNovo').hidden = !novo;
+  $('#edModeloNovo').value = novo ? sel : '';
+}
+const marcaEscolhida = () =>
+  ($('#edMarca').value === NOVO ? $('#edMarcaNova').value : $('#edMarca').value).trim();
+const modeloEscolhido = () =>
+  ($('#edModelo').value === NOVO ? $('#edModeloNovo').value : $('#edModelo').value).trim();
+
+function pintarTamanhos(){
+  edTams = [...new Set(edTams)].sort((a, b) => a - b);
+  $('#edTams').innerHTML = TAMANHOS_ED.map(t =>
+    `<button type="button" class="chip" data-tam-ed="${t}" aria-pressed="${edTams.includes(t)}">${t}</button>`).join('');
+}
+// O parcelamento sai do preço de tabela, não do à vista: quem parcela paga o cheio.
+function pintarParcela(){
+  const base = Number($('#edPreco').value) || Number($('#edAvista').value) || 0;
+  $('#edParcela').textContent = base
+    ? `Na loja vai aparecer: ou até 6x de ${BRL(Math.round(base / 6 * 100) / 100)} sem juros`
+    : '';
+}
+
+$('#edMarca').addEventListener('change', e => {
+  $('#edMarcaNova').hidden = e.target.value !== NOVO;
+  if (e.target.value === NOVO) $('#edMarcaNova').focus();
+  pintarModelos('');
+});
+$('#edMarcaNova').addEventListener('input', () => pintarModelos(''));
+$('#edModelo').addEventListener('change', e => {
+  $('#edModeloNovo').hidden = e.target.value !== NOVO;
+  if (e.target.value === NOVO) $('#edModeloNovo').focus();
+});
+$('#edPreco').addEventListener('input', pintarParcela);
+$('#edAvista').addEventListener('input', pintarParcela);
+$('#edTams').addEventListener('click', e => {
+  const b = e.target.closest('[data-tam-ed]');
+  if (!b) return;
+  const t = +b.dataset.tamEd;
+  edTams = edTams.includes(t) ? edTams.filter(x => x !== t) : [...edTams, t];
+  pintarTamanhos();
+});
+$('#formEd').addEventListener('click', e => {
+  const b = e.target.closest('[data-faixa]');
+  if (!b) return;
+  const f = b.dataset.faixa;
+  if (!f) edTams = [];
+  else { const [a, z] = f.split('-').map(Number); edTams = TAMANHOS_ED.filter(t => t >= a && t <= z); }
+  pintarTamanhos();
+});
+
 function abrirEditor(id){
   let r = id ? TODOS.find(x => x.id === id) : null;
   // Produto ainda não importado para o banco: abre com os dados do catálogo da página.
@@ -1051,14 +1159,16 @@ function abrirEditor(id){
   edAtual = r; edNovoId = r ? null : 'p' + Date.now().toString(36);
   edFotos = r ? [...(r.fotos || [])] : [];
   $('#edTitulo').textContent = r ? 'Editar produto' : 'Novo produto';
-  $('#edMarca').value = r?.marca || '';
-  $('#edModelo').value = r?.modelo || '';
+  pintarMarcas(r?.marca || '');
+  pintarModelos(r?.modelo || '');
+  edTams = [...(r?.sizes || [])];
+  pintarTamanhos();
   $('#edNome').value = r?.nome || '';
   $('#edCor').value = r?.cor || '';
   $('#edGenero').value = r?.genero || 'Unissex';
-  $('#edSizes').value = (r?.sizes || []).join(',');
   $('#edPreco').value = r?.preco ?? '';
   $('#edAvista').value = r?.avista ?? '';
+  pintarParcela();
   $('#edDesc').value = r?.descricao || '';
   $('#edAtivo').checked = r ? r.ativo !== false : true;
   $('#edExcluir').hidden = !r;
@@ -1109,16 +1219,21 @@ $('#edUpload').addEventListener('change', async e => {
 });
 $('#formEd').addEventListener('submit', async e => {
   e.preventDefault();
-  const sizes = $('#edSizes').value.split(',').map(s => Number(s.trim())).filter(n => n > 0);
+  const marca = marcaEscolhida(), modelo = modeloEscolhido();
+  if (!marca){ $('#edMsg').textContent = 'Escolha a marca, ou crie uma nova.'; $('#edMarca').focus(); return; }
+  if (!modelo){ $('#edMsg').textContent = 'Escolha o modelo, ou crie um novo.'; $('#edModelo').focus(); return; }
+  const sizes = [...edTams].sort((a, b) => a - b);
   const avista = Number($('#edAvista').value);
   if (!(avista > 0)){ $('#edMsg').textContent = 'Informe o preço à vista.'; $('#edAvista').focus(); return; }
+  if (!sizes.length && !confirm('Nenhum tamanho marcado. O produto vai aparecer como "Tamanho sob consulta". Salvar assim?')) return;
   if (!edFotos.length && !confirm('Este produto não tem foto. Na loja ele aparece sem imagem. Salvar assim mesmo?')) return;
   const num = v => v === '' ? null : Number(v);
-  const marca = $('#edMarca').value.trim(), modelo = $('#edModelo').value.trim();
+  const tabela = num($('#edPreco').value);
   const linha = {
     id: edAtual?.id || edNovoId, marca, modelo,
     nome: $('#edNome').value.trim(), cor: $('#edCor').value.trim(), genero: $('#edGenero').value,
-    sizes, preco: num($('#edPreco').value), avista, parcela: Math.round(avista / 6 * 100) / 100,
+    sizes, preco: tabela, avista,
+    parcela: Math.round((tabela || avista) / 6 * 100) / 100,
     descricao: $('#edDesc').value.trim(), fotos: edFotos, ativo: $('#edAtivo').checked,
   };
   $('#edMsg').textContent = 'Salvando…';
