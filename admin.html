@@ -35,7 +35,10 @@ tbody tr:hover{background:#faf8f5}
 .foto img{width:100%;height:100%;object-fit:cover;border-radius:8px;border:1px solid var(--line)}
 .foto button{position:absolute;top:4px;right:4px;background:rgba(0,0,0,.7);color:#fff;border:0;border-radius:999px;width:24px;height:24px;cursor:pointer;line-height:1}
 [hidden]{display:none!important}
-.tela-login{min-height:calc(100vh - 60px);display:grid;place-items:center;margin:0 -16px;padding:32px 16px;background:radial-gradient(circle at 15% 15%,#4a1222 0,transparent 42%),radial-gradient(circle at 85% 85%,#2c2414 0,transparent 40%),#0b0b0b;color:#f4f1ec}
+body:not(.logado){padding:0!important}
+body:not(.logado) header{margin:0}
+body:not(.logado) main{max-width:none;padding:0}
+.tela-login{min-height:calc(100vh - 62px);display:grid;place-items:center;margin:0;padding:48px 24px;background:radial-gradient(circle at 15% 15%,#4a1222 0,transparent 42%),radial-gradient(circle at 85% 85%,#2c2414 0,transparent 40%),#0b0b0b;color:#f4f1ec}
 .caixa-login{width:100%;max-width:400px;background:#141312;border:1px solid #2a2826;border-radius:18px;padding:36px 30px 26px;box-shadow:0 30px 80px rgba(0,0,0,.5)}
 .marca-login{display:flex;align-items:baseline;gap:10px;justify-content:center}
 .marca-login span{font-size:44px;font-weight:300;letter-spacing:.08em;line-height:1}
@@ -62,8 +65,8 @@ tbody tr:hover{background:#faf8f5}
   <form id="formLogin" style="display:grid;gap:14px">
     <label>E-mail<input type="email" id="email" required autocomplete="username"></label>
     <label>Senha<input type="password" id="senha" required autocomplete="current-password"></label>
-    <button class="btn" type="submit">Entrar</button>
-    <p class="erro-login" id="erroLogin"></p>
+    <button class="btn" type="submit" id="btnEntrar">Entrar</button>
+    <p class="erro-login" id="erroLogin" role="alert"></p>
   </form>
   <p class="rodape-login">Acesso restrito à equipe da RM Store</p>
  </div>
@@ -81,6 +84,7 @@ tbody tr:hover{background:#faf8f5}
       <span class="grow"></span>
       <button class="btn" id="novo" type="button">+ Novo produto</button>
     </div>
+    <p class="muted" id="status" role="status" style="margin:0 0 8px"></p>
     <div class="card tabela-wrap">
       <table>
         <thead><tr><th>Produto</th><th class="oculta-mobile">Gênero</th><th>Preço à vista</th><th>No site</th></tr></thead>
@@ -116,12 +120,12 @@ tbody tr:hover{background:#faf8f5}
         <input type="file" id="upload" accept="image/*" multiple>
       </div>
       <div class="row" style="margin-top:18px">
-        <button class="btn" type="submit">Salvar</button>
+        <button class="btn" type="submit">Salvar produto</button>
         <button class="ghost" type="button" id="cancelar">Cancelar</button>
         <span class="grow"></span>
         <button class="danger" type="button" id="excluir" hidden>Excluir produto</button>
       </div>
-      <p class="muted" id="msgForm"></p>
+      <p class="muted" id="msgForm" role="status"></p>
     </form>
   </div>
 
@@ -129,14 +133,14 @@ tbody tr:hover{background:#faf8f5}
     <form id="formTextos" class="card">
       <h3 style="margin-top:0">Textos do site</h3>
       <div class="g2">
-        <label>WhatsApp (só números, com DDI 55)<input id="t_whatsapp" placeholder="554896374837"></label>
+        <label>WhatsApp (só números, com DDI 55)<input id="t_whatsapp" inputmode="numeric" placeholder="554896374837"></label>
         <label>Horário de atendimento<input id="t_horario" placeholder="Atendimento de segunda a sexta, das 8h às 18h"></label>
         <label>Título da página inicial<input id="t_hero_titulo" placeholder="RM STORE"></label>
         <label>Texto da página inicial<input id="t_hero_texto"></label>
       </div>
       <div class="row" style="margin-top:14px">
         <button class="btn" type="submit">Salvar textos</button>
-        <span class="muted" id="msgTextos"></span>
+        <span class="muted" id="msgTextos" role="status"></span>
       </div>
     </form>
   </div>
@@ -157,16 +161,23 @@ let lista = [], atual = null, novoId = null, fotosAtual = [];
 // ---------- login
 $('#formLogin').addEventListener('submit', async e => {
   e.preventDefault();
+  const btn = $('#btnEntrar');
+  btn.disabled = true; btn.textContent = 'Entrando…'; $('#erroLogin').textContent = '';
   const { error } = await sb.auth.signInWithPassword({ email: $('#email').value.trim(), password: $('#senha').value });
-  if (error) { $('#erroLogin').textContent = 'E-mail ou senha incorretos.'; return; }
+  btn.disabled = false; btn.textContent = 'Entrar';
+  if (error) { $('#erroLogin').textContent = 'E-mail ou senha não conferem. Tente de novo.'; $('#senha').value = ''; $('#senha').focus(); return; }
   mostrarPainel();
 });
 function mostrarPainel(){
+  document.body.classList.add('logado');
   $('#login').hidden = true; $('#painel').hidden = false; $('#sair').hidden = false;
   carregarLista(); carregarTextos();
 }
 $('#sair').addEventListener('click', async () => { await sb.auth.signOut(); location.reload(); });
-(async () => { const { data } = await sb.auth.getSession(); if (data.session) mostrarPainel(); })();
+(async () => {
+  const { data } = await sb.auth.getSession();
+  if (data.session) mostrarPainel(); else $('#email').focus();
+})();
 
 // ---------- abas
 $('#tabProd').addEventListener('click', () => trocarAba('prod'));
@@ -176,29 +187,40 @@ function trocarAba(a){
   $('#areaProd').hidden = !prod; $('#areaTextos').hidden = prod;
   $('#tabProd').className = prod ? 'btn' : 'ghost';
   $('#tabTextos').className = prod ? 'ghost' : 'btn';
+  $('#tabProd').setAttribute('aria-pressed', String(prod));
+  $('#tabTextos').setAttribute('aria-pressed', String(!prod));
 }
 
 // ---------- lista de produtos
 async function carregarLista(){
+  $('#lista').innerHTML = '<tr><td colspan="4" class="muted">Carregando produtos…</td></tr>';
   const { data, error } = await sb.from('produtos').select('*').order('id');
-  if (error) { alert('Erro ao carregar produtos: ' + error.message); return; }
+  if (error) { $('#lista').innerHTML = '<tr><td colspan="4" class="muted">Não foi possível carregar os produtos. Atualize a página e tente de novo.</td></tr>'; return; }
   lista = data || [];
   desenharLista();
 }
 function desenharLista(){
   const q = $('#busca').value.trim().toLowerCase();
   const itens = lista.filter(p => (p.nome + ' ' + p.marca + ' ' + p.modelo + ' ' + (p.cor || '')).toLowerCase().includes(q));
-  $('#lista').innerHTML = itens.map(p => `<tr data-id="${esc(p.id)}">
+  const vazio = lista.length === 0
+    ? 'Nenhum produto cadastrado ainda. Clique em "+ Novo produto" para começar.'
+    : `Nenhum produto encontrado para "${esc(q)}".`;
+  $('#lista').innerHTML = itens.map(p => `<tr data-id="${esc(p.id)}" tabindex="0" role="button" aria-label="Editar ${esc(p.nome)}">
       <td><b>${esc(p.nome)}</b><br><span class="muted">${esc(p.marca)} · ${esc(p.modelo)}${p.cor ? ' · ' + esc(p.cor) : ''}</span></td>
       <td class="oculta-mobile">${esc(p.genero === 'Kids' ? 'Infantil' : p.genero)}</td>
       <td>${BRL(p.avista)}</td>
       <td>${p.ativo ? 'Sim' : 'Não'}</td></tr>`).join('')
-    || '<tr><td colspan="4" class="muted">Nenhum produto.</td></tr>';
+    || `<tr><td colspan="4" class="muted">${vazio}</td></tr>`;
 }
 $('#busca').addEventListener('input', desenharLista);
 $('#lista').addEventListener('click', e => {
   const tr = e.target.closest('tr[data-id]'); if (!tr) return;
   abrirForm(lista.find(p => p.id === tr.dataset.id));
+});
+$('#lista').addEventListener('keydown', e => {
+  if (e.key !== 'Enter' && e.key !== ' ') return;
+  const tr = e.target.closest('tr[data-id]'); if (!tr) return;
+  e.preventDefault(); abrirForm(lista.find(p => p.id === tr.dataset.id));
 });
 $('#novo').addEventListener('click', () => {
   novoId = 'p' + Date.now().toString(36);
@@ -227,7 +249,8 @@ function abrirForm(p){
   $('#form').hidden = false;
   $('#form').scrollIntoView({behavior: 'smooth', block: 'start'});
 }
-function fecharForm(){ $('#form').hidden = true; atual = null; }
+function fecharForm(){ $('#form').hidden = true; atual = null; $('#msgForm').textContent = ''; }
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#form').hidden) fecharForm(); });
 $('#cancelar').addEventListener('click', fecharForm);
 
 function desenharFotos(){
@@ -260,7 +283,7 @@ $('#upload').addEventListener('change', async e => {
   for (const f of files){
     if (fotosAtual.length >= 4) { $('#msgForm').textContent = 'Máximo de 4 fotos por produto.'; break; }
     try {
-      $('#msgForm').textContent = 'Enviando foto...';
+      $('#msgForm').textContent = `Enviando foto ${fotosAtual.length + 1} de até 4…`;
       const blob = await reduzir(f);
       const caminho = `${id}/${Date.now()}_${fotosAtual.length + 1}.jpg`;
       const { error } = await sb.storage.from('fotos').upload(caminho, blob, { contentType: 'image/jpeg' });
@@ -268,7 +291,7 @@ $('#upload').addEventListener('change', async e => {
       fotosAtual.push(sb.storage.from('fotos').getPublicUrl(caminho).data.publicUrl);
       desenharFotos();
     } catch (err) {
-      $('#msgForm').textContent = 'Erro na foto: ' + err.message;
+      $('#msgForm').textContent = 'Não foi possível enviar esta foto: ' + err.message;
     }
   }
   $('#msgForm').textContent = '';
@@ -280,6 +303,8 @@ $('#form').addEventListener('submit', async e => {
   e.preventDefault();
   const id = atual?.id || novoId;
   const sizes = $('#f_sizes').value.split(',').map(s => Number(s.trim())).filter(n => n > 0);
+  if (sizes.length === 0) { $('#msgForm').textContent = 'Informe pelo menos uma numeração, separada por vírgula. Ex: 34,35,36.'; $('#f_sizes').focus(); return; }
+  if (fotosAtual.length === 0 && !confirm('Este produto não tem foto. Na loja ele aparece sem imagem. Salvar mesmo assim?')) return;
   const row = {
     id,
     marca: $('#f_marca').value.trim(),
@@ -295,18 +320,22 @@ $('#form').addEventListener('submit', async e => {
     fotos: fotosAtual,
     ativo: $('#f_ativo').checked
   };
+  $('#msgForm').textContent = 'Salvando…';
   const { error } = await sb.from('produtos').upsert(row);
-  if (error) { $('#msgForm').textContent = 'Erro ao salvar: ' + error.message; return; }
+  if (error) { $('#msgForm').textContent = 'Não foi possível salvar: ' + error.message + '. Nada foi perdido, tente de novo.'; return; }
   await carregarLista();
   fecharForm();
+  $('#status').textContent = `"${row.nome}" salvo.`;
 });
 $('#excluir').addEventListener('click', async () => {
   if (!atual) return;
-  if (!confirm('Excluir "' + atual.nome + '"? Não tem como desfazer. Se quiser só esconder, desmarque "Mostrar no site".')) return;
+  if (!confirm('Excluir "' + atual.nome + '"? Não dá para desfazer. Se quiser só esconder da loja, desmarque "Mostrar no site".')) return;
   const { error } = await sb.from('produtos').delete().eq('id', atual.id);
-  if (error) { $('#msgForm').textContent = 'Erro ao excluir: ' + error.message; return; }
+  if (error) { $('#msgForm').textContent = 'Não foi possível excluir: ' + error.message; return; }
+  const nome = atual.nome;
   await carregarLista();
   fecharForm();
+  $('#status').textContent = `"${nome}" excluído.`;
 });
 
 // ---------- textos do site
@@ -327,7 +356,7 @@ $('#formTextos').addEventListener('submit', async e => {
     ['hero_texto', $('#t_hero_texto').value.trim()]
   ].filter(([, v]) => v !== '').map(([chave, valor]) => ({ chave, valor }));
   const { error } = await sb.from('config').upsert(itens);
-  $('#msgTextos').textContent = error ? 'Erro: ' + error.message : 'Textos salvos. Atualize a loja para ver.';
+  $('#msgTextos').textContent = error ? 'Não foi possível salvar os textos: ' + error.message : 'Textos salvos. Atualize a loja para ver as mudanças.';
 });
 </script>
 </body>
