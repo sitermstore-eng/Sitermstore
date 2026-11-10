@@ -39,10 +39,19 @@ header.top .wrap{display:flex;align-items:center;gap:12px;padding-block:12px}
 .sacola span{background:var(--accent);color:var(--accent-ink);border-radius:999px;min-width:22px;padding:0 6px;font-size:12px;text-align:center}
 
 .bar{background:var(--surface);border-bottom:1px solid var(--line)}
-.bar .wrap{display:flex;align-items:center;gap:12px 16px;flex-wrap:wrap;padding-block:10px}
-.bar label{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
-.bar select{padding:8px 10px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink);min-width:0;max-width:100%}
-.btn-ghost{display:none;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:6px;padding:8px 12px;cursor:pointer}
+.bar .wrap{padding-block:12px;display:grid;gap:10px}
+.bar .busca{max-width:420px;margin:0}
+.barra{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.bar label.ord{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);margin-left:auto}
+.bar select{padding:7px 10px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink);max-width:100%}
+.gq,.btn-filtros,.sheet-h,.sheet-f{display:none}
+.gchip{flex-shrink:0;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:7px 14px;font-size:13px;cursor:pointer}
+.gchip[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.btn-filtros{align-items:center;gap:8px;border:1px solid var(--ink);background:var(--surface);color:var(--ink);border-radius:999px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer}
+#fCount{background:var(--accent);color:#fff;border-radius:999px;padding:0 7px;font-size:11px;min-width:18px;text-align:center}
+.sheet-h{justify-content:space-between;align-items:center;padding:16px 0;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--surface);z-index:1}
+.sheet-f{position:sticky;bottom:0;background:var(--surface);padding:12px 0}
+.aplicar{width:100%;background:var(--accent);color:#fff;border:0;border-radius:10px;padding:13px;font-weight:700;cursor:pointer;font-size:15px}
 
 .layout .wrap{display:grid;grid-template-columns:240px minmax(0,1fr);gap:28px;align-items:start;padding-block:20px 48px}
 .filtros{position:sticky;top:12px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:4px 16px}
@@ -114,13 +123,25 @@ select.tam{flex:1;min-width:0;padding:8px;border:1px solid var(--line);border-ra
 .mthumbs .th.on{outline:2px solid var(--accent)}
 .mclose{position:absolute;top:8px;right:8px;background:var(--surface);border:0;border-radius:999px;width:36px;height:36px;font-size:22px;cursor:pointer;z-index:2}
 @media (max-width:720px){.mbox{grid-template-columns:minmax(0,1fr)}}
+.cores{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 2px}
+.cores .chip.on{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.info{cursor:pointer}
 @media (max-width:820px){
-  .layout .wrap{grid-template-columns:minmax(0,1fr);gap:16px}
-  .filtros{position:static;display:none}
-  .filtros.open{display:block}
-  .btn-ghost{display:inline-block}
-  .bar label.ord{margin-left:auto}
+  .layout .wrap{grid-template-columns:minmax(0,1fr);gap:0;padding-block:12px 40px}
+  .gq{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:0 16px}
+  .gq::-webkit-scrollbar{display:none}
+  .btn-filtros{display:inline-flex}
+  .sheet-h,.sheet-f{display:flex}
+  .filtros{position:fixed;left:0;right:0;bottom:0;top:auto;max-height:82vh;overflow:auto;border:0;border-radius:18px 18px 0 0;padding:0 16px max(16px,env(safe-area-inset-bottom,0px));transform:translateY(105%);transition:transform .25s ease;z-index:25;box-shadow:0 -10px 30px rgba(0,0,0,.2)}
+  .filtros.open{transform:none}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .info{padding:10px}
+  .nome{font-size:13px}
+  .preco{font-size:17px}
+  .btn{padding:8px 10px}
+  select.tam{padding:7px 6px}
 }
+@media (prefers-reduced-motion:reduce){.filtros{transition:none}}
 @media (prefers-reduced-motion:reduce){.drawer,.toast{transition:none}}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 </style>
@@ -132,23 +153,27 @@ select.tam{flex:1;min-width:0;padding:8px;border:1px solid var(--line);border-ra
 </div></header>
 
 <div class="bar"><div class="wrap">
-  <label>Marca <select id="marca" aria-label="Filtrar por marca"></select></label>
-  <button class="btn-ghost" id="toggleF" type="button">Filtros</button>
-  <span class="spacer"></span>
-  <span id="contagem" class="cor"></span>
-  <label class="ord">Ordenar <select id="ord" aria-label="Ordenar"><option value="rel">Destaques</option><option value="menor">Menor preço</option><option value="maior">Maior preço</option><option value="nome">Nome A-Z</option></select></label>
+  <input type="search" id="busca" class="busca" placeholder="Buscar tênis, modelo ou cor" aria-label="Buscar produto">
+  <div class="gq" id="gQuick" role="group" aria-label="Gênero"></div>
+  <div class="barra">
+    <button class="btn-filtros" id="toggleF" type="button" aria-expanded="false">Filtros <span id="fCount"></span></button>
+    <span id="contagem" class="cor"></span>
+    <label class="ord">Ordenar <select id="ord" aria-label="Ordenar"><option value="rel">Destaques</option><option value="menor">Menor preço</option><option value="maior">Maior preço</option><option value="nome">Nome A-Z</option></select></label>
+  </div>
 </div></div>
 
 <main class="layout"><div class="wrap">
   <aside class="filtros" id="filtros" aria-label="Filtros">
+    <div class="sheet-h"><b>Filtros</b><button class="x" id="fecharF" type="button" aria-label="Fechar filtros">×</button></div>
+    <div class="grupo"><h3>Marca</h3><select id="marca" aria-label="Filtrar por marca" style="width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink)"></select></div>
     <div class="grupo"><h3>Gênero</h3><div id="generos"></div></div>
     <div class="grupo"><h3>Modelo</h3><input type="search" id="buscaModelo" placeholder="Buscar modelo" aria-label="Buscar modelo"><div class="lista" id="modelos"></div></div>
     <div class="grupo"><h3>Numeração</h3><div class="chips" id="tams"></div></div>
     <div class="grupo"><h3>Preço à vista</h3><div id="faixas"></div></div>
     <button class="limpar" id="limpar" type="button">Limpar filtros</button>
+    <div class="sheet-f"><button class="aplicar" id="aplicarF" type="button">Ver produtos</button></div>
   </aside>
   <section>
-    <input type="search" id="busca" class="busca" placeholder="Buscar tênis, modelo ou cor" aria-label="Buscar produto">
     <div class="grid" id="grid"></div>
   </section>
 </div></main>
@@ -223,23 +248,36 @@ function renderFiltros(){
   const lista = [...cont.entries()].filter(([m])=>!q || m.toLowerCase().includes(q)).sort((a,b)=>a[0].localeCompare(b[0],'pt'));
   $('#modelos').innerHTML = lista.map(([m,n])=>`<label class="opt"><input type="checkbox" data-m="${esc(m)}" ${S.modelo.has(m)?'checked':''}> ${esc(m)}<span class="n">${n}</span></label>`).join('') || '<p class="cor">Nenhum modelo encontrado.</p>';
   $('#tams').innerHTML = TAMS.map(t=>`<button type="button" class="chip" data-t="${t}" aria-pressed="${String(S.tam==t)}">${t}</button>`).join('');
+  $('#gQuick').innerHTML = `<button type="button" class="gchip" data-gq="" aria-pressed="${S.genero.size===0}">Todos</button>` + GENEROS.map(g=>`<button type="button" class="gchip" data-gq="${g}" aria-pressed="${S.genero.has(g)}">${g}</button>`).join('');
+  const nAtivos = (S.marca?1:0)+S.genero.size+S.modelo.size+(S.tam?1:0)+(S.faixa?1:0);
+  $('#fCount').textContent = nAtivos ? `(${nAtivos})` : '';
   $('#faixas').innerHTML = Object.entries(FAIXAS).map(([k,[a,b,l]])=>`<label class="opt"><input type="radio" name="faixa" value="${k}" ${S.faixa===k?'checked':''}> ${l}</label>`).join('');
 }
 
-function card(p){
+const SEL = {};
+function titulo(p){ return p.genero && p.genero!=='Unissex' ? `${p.nome} · ${p.genero}` : p.nome; }
+function grupos(list){
+  const m = new Map();
+  list.forEach(p=>{ const k = p.marca+'|'+p.modelo; if(!m.has(k)) m.set(k,[]); m.get(k).push(p); });
+  return [...m.entries()];
+}
+function card(key, vars){
+  const id = vars.some(v=>v.id===SEL[key]) ? SEL[key] : vars[0].id;
+  const p = vars.find(v=>v.id===id);
   const tams = p.sizes||[];
   const sel = tams.length
     ? `<select class="tam" id="t-${esc(p.id)}" aria-label="Numeração de ${esc(p.nome)}">${tams.map(t=>`<option ${String(S.tam)===String(t)?'selected':''}>${t}</option>`).join('')}</select>`
     : '<span class="cor">Consulte a numeração</span>';
+  const cores = vars.length>1 ? `<div class="cores" role="group" aria-label="Cor">${vars.map(v=>`<button type="button" class="chip${v.id===id?' on':''}" data-key="${esc(key)}" data-var="${esc(v.id)}" aria-pressed="${v.id===id}">${esc(v.cor||v.genero)}</button>`).join('')}</div>` : '';
   const fotos = p.fotos||[];
-  const main = fotos.length ? `<img id="m-${esc(p.id)}" src="${esc(fotos[0])}" alt="${esc(p.nome)}" loading="lazy">` : `<div class="ph">RM<br>${esc(p.marca)}</div>`;
+  const main = fotos.length ? `<img src="${esc(fotos[0])}" alt="${esc(titulo(p))}" loading="lazy">` : `<div class="ph">RM<br>${esc(p.marca)}</div>`;
   const thumbs = fotos.length>1 ? `<div class="thumbs">${fotos.map((f,i)=>`<button type="button" class="th" data-open="${esc(p.id)}" data-i="${i}" aria-label="Foto ${i+1}"><img src="${esc(f)}" alt="" loading="lazy"></button>`).join('')}</div>` : '';
   return `<article class="card">
-    <div class="foto" data-open="${esc(p.id)}" data-i="0" style="cursor:zoom-in">${main}</div>${thumbs}
-    <div class="info">
+    <div class="foto" data-open="${esc(p.id)}" data-i="0">${main}</div>${thumbs}
+    <div class="info" data-open="${esc(p.id)}" data-i="0">
       <span class="tagm">${esc(p.marca)} · ${esc(p.modelo)}</span>
-      <h3 class="nome">${esc(p.nome)}</h3>
-      ${p.cor?`<span class="cor">${esc(p.cor)}</span>`:''}
+      <h3 class="nome">${esc(titulo(p))}</h3>
+      ${cores}
       <div class="preco">${BRL(p.avista)}</div>
       ${p.preco>p.avista?`<span class="cor"><s>${BRL(p.preco)}</s></span>`:''}
       <span class="parc">ou 6x de ${BRL(p.parcela)} sem juros</span>
@@ -254,7 +292,7 @@ function renderGrid(){
     S.ord==='maior' ? b.avista-a.avista :
     S.ord==='nome' ? a.nome.localeCompare(b.nome,'pt') : 0);
   $('#contagem').textContent = `${list.length} ${list.length===1?'produto':'produtos'}`;
-  $('#grid').innerHTML = list.length ? list.map(card).join('')
+  $('#grid').innerHTML = list.length ? grupos(list).map(([k,vs])=>card(k,vs)).join('')
     : '<div class="nada">Nenhum produto com esses filtros.<br><button class="chip" id="limpar2" type="button" style="margin-top:12px">Limpar filtros</button></div>';
 }
 
@@ -275,7 +313,7 @@ function mensagem(){
   const linhas = ['Olá! Quero fazer um pedido na RM Store:',''];
   sacola.forEach((it,i)=>{
     const p = P.find(x=>x.id===it.id);
-    if(p) linhas.push(`${i+1}. ${p.nome}${p.cor?' ('+p.cor+')':''} - Nº ${it.tam} - ${BRL(p.avista)}`);
+    if(p) linhas.push(`${i+1}. ${titulo(p)}${p.cor?' ('+p.cor+')':''} - Nº ${it.tam} - ${BRL(p.avista)}`);
   });
   linhas.push('', `Total à vista: ${BRL(totalVal())}`, `Entrega: ${$('#entrega').value}`, `Pagamento: ${$('#pagto').value}`);
   if(nome) linhas.push(`Nome: ${nome}`);
@@ -285,7 +323,7 @@ function renderCart(){
   $('#qtd').textContent = sacola.length;
   $('#itens').innerHTML = sacola.map((it,i)=>{
     const p = P.find(x=>x.id===it.id);
-    return p ? `<li class="item"><div><b>${esc(p.nome)}</b><br><span class="cor">Nº ${esc(it.tam)}${p.cor?' · '+esc(p.cor):''}</span></div>
+    return p ? `<li class="item"><div><b>${esc(titulo(p))}</b><br><span class="cor">Nº ${esc(it.tam)}${p.cor?' · '+esc(p.cor):''}</span></div>
       <div class="item-r"><span>${BRL(p.avista)}</span><button class="rm" type="button" data-rm="${i}">Remover</button></div></li>` : '';
   }).join('') || '<li class="nada">Sua sacola está vazia.</li>';
   $('#total').textContent = BRL(totalVal());
@@ -299,13 +337,15 @@ function addCart(id, tamOverride){
   sacola.push({id, tam}); saveCart(); renderCart();
   toast(`${p.nome} (Nº ${tam}) na sacola`);
 }
+function sheet(open){ $('#filtros').classList.toggle('open',open); $('#ov').hidden=!open; $('#toggleF').setAttribute('aria-expanded',String(open)); }
 function drawer(open){ $('#drawer').classList.toggle('open',open); $('#ov').hidden=!open; }
 let tt;
 function toast(t){ const el=$('#toast'); el.textContent=t; el.classList.add('on'); clearTimeout(tt); tt=setTimeout(()=>el.classList.remove('on'),2200); }
 
 document.addEventListener('click', e=>{
   const t = e.target;
-  const op = t.closest('[data-open]'); if(op) return abrirProduto(op.dataset.open, op.dataset.i);
+  const vc = t.closest('[data-var]'); if(vc){ SEL[vc.dataset.key] = vc.dataset.var; return renderGrid(); }
+  const op = t.closest('[data-open]'); if(op && (op.classList.contains('th') || !t.closest('button,select,input,label'))) return abrirProduto(op.dataset.open, op.dataset.i);
   const mt = t.closest('#mThumbs [data-mi]'); if(mt){ mi=+mt.dataset.mi; return renderModal(); }
   if(t.closest('#mPrev')) return passo(-1);
   if(t.closest('#mNext')) return passo(1);
@@ -315,9 +355,12 @@ document.addEventListener('click', e=>{
   const rm = t.closest('[data-rm]'); if(rm){ sacola.splice(+rm.dataset.rm,1); saveCart(); renderCart(); return; }
   const chip = t.closest('#tams [data-t]'); if(chip){ S.tam = S.tam==chip.dataset.t ? '' : chip.dataset.t; return refresh(); }
   if(t.closest('#limpar') || t.closest('#limpar2')) return reset();
-  if(t.closest('#toggleF')) return $('#filtros').classList.toggle('open');
+  const gq = t.closest('[data-gq]'); if(gq){ const g=gq.dataset.gq; if(!g) S.genero.clear(); else S.genero.has(g)?S.genero.delete(g):S.genero.add(g); return refresh(); }
+  if(t.closest('#toggleF')) return sheet(!$('#filtros').classList.contains('open'));
+  if(t.closest('#fecharF') || t.closest('#aplicarF')) return sheet(false);
   if(t.closest('#abrir')) return drawer(true);
-  if(t.closest('#fechar') || t.id==='ov') return drawer(false);
+  if(t.id==='ov'){ drawer(false); sheet(false); return; }
+  if(t.closest('#fechar')) return drawer(false);
   if(t.closest('#copy')) return navigator.clipboard.writeText(mensagem())
       .then(()=>toast('Pedido copiado'))
       .catch(()=>{ $('#msgbox').select(); toast('Selecione o texto e copie'); });
@@ -347,7 +390,7 @@ function renderModal(){
   $('#mCont').textContent = f.length ? `${mi+1} / ${f.length}` : '';
   $('#mPrev').hidden = f.length<2; $('#mNext').hidden = f.length<2;
   $('#mThumbs').innerHTML = f.map((x,i)=>`<button type="button" class="th${i===mi?' on':''}" data-mi="${i}" aria-label="Foto ${i+1}"><img src="${esc(x)}" alt="" loading="lazy"></button>`).join('');
-  $('#mInfo').innerHTML = `<span class="tagm">${esc(mp.marca)} · ${esc(mp.modelo)}</span><h3 class="nome">${esc(mp.nome)}</h3>${mp.cor?`<span class="cor">${esc(mp.cor)}</span>`:''}<div class="preco">${BRL(mp.avista)}</div>${mp.preco>mp.avista?`<span class="cor"><s>${BRL(mp.preco)}</s></span>`:''}<span class="parc">ou 6x de ${BRL(mp.parcela)} sem juros</span><div class="add-row">${(mp.sizes||[]).length?`<select class="tam" id="mTam" aria-label="Numeração">${mp.sizes.map(t=>`<option>${t}</option>`).join('')}</select>`:'<span class="cor">Consulte a numeração</span>'}<button class="btn" type="button" data-madd="${esc(mp.id)}">Adicionar</button></div>`;
+  $('#mInfo').innerHTML = `<span class="tagm">${esc(mp.marca)} · ${esc(mp.modelo)}</span><h3 class="nome">${esc(titulo(mp))}</h3>${mp.cor?`<span class="cor">${esc(mp.cor)}</span>`:''}<div class="preco">${BRL(mp.avista)}</div>${mp.preco>mp.avista?`<span class="cor"><s>${BRL(mp.preco)}</s></span>`:''}<span class="parc">ou 6x de ${BRL(mp.parcela)} sem juros</span><div class="add-row">${(mp.sizes||[]).length?`<select class="tam" id="mTam" aria-label="Numeração">${mp.sizes.map(t=>`<option>${t}</option>`).join('')}</select>`:'<span class="cor">Consulte a numeração</span>'}<button class="btn" type="button" data-madd="${esc(mp.id)}">Adicionar</button></div>`;
 }
 function passo(d){ if(!mp||!(mp.fotos||[]).length) return; mi=(mi+d+mp.fotos.length)%mp.fotos.length; renderModal(); }
 document.addEventListener('keydown', e=>{
