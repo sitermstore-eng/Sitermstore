@@ -650,13 +650,11 @@ function pintarProduto(){
   $('#mCont').textContent = temFoto ? `${MI + 1} / ${fotos.length}` : 'Foto em breve';
   $('#mAnt').hidden = $('#mProx').hidden = fotos.length < 2;
 
-  const vars = mostrar(P.filter(v => chaveGrupo(v) === chaveGrupo(p) && (ADMIN || v.ativo !== false)));
   const tams = p.sizes || [];
   $('#mInfo').innerHTML = `
     <span class="tagm">${esc(p.marca)} · ${esc(p.colecao.replace(p.marca, '').trim() || p.colecao)}</span>
     <h3 class="ctit" id="mNome" style="margin:4px 0 2px;font-size:24px">${esc(titulo(p))}</h3>
     ${p.cor ? `<span class="muted">Cor: <b style="color:var(--ink)">${esc(p.cor)}</b></span>` : ''}
-    ${vars.length > 1 ? `<div style="margin:12px 0 4px"><span class="muted">Cores deste modelo (${vars.length})</span>${swatches(vars, p.id, true).replace('class="cores"', 'class="cores mthumbs"')}</div>` : ''}
     ${fotos.length > 1 ? `<div style="margin:12px 0 4px"><span class="muted">Fotos desta cor (${fotos.length})</span><div class="mthumbs">${fotos.map((f, i) => `<button type="button" class="sw" data-foto="${i}" aria-pressed="${i === MI}" aria-label="Foto ${i + 1}"><img src="${esc(f)}" alt="" loading="lazy"></button>`).join('')}</div></div>` : ''}
     <div class="preco" style="font-size:28px">${BRL(p.avista)}</div>
     ${p.preco > p.avista ? `<span class="de">${BRL(p.preco)}</span>` : ''}
