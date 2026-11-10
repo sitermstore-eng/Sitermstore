@@ -57,14 +57,11 @@ header.top .wrap{display:flex;align-items:center;gap:10px;padding-block:12px}
 
 /* ---------- vitrine de abertura ---------- */
 .hero{background:var(--band);color:var(--band-ink)}
-.hero .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:center;padding-block:40px 0}
+.hero .wrap{display:grid;gap:10px;justify-items:center;text-align:center;padding-block:34px 0}
 .hero-k{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
-.hero h1{font-family:var(--display);font-size:clamp(50px,8.5vw,108px);line-height:.9;margin:14px 0 18px;letter-spacing:.04em;font-weight:600;text-wrap:balance}
-.hero p{color:#bdb6ab;max-width:46ch;margin:0}
-.hero-img{display:grid;grid-template-columns:1.3fr .9fr;gap:12px;align-items:start}
-.hero-img img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:14px;display:block;background:#1a1917}
-.hero-img img:last-child{margin-top:54px}
-.hnav{grid-column:1/-1;display:flex;justify-content:center;gap:6px;border-top:1px solid #262422;padding:14px 0;margin-top:24px;overflow-x:auto;scrollbar-width:none}
+.hero h1{font-family:var(--display);font-size:clamp(38px,6.4vw,66px);line-height:.92;margin:6px 0 4px;letter-spacing:.06em;font-weight:600;text-wrap:balance}
+.hero p{color:#bdb6ab;max-width:62ch;margin:0;font-size:14px}
+.hnav{justify-self:stretch;display:flex;justify-content:center;gap:6px;border-top:1px solid #262422;padding:12px 0;margin-top:20px;overflow-x:auto;scrollbar-width:none}
 .hnav::-webkit-scrollbar{display:none}
 .hnav button{flex-shrink:0;background:none;border:0;color:var(--band-ink);padding:9px 20px;border-radius:999px;cursor:pointer;font-family:var(--display);letter-spacing:.16em;text-transform:uppercase;font-size:13px}
 .hnav button[aria-pressed="true"]{background:var(--band-ink);color:var(--band)}
@@ -208,10 +205,8 @@ header.top .wrap{display:flex;align-items:center;gap:10px;padding-block:12px}
   .sheet-h b{font-family:var(--display);letter-spacing:.06em;font-size:17px}
   .sheet-f{position:sticky;bottom:0;background:var(--surface);padding-block:12px;border-top:1px solid var(--line)}
   .sheet-f .btn{padding:13px}
-  .hero .wrap{grid-template-columns:minmax(0,1fr);gap:18px;padding-block:26px 0}
-  .hero-img{gap:8px}
-  .hero-img img:last-child{margin-top:20px}
-  .hnav{justify-content:flex-start;margin-top:10px;padding-block:11px}
+  .hero .wrap{padding-block:24px 0}
+  .hnav{margin-top:14px;padding-block:10px}
   .hnav button{padding:8px 15px;font-size:12px}
   .caixa.xg{grid-template-columns:minmax(0,1fr);max-height:92vh}
   .mfoto img{max-height:48vh}
@@ -258,10 +253,9 @@ header.top .wrap{display:flex;align-items:center;gap:10px;padding-block:12px}
 <section class="hero"><div class="wrap">
   <div>
     <span class="hero-k">Loja online de calçados</span>
-    <h1 id="heroTitulo">RM<br>STORE</h1>
-    <p id="heroTexto">Trabalhamos por encomenda, com modelos selecionados para todos os estilos. Escolha seu favorito e finalize seu pedido pelo WhatsApp.</p>
+    <h1 id="heroTitulo">RM STORE</h1>
+    <p id="heroTexto">Trabalhamos por encomenda, com modelos selecionados que unem qualidade, conforto e estilo. Enviamos para todo o Brasil! Escolha seu favorito e finalize seu pedido pelo WhatsApp.</p>
   </div>
-  <div class="hero-img" aria-hidden="true"><img src="fotos/p048_2.jpg" alt=""><img src="fotos/c038_3.jpg" alt=""></div>
   <nav class="hnav" id="hnav" aria-label="Categorias"></nav>
 </div></section>
 
@@ -424,7 +418,7 @@ const FAIXAS = {
   c: [260, 320, 'R$ 260 a R$ 320'],
   d: [320, 1e9, 'Acima de R$ 320'],
 };
-const GENEROS = [['Masculino','Homem'], ['Feminino','Mulher'], ['Kids','Infantil'], ['Unissex','Unissex']];
+const GENEROS = [['Masculino','Masculinos'], ['Feminino','Femininos'], ['Kids','Infantis'], ['Unissex','Unissex']];
 // Tira a marca do nome do modelo: a marca já tem filtro próprio.
 const curto = m => { const b = MARCAS.find(x => m.startsWith(x)); return b ? (m.slice(b.length).trim() || m) : m; };
 
