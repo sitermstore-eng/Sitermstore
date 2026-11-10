@@ -35,6 +35,19 @@ tbody tr:hover{background:#faf8f5}
 .foto img{width:100%;height:100%;object-fit:cover;border-radius:8px;border:1px solid var(--line)}
 .foto button{position:absolute;top:4px;right:4px;background:rgba(0,0,0,.7);color:#fff;border:0;border-radius:999px;width:24px;height:24px;cursor:pointer;line-height:1}
 [hidden]{display:none!important}
+.tela-login{min-height:calc(100vh - 60px);display:grid;place-items:center;margin:0 -16px;padding:32px 16px;background:radial-gradient(circle at 15% 15%,#4a1222 0,transparent 42%),radial-gradient(circle at 85% 85%,#2c2414 0,transparent 40%),#0b0b0b;color:#f4f1ec}
+.caixa-login{width:100%;max-width:400px;background:#141312;border:1px solid #2a2826;border-radius:18px;padding:36px 30px 26px;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.marca-login{display:flex;align-items:baseline;gap:10px;justify-content:center}
+.marca-login span{font-size:44px;font-weight:300;letter-spacing:.08em;line-height:1}
+.marca-login small{font-size:14px;letter-spacing:.4em;color:#b89a5e}
+.sub-login{text-align:center;color:#8f8a84;font-size:13px;letter-spacing:.12em;text-transform:uppercase;margin:12px 0 26px}
+.tela-login label{color:#a8a29a}
+.tela-login input{background:#0d0c0b;border:1px solid #302d2a;color:#f4f1ec;padding:12px 14px;border-radius:10px}
+.tela-login input:focus{outline:2px solid #6e1f2f;outline-offset:1px;border-color:#6e1f2f}
+.tela-login .btn{padding:13px;border-radius:10px;font-size:15px;background:#6e1f2f;margin-top:4px}
+.tela-login .btn:hover{background:#82283b}
+.erro-login{color:#e8836f;font-size:13px;margin:0;min-height:18px}
+.rodape-login{text-align:center;color:#5f5a54;font-size:12px;margin:18px 0 0}
 @media (max-width:720px){.g2{grid-template-columns:1fr}.oculta-mobile{display:none}}
 </style>
 </head>
@@ -42,14 +55,18 @@ tbody tr:hover{background:#faf8f5}
 <header><b>RM STORE · PAINEL</b><button class="ghost" id="sair" type="button" hidden>Sair</button></header>
 <main>
 
-<section id="login" class="card" style="max-width:380px;margin:40px auto">
-  <h2 style="margin-top:0">Entrar</h2>
-  <form id="formLogin" style="display:grid;gap:12px">
+<section id="login" class="tela-login">
+ <div class="caixa-login">
+  <div class="marca-login"><span>RM</span><small>STORE</small></div>
+  <p class="sub-login">Painel do administrador</p>
+  <form id="formLogin" style="display:grid;gap:14px">
     <label>E-mail<input type="email" id="email" required autocomplete="username"></label>
     <label>Senha<input type="password" id="senha" required autocomplete="current-password"></label>
     <button class="btn" type="submit">Entrar</button>
-    <p class="muted" id="erroLogin"></p>
+    <p class="erro-login" id="erroLogin"></p>
   </form>
+  <p class="rodape-login">Acesso restrito à equipe da RM Store</p>
+ </div>
 </section>
 
 <section id="painel" hidden>
