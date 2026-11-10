@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>RM Store · Painel</title>
+<link rel="icon" href="favicon.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&display=swap">
+<style>
+:root{--bg:#f6f4f1;--surface:#fff;--ink:#111;--muted:#6f6a64;--line:#e2ded8;--accent:#6e1f2f;--band:#0b0b0b;--band-ink:#f4f1ec}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Manrope,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:15px;line-height:1.5;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header{background:var(--band);color:var(--band-ink);margin:0 -16px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between}
+header b{letter-spacing:.16em}
+main{max-width:980px;margin:0 auto;padding:16px 0 40px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;min-width:0}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.grow{flex:1}
+input,select,textarea{font:inherit;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);width:100%;min-width:0}
+label{display:grid;gap:4px;font-size:13px;color:var(--muted)}
+.btn{background:var(--accent);color:#fff;border:0;border-radius:8px;padding:10px 14px;font-weight:700;cursor:pointer}
+.ghost{background:#fff;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:10px 14px;cursor:pointer}
+.danger{color:#a12a2a;background:none;border:0;cursor:pointer;padding:8px 0;font-weight:700}
+.tabs{display:flex;gap:8px;margin-bottom:14px}
+.muted{font-size:13px;color:var(--muted)}
+.tabela-wrap{overflow:auto;padding:0}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+tbody tr{cursor:pointer}
+tbody tr:hover{background:#faf8f5}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fotos{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.foto{position:relative;width:96px;height:96px}
+.foto img{width:100%;height:100%;object-fit:cover;border-radius:8px;border:1px solid var(--line)}
+.foto button{position:absolute;top:4px;right:4px;background:rgba(0,0,0,.7);color:#fff;border:0;border-radius:999px;width:24px;height:24px;cursor:pointer;line-height:1}
+[hidden]{display:none!important}
+body:not(.logado){padding:0!important}
+body:not(.logado) header{margin:0}
+body:not(.logado) main{max-width:none;padding:0}
+.tela-login{min-height:calc(100vh - 62px);display:grid;place-items:center;margin:0;padding:48px 24px;background:radial-gradient(circle at 15% 15%,#4a1222 0,transparent 42%),radial-gradient(circle at 85% 85%,#2c2414 0,transparent 40%),#0b0b0b;color:#f4f1ec}
+.caixa-login{width:100%;max-width:400px;background:#141312;border:1px solid #2a2826;border-radius:18px;padding:36px 30px 26px;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.marca-login{display:flex;align-items:baseline;gap:10px;justify-content:center}
+.marca-login span{font-size:44px;font-weight:300;letter-spacing:.08em;line-height:1}
+.marca-login small{font-size:14px;letter-spacing:.4em;color:#b89a5e}
+.sub-login{text-align:center;color:#8f8a84;font-size:13px;letter-spacing:.12em;text-transform:uppercase;margin:12px 0 26px}
+.tela-login label{color:#a8a29a}
+.tela-login input{background:#0d0c0b;border:1px solid #302d2a;color:#f4f1ec;padding:12px 14px;border-radius:10px}
+.tela-login input:focus{outline:2px solid #6e1f2f;outline-offset:1px;border-color:#6e1f2f}
+.tela-login .btn{padding:13px;border-radius:10px;font-size:15px;background:#6e1f2f;margin-top:4px}
+.tela-login .btn:hover{background:#82283b}
+.erro-login{color:#e8836f;font-size:13px;margin:0;min-height:18px}
+.rodape-login{text-align:center;color:#5f5a54;font-size:12px;margin:18px 0 0}
+@media (max-width:720px){.g2{grid-template-columns:1fr}.oculta-mobile{display:none}}
+</style>
+</head>
+<body>
+<header><b>RM STORE · PAINEL</b><button class="ghost" id="sair" type="button" hidden>Sair</button></header>
+<main>
+
+<section id="login" class="tela-login">
+ <div class="caixa-login">
+  <div class="marca-login"><span>RM</span><small>STORE</small></div>
+  <p class="sub-login">Painel do administrador</p>
+  <form id="formLogin" style="display:grid;gap:14px">
+    <label>E-mail<input type="email" id="email" required autocomplete="username"></label>
+    <label>Senha<input type="password" id="senha" required autocomplete="current-password"></label>
+    <button class="btn" type="submit" id="btnEntrar">Entrar</button>
+    <p class="erro-login" id="erroLogin" role="alert"></p>
+  </form>
+  <p class="rodape-login">Acesso restrito à equipe da RM Store</p>
+ </div>
+</section>
+
+<section id="painel" hidden>
+  <div class="tabs">
+    <button class="btn" id="tabProd" type="button">Produtos</button>
+    <button class="ghost" id="tabTextos" type="button">Textos do site</button>
+  </div>
+
+  <div id="areaProd">
+    <div class="row" style="margin-bottom:12px">
+      <input id="busca" placeholder="Buscar produto" style="max-width:320px">
+      <span class="grow"></span>
+      <button class="btn" id="novo" type="button">+ Novo produto</button>
+    </div>
+    <p class="muted" id="status" role="status" style="margin:0 0 8px"></p>
+    <div class="card tabela-wrap">
+      <table>
+        <thead><tr><th>Produto</th><th class="oculta-mobile">Gênero</th><th>Preço à vista</th><th>No site</th></tr></thead>
+        <tbody id="lista"></tbody>
+      </table>
+    </div>
+
+    <form id="form" class="card" style="margin-top:16px" hidden>
+      <h3 style="margin-top:0" id="tituloForm">Novo produto</h3>
+      <div class="g2">
+        <label>Marca<input id="f_marca" required></label>
+        <label>Modelo<input id="f_modelo" required></label>
+        <label>Nome do produto<input id="f_nome" required></label>
+        <label>Cor<input id="f_cor" placeholder="ex: preto/branco"></label>
+        <label>Gênero
+          <select id="f_genero">
+            <option value="Masculino">Masculino</option>
+            <option value="Feminino">Feminino</option>
+            <option value="Kids">Infantil</option>
+            <option value="Unissex">Unissex</option>
+          </select>
+        </label>
+        <label>Numeração (separe por vírgula)<input id="f_sizes" placeholder="34,35,36,37"></label>
+        <label>Preço de tabela<input id="f_preco" type="number" step="0.01" min="0"></label>
+        <label>Preço à vista<input id="f_avista" type="number" step="0.01" min="0" required></label>
+        <label>Parcela (6x sem juros)<input id="f_parcela" type="number" step="0.01" min="0"></label>
+        <label style="align-content:end"><span><input id="f_ativo" type="checkbox" style="width:auto"> Mostrar no site</span></label>
+      </div>
+      <label style="margin-top:12px">Descrição<textarea id="f_desc" rows="2"></textarea></label>
+      <div style="margin-top:14px">
+        <b>Fotos</b> <span class="muted">até 4 por produto; a foto é reduzida automaticamente</span>
+        <div class="fotos" id="fotos"></div>
+        <input type="file" id="upload" accept="image/*" multiple>
+      </div>
+      <div class="row" style="margin-top:18px">
+        <button class="btn" type="submit">Salvar produto</button>
+        <button class="ghost" type="button" id="cancelar">Cancelar</button>
+        <span class="grow"></span>
+        <button class="danger" type="button" id="excluir" hidden>Excluir produto</button>
+      </div>
+      <p class="muted" id="msgForm" role="status"></p>
+    </form>
+  </div>
+
+  <div id="areaTextos" hidden>
+    <form id="formTextos" class="card">
+      <h3 style="margin-top:0">Textos do site</h3>
+      <div class="g2">
+        <label>WhatsApp (só números, com DDI 55)<input id="t_whatsapp" inputmode="numeric" placeholder="554896374837"></label>
+        <label>Horário de atendimento<input id="t_horario" placeholder="Atendimento de segunda a sexta, das 8h às 18h"></label>
+        <label>Título da página inicial<input id="t_hero_titulo" placeholder="RM STORE"></label>
+        <label>Texto da página inicial<input id="t_hero_texto"></label>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn" type="submit">Salvar textos</button>
+        <span class="muted" id="msgTextos" role="status"></span>
+      </div>
+    </form>
+  </div>
+</section>
+
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+const SB_URL = 'https://xlucsoplwgpqhoziwoxp.supabase.co';
+const SB_KEY = 'sb_publishable_5FQ4YE8q7dvFSISkedckaQ_84I880h4';
+const sb = supabase.createClient(SB_URL, SB_KEY);
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const BRL = v => Number(v || 0).toLocaleString('pt-BR', {style:'currency', currency:'BRL'});
+
+let lista = [], atual = null, novoId = null, fotosAtual = [];
+
+// ---------- login
+$('#formLogin').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = $('#btnEntrar');
+  btn.disabled = true; btn.textContent = 'Entrando…'; $('#erroLogin').textContent = '';
+  const { error } = await sb.auth.signInWithPassword({ email: $('#email').value.trim(), password: $('#senha').value });
+  btn.disabled = false; btn.textContent = 'Entrar';
+  if (error) { $('#erroLogin').textContent = 'E-mail ou senha não conferem. Tente de novo. (Detalhe: ' + error.message + ')'; $('#senha').value = ''; $('#senha').focus(); return; }
+  mostrarPainel();
+});
+function mostrarPainel(){
+  document.body.classList.add('logado');
+  $('#login').hidden = true; $('#painel').hidden = false; $('#sair').hidden = false;
+  carregarLista(); carregarTextos();
+}
+$('#sair').addEventListener('click', async () => { await sb.auth.signOut(); location.reload(); });
+(async () => {
+  const { data } = await sb.auth.getSession();
+  if (data.session) mostrarPainel(); else $('#email').focus();
+})();
+
+// ---------- abas
+$('#tabProd').addEventListener('click', () => trocarAba('prod'));
+$('#tabTextos').addEventListener('click', () => trocarAba('textos'));
+function trocarAba(a){
+  const prod = a === 'prod';
+  $('#areaProd').hidden = !prod; $('#areaTextos').hidden = prod;
+  $('#tabProd').className = prod ? 'btn' : 'ghost';
+  $('#tabTextos').className = prod ? 'ghost' : 'btn';
+  $('#tabProd').setAttribute('aria-pressed', String(prod));
+  $('#tabTextos').setAttribute('aria-pressed', String(!prod));
+}
+
+// ---------- lista de produtos
+async function carregarLista(){
+  $('#lista').innerHTML = '<tr><td colspan="4" class="muted">Carregando produtos…</td></tr>';
+  const { data, error } = await sb.from('produtos').select('*').order('id');
+  if (error) { $('#lista').innerHTML = '<tr><td colspan="4" class="muted">Não foi possível carregar os produtos. Atualize a página e tente de novo.</td></tr>'; return; }
+  lista = data || [];
+  desenharLista();
+}
+function desenharLista(){
+  const q = $('#busca').value.trim().toLowerCase();
+  const itens = lista.filter(p => (p.nome + ' ' + p.marca + ' ' + p.modelo + ' ' + (p.cor || '')).toLowerCase().includes(q));
+  const vazio = lista.length === 0
+    ? 'Nenhum produto cadastrado ainda. Clique em "+ Novo produto" para começar.'
+    : `Nenhum produto encontrado para "${esc(q)}".`;
+  $('#lista').innerHTML = itens.map(p => `<tr data-id="${esc(p.id)}" tabindex="0" role="button" aria-label="Editar ${esc(p.nome)}">
+      <td><b>${esc(p.nome)}</b><br><span class="muted">${esc(p.marca)} · ${esc(p.modelo)}${p.cor ? ' · ' + esc(p.cor) : ''}</span></td>
+      <td class="oculta-mobile">${esc(p.genero === 'Kids' ? 'Infantil' : p.genero)}</td>
+      <td>${BRL(p.avista)}</td>
+      <td>${p.ativo ? 'Sim' : 'Não'}</td></tr>`).join('')
+    || `<tr><td colspan="4" class="muted">${vazio}</td></tr>`;
+}
+$('#busca').addEventListener('input', desenharLista);
+$('#lista').addEventListener('click', e => {
+  const tr = e.target.closest('tr[data-id]'); if (!tr) return;
+  abrirForm(lista.find(p => p.id === tr.dataset.id));
+});
+$('#lista').addEventListener('keydown', e => {
+  if (e.key !== 'Enter' && e.key !== ' ') return;
+  const tr = e.target.closest('tr[data-id]'); if (!tr) return;
+  e.preventDefault(); abrirForm(lista.find(p => p.id === tr.dataset.id));
+});
+$('#novo').addEventListener('click', () => {
+  novoId = 'p' + Date.now().toString(36);
+  abrirForm(null);
+});
+
+// ---------- formulário
+function abrirForm(p){
+  atual = p || null;
+  fotosAtual = p ? [...(p.fotos || [])] : [];
+  $('#tituloForm').textContent = p ? 'Editar produto' : 'Novo produto';
+  $('#f_marca').value = p?.marca || '';
+  $('#f_modelo').value = p?.modelo || '';
+  $('#f_nome').value = p?.nome || '';
+  $('#f_cor').value = p?.cor || '';
+  $('#f_genero').value = p?.genero || 'Unissex';
+  $('#f_sizes').value = (p?.sizes || []).join(',');
+  $('#f_preco').value = p?.preco ?? '';
+  $('#f_avista').value = p?.avista ?? '';
+  $('#f_parcela').value = p?.parcela ?? '';
+  $('#f_desc').value = p?.descricao || '';
+  $('#f_ativo').checked = p ? !!p.ativo : true;
+  $('#excluir').hidden = !p;
+  $('#msgForm').textContent = '';
+  desenharFotos();
+  $('#form').hidden = false;
+  $('#form').scrollIntoView({behavior: 'smooth', block: 'start'});
+}
+function fecharForm(){ $('#form').hidden = true; atual = null; $('#msgForm').textContent = ''; }
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#form').hidden) fecharForm(); });
+$('#cancelar').addEventListener('click', fecharForm);
+
+function desenharFotos(){
+  $('#fotos').innerHTML = fotosAtual.map((u, i) =>
+    `<div class="foto"><img src="${esc(u)}" alt=""><button type="button" data-rm="${i}" aria-label="Remover foto">×</button></div>`).join('');
+}
+$('#fotos').addEventListener('click', e => {
+  const b = e.target.closest('[data-rm]'); if (!b) return;
+  fotosAtual.splice(+b.dataset.rm, 1); desenharFotos();
+});
+
+function reduzir(file){
+  return new Promise((res, rej) => {
+    const img = new Image();
+    img.onload = () => {
+      const k = Math.min(1, 720 / Math.max(img.width, img.height));
+      const c = document.createElement('canvas');
+      c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(img.src);
+      c.toBlob(b => b ? res(b) : rej(new Error('não foi possível reduzir a foto')), 'image/jpeg', 0.78);
+    };
+    img.onerror = () => rej(new Error('arquivo de imagem inválido'));
+    img.src = URL.createObjectURL(file);
+  });
+}
+$('#upload').addEventListener('change', async e => {
+  const files = [...e.target.files];
+  const id = atual?.id || novoId;
+  for (const f of files){
+    if (fotosAtual.length >= 4) { $('#msgForm').textContent = 'Máximo de 4 fotos por produto.'; break; }
+    try {
+      $('#msgForm').textContent = `Enviando foto ${fotosAtual.length + 1} de até 4…`;
+      const blob = await reduzir(f);
+      const caminho = `${id}/${Date.now()}_${fotosAtual.length + 1}.jpg`;
+      const { error } = await sb.storage.from('fotos').upload(caminho, blob, { contentType: 'image/jpeg' });
+      if (error) throw error;
+      fotosAtual.push(sb.storage.from('fotos').getPublicUrl(caminho).data.publicUrl);
+      desenharFotos();
+    } catch (err) {
+      $('#msgForm').textContent = 'Não foi possível enviar esta foto: ' + err.message;
+    }
+  }
+  $('#msgForm').textContent = '';
+  e.target.value = '';
+});
+
+const num = v => v === '' || v == null ? null : Number(v);
+$('#form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const id = atual?.id || novoId;
+  const sizes = $('#f_sizes').value.split(',').map(s => Number(s.trim())).filter(n => n > 0);
+  if (sizes.length === 0) { $('#msgForm').textContent = 'Informe pelo menos uma numeração, separada por vírgula. Ex: 34,35,36.'; $('#f_sizes').focus(); return; }
+  if (fotosAtual.length === 0 && !confirm('Este produto não tem foto. Na loja ele aparece sem imagem. Salvar mesmo assim?')) return;
+  const row = {
+    id,
+    marca: $('#f_marca').value.trim(),
+    modelo: $('#f_modelo').value.trim(),
+    nome: $('#f_nome').value.trim(),
+    cor: $('#f_cor').value.trim(),
+    genero: $('#f_genero').value,
+    sizes,
+    preco: num($('#f_preco').value),
+    avista: num($('#f_avista').value),
+    parcela: num($('#f_parcela').value),
+    descricao: $('#f_desc').value.trim(),
+    fotos: fotosAtual,
+    ativo: $('#f_ativo').checked
+  };
+  $('#msgForm').textContent = 'Salvando…';
+  const { error } = await sb.from('produtos').upsert(row);
+  if (error) { $('#msgForm').textContent = 'Não foi possível salvar: ' + error.message + '. Nada foi perdido, tente de novo.'; return; }
+  await carregarLista();
+  fecharForm();
+  $('#status').textContent = `"${row.nome}" salvo.`;
+});
+$('#excluir').addEventListener('click', async () => {
+  if (!atual) return;
+  if (!confirm('Excluir "' + atual.nome + '"? Não dá para desfazer. Se quiser só esconder da loja, desmarque "Mostrar no site".')) return;
+  const { error } = await sb.from('produtos').delete().eq('id', atual.id);
+  if (error) { $('#msgForm').textContent = 'Não foi possível excluir: ' + error.message; return; }
+  const nome = atual.nome;
+  await carregarLista();
+  fecharForm();
+  $('#status').textContent = `"${nome}" excluído.`;
+});
+
+// ---------- textos do site
+async function carregarTextos(){
+  const { data } = await sb.from('config').select('*');
+  const m = Object.fromEntries((data || []).map(r => [r.chave, r.valor]));
+  $('#t_whatsapp').value = m.whatsapp || '';
+  $('#t_horario').value = m.horario || '';
+  $('#t_hero_titulo').value = m.hero_titulo || '';
+  $('#t_hero_texto').value = m.hero_texto || '';
+}
+$('#formTextos').addEventListener('submit', async e => {
+  e.preventDefault();
+  const itens = [
+    ['whatsapp', $('#t_whatsapp').value.replace(/\D/g, '')],
+    ['horario', $('#t_horario').value.trim()],
+    ['hero_titulo', $('#t_hero_titulo').value.trim()],
+    ['hero_texto', $('#t_hero_texto').value.trim()]
+  ].filter(([, v]) => v !== '').map(([chave, valor]) => ({ chave, valor }));
+  const { error } = await sb.from('config').upsert(itens);
+  $('#msgTextos').textContent = error ? 'Não foi possível salvar os textos: ' + error.message : 'Textos salvos. Atualize a loja para ver as mudanças.';
+});
+</script>
+</body>
+</html>
