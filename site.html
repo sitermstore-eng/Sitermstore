@@ -1,0 +1,1094 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RM Store · Catálogo</title>
+<link rel="icon" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&family=Manrope:wght@400;500;700&display=swap">
+<style>
+/* Faixa escura no topo, coluna de filtros à esquerda, vitrine à direita.
+   Paleta: quase preto, bordô RM, dourado quente. */
+:root{
+  --bg:#f6f4f1; --surface:#fff; --ink:#111; --muted:#6f6a64; --line:#e2ded8; --soft:#ece8e2;
+  --band:#0b0b0b; --band-ink:#f4f1ec; --accent:#6e1f2f; --accent-ink:#fff; --gold:#b89a5e; --wa:#1f9d55;
+  --display:"Jost","Futura","Century Gothic",sans-serif;
+  --body:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --r:10px;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:40;background:var(--band)}
+img{max-width:100%}
+button,input,select,textarea{font:inherit;color:inherit}
+.wrap{max-width:1280px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.spacer{flex:1}
+.mark{display:inline-block;width:40px;height:27px;background:currentColor;
+  -webkit-mask:url("data:image/png;base64,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") center/contain no-repeat;mask:url("data:image/png;base64,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") center/contain no-repeat}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.muted{color:var(--muted);font-size:13px}
+
+/* ---------- topo ---------- */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--band);color:var(--band-ink)}
+header.top .wrap{display:flex;align-items:center;gap:10px;padding-block:12px}
+.brand{display:flex;align-items:center;gap:10px;color:inherit;text-decoration:none;flex-shrink:0}
+.brand b{font-family:var(--display);letter-spacing:.16em;font-weight:500;font-size:15px;display:block;line-height:1.1}
+.brand small{display:block;color:var(--gold);font-size:10px;letter-spacing:.1em}
+.tbtn{background:transparent;color:var(--band-ink);border:1px solid #3a3835;border-radius:999px;padding:8px 14px;cursor:pointer;display:inline-flex;gap:8px;align-items:center;white-space:nowrap;font-size:14px}
+.tbtn.cheio{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700}
+.tbtn .n{background:var(--accent);color:#fff;border-radius:999px;min-width:22px;padding:0 6px;font-size:12px;text-align:center}
+.tbtn.cheio .n{background:#fff;color:var(--accent)}
+
+/* ---------- barra admin ---------- */
+.admbar{background:#1b1917;color:#f4f1ec;border-bottom:1px solid #2f2c29}
+.admbar .wrap{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding-block:12px}
+.admtag{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:700}
+.abtn{background:var(--accent);color:#fff;border:1px solid var(--accent);border-radius:8px;padding:8px 13px;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.abtn.vazio{background:transparent;color:#f4f1ec;border-color:#3f3b37}
+.admbar label{display:flex;gap:6px;align-items:center;font-size:13px;color:#c9c3ba}
+.admbar input{width:74px;padding:7px 8px;border-radius:8px;border:1px solid #3f3b37;background:#0d0c0b;color:#f4f1ec}
+
+/* ---------- vitrine de abertura ---------- */
+.hero{background:var(--band);color:var(--band-ink)}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:center;padding-block:40px 0}
+.hero-k{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+.hero h1{font-family:var(--display);font-size:clamp(50px,8.5vw,108px);line-height:.9;margin:14px 0 18px;letter-spacing:.04em;font-weight:600;text-wrap:balance}
+.hero p{color:#bdb6ab;max-width:46ch;margin:0}
+.hero-img{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.hero-img img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:14px;display:block;background:#1a1917}
+.hero-img img:last-child{margin-top:40px}
+.hnav{grid-column:1/-1;display:flex;justify-content:center;gap:6px;border-top:1px solid #262422;padding:14px 0;margin-top:24px;overflow-x:auto;scrollbar-width:none}
+.hnav::-webkit-scrollbar{display:none}
+.hnav button{flex-shrink:0;background:none;border:0;color:var(--band-ink);padding:9px 20px;border-radius:999px;cursor:pointer;font-family:var(--display);letter-spacing:.16em;text-transform:uppercase;font-size:13px}
+.hnav button[aria-pressed="true"]{background:var(--band-ink);color:var(--band)}
+
+/* ---------- barra de busca e ordenação ---------- */
+.bar{background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:calc(env(safe-area-inset-top,0px) + 57px);z-index:20}
+.bar .wrap{padding-block:12px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.busca{flex:1;min-width:200px;max-width:420px;padding:9px 12px;border:1px solid var(--line);border-radius:999px;background:var(--surface)}
+.conta{color:var(--muted);font-size:13px;white-space:nowrap}
+.bar .ord{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);margin-left:auto}
+.bar select{padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);max-width:100%}
+.btn-f{display:none;align-items:center;gap:8px;border:1px solid var(--ink);background:var(--surface);border-radius:999px;padding:8px 15px;font-size:13px;font-weight:700;cursor:pointer}
+.btn-f .n{background:var(--accent);color:#fff;border-radius:999px;padding:0 7px;font-size:11px;min-width:18px;text-align:center}
+
+/* ---------- layout ---------- */
+.layout .wrap{display:grid;grid-template-columns:248px minmax(0,1fr);gap:30px;align-items:start;padding-block:22px 56px}
+.filtros{position:sticky;top:calc(env(safe-area-inset-top,0px) + 118px);background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:2px 16px;max-height:calc(100vh - 150px);overflow:auto}
+.sheet-h,.sheet-f{display:none}
+.grupo{padding-block:15px;border-bottom:1px solid var(--line)}
+.grupo:last-of-type{border-bottom:0}
+.grupo h3{font-family:var(--display);font-size:11px;letter-spacing:.16em;text-transform:uppercase;margin:0 0 11px;font-weight:600;color:var(--muted)}
+.opt{display:flex;align-items:center;gap:9px;padding:5px 0;cursor:pointer;font-size:14px;min-width:0}
+.opt input{flex-shrink:0;accent-color:var(--accent);width:16px;height:16px}
+.opt span.t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.opt .n{margin-left:auto;color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums;flex-shrink:0}
+.lista{max-height:250px;overflow:auto;padding-right:4px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--surface);padding:6px 11px;border-radius:999px;font-size:13px;cursor:pointer;min-width:42px;font-variant-numeric:tabular-nums}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.filtros input[type=search]{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);margin-bottom:9px}
+.filtros select{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+.limpar{width:100%;margin:14px 0;border:1px solid var(--line);background:transparent;border-radius:8px;padding:9px;cursor:pointer}
+
+/* ---------- vitrine ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:20px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.foto{aspect-ratio:1/1;background:var(--soft);display:grid;place-items:center;overflow:hidden;cursor:pointer;position:relative}
+.foto img{width:100%;height:100%;object-fit:cover;display:block}
+.ph{font-family:var(--display);color:var(--muted);letter-spacing:.14em;font-size:12px;text-align:center;line-height:1.6;padding:12px}
+.ph b{display:block;font-size:20px;letter-spacing:.2em;color:#c9c2b8}
+.cores{display:flex;gap:6px;padding:8px 10px 0;overflow-x:auto;scrollbar-width:none}
+.cores::-webkit-scrollbar{display:none}
+.sw{width:38px;height:38px;flex-shrink:0;padding:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;cursor:pointer;background:var(--soft)}
+.sw img{width:100%;height:100%;object-fit:cover;display:block}
+.sw[aria-pressed="true"]{border-color:var(--ink);box-shadow:0 0 0 1px var(--ink)}
+.sw.vazio{display:grid;place-items:center;font-size:10px;color:var(--muted);letter-spacing:.06em}
+.sw.mais{font-size:13px;font-weight:700;color:var(--ink);background:var(--surface);border-style:dashed}
+.info{padding:11px 12px 12px;display:flex;flex-direction:column;gap:3px;flex:1;min-width:0}
+.tagm{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted)}
+.nome{font-size:14px;font-weight:700;line-height:1.3;margin:0;cursor:pointer;overflow-wrap:anywhere}
+.corat{font-size:12px;color:var(--muted);text-transform:lowercase}
+.preco{font-family:var(--display);font-size:21px;font-weight:600;font-variant-numeric:tabular-nums;margin-top:7px;line-height:1.1}
+.de{font-size:12px;color:var(--muted);text-decoration:line-through;font-variant-numeric:tabular-nums}
+.parc{font-size:12px;color:var(--muted)}
+.tag{display:inline-block;align-self:flex-start;border-radius:999px;padding:2px 9px;font-size:11px;font-weight:700;margin-top:6px}
+.tag.promo{background:var(--accent);color:#fff}
+.tag.oculto{background:#3a3835;color:#f4f1ec}
+.acoes{margin-top:auto;padding-top:11px;display:grid;gap:7px}
+.acoes select{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);font-variant-numeric:tabular-nums}
+.btn{background:var(--accent);color:var(--accent-ink);border:0;border-radius:8px;padding:10px 12px;font-weight:700;cursor:pointer;width:100%}
+.btn[disabled]{background:var(--soft);color:var(--muted);cursor:not-allowed}
+.btn-ed{background:none;border:1px dashed var(--accent);color:var(--accent);border-radius:8px;padding:8px;cursor:pointer;font-weight:700;font-size:13px;width:100%}
+.nada{grid-column:1/-1;text-align:center;color:var(--muted);padding:56px 16px}
+.nada b{display:block;color:var(--ink);font-size:17px;margin-bottom:6px}
+
+/* ---------- sacola ---------- */
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:45}
+.ov[hidden]{display:none}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(420px,100%);background:var(--surface);z-index:50;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .25s ease;padding:env(safe-area-inset-top,0px) max(16px,env(safe-area-inset-right,0px)) env(safe-area-inset-bottom,0px) max(16px,env(safe-area-inset-left,0px))}
+.drawer.aberto{transform:none}
+.dh{display:flex;align-items:center;justify-content:space-between;padding-block:16px;border-bottom:1px solid var(--line);flex-shrink:0}
+.dh b{font-family:var(--display);letter-spacing:.06em;font-size:18px}
+.x{background:none;border:0;font-size:26px;line-height:1;cursor:pointer;padding:4px 8px}
+.dcorpo{overflow:auto;flex:1;min-height:0}
+.itens{list-style:none;margin:0;padding:0}
+.item{display:flex;gap:11px;padding-block:12px;border-bottom:1px solid var(--line)}
+.item img{width:56px;height:56px;object-fit:cover;border-radius:8px;flex-shrink:0;background:var(--soft)}
+.item-c{flex:1;min-width:0}
+.item-n{font-size:14px;font-weight:700;line-height:1.3}
+.item-r{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:4px;font-variant-numeric:tabular-nums;flex-shrink:0}
+.qtd{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:999px;padding:2px 4px}
+.qtd button{background:none;border:0;width:24px;height:24px;cursor:pointer;font-size:16px;line-height:1}
+.qtd span{min-width:18px;text-align:center;font-variant-numeric:tabular-nums}
+.rm{background:none;border:0;color:var(--accent);cursor:pointer;font-size:12px;padding:0;text-decoration:underline}
+.vazio-sac{text-align:center;color:var(--muted);padding:48px 0}
+.dpe{flex-shrink:0;border-top:1px solid var(--line);padding-bottom:12px}
+.dtot{display:flex;justify-content:space-between;align-items:baseline;padding-block:14px;font-size:14px}
+.dtot b{font-family:var(--display);font-size:23px;font-variant-numeric:tabular-nums}
+.dform{display:grid;gap:10px}
+.dform label{display:grid;gap:4px;font-size:13px;color:var(--muted)}
+.dform input,.dform select{padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);width:100%}
+.wa{display:block;text-align:center;background:var(--wa);color:#fff;text-decoration:none;border-radius:8px;padding:12px;font-weight:700;margin-top:12px}
+.wa[aria-disabled="true"]{background:var(--soft);color:var(--muted);pointer-events:none}
+.copiar{width:100%;margin-top:8px;border:1px solid var(--line);background:transparent;border-radius:8px;padding:10px;cursor:pointer}
+.aviso{font-size:12px;color:var(--muted);margin:12px 0 0}
+
+/* ---------- janelas ---------- */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:60;display:flex;align-items:center;justify-content:center;padding:16px}
+.modal[hidden]{display:none}
+.caixa{background:var(--surface);border-radius:14px;max-width:460px;width:100%;position:relative;max-height:92vh;overflow:auto;padding:26px}
+.caixa.g{max-width:700px}
+.caixa.xg{max-width:1020px;padding:0;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)}
+.ctit{margin:0 0 16px;font-family:var(--display);font-weight:500;letter-spacing:.04em;font-size:22px}
+.fechar{position:absolute;top:10px;right:10px;background:var(--surface);border:1px solid var(--line);border-radius:999px;width:36px;height:36px;font-size:22px;line-height:1;cursor:pointer;z-index:3}
+.mfoto{position:relative;background:var(--soft);display:flex;align-items:center;justify-content:center;min-height:300px}
+.mfoto img{width:100%;height:100%;max-height:78vh;object-fit:contain;display:block}
+.seta{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.92);border:0;border-radius:999px;width:40px;height:40px;font-size:20px;cursor:pointer;box-shadow:0 1px 6px rgba(0,0,0,.2)}
+#mAnt{left:10px}#mProx{right:10px}
+.mcont{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.65);color:#fff;font-size:12px;padding:3px 11px;border-radius:999px}
+.minfo{padding:22px;display:flex;flex-direction:column;gap:4px;overflow:auto}
+.mthumbs{display:flex;gap:6px;overflow-x:auto;padding:6px 0 2px;scrollbar-width:thin}
+.mthumbs .sw{width:52px;height:52px}
+.campos{display:grid;gap:12px}
+.campos label{display:grid;gap:4px;font-size:13px;color:var(--muted)}
+.campos input,.campos select,.campos textarea{padding:10px;border:1px solid var(--line);border-radius:8px;background:#fff;width:100%}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.erro{color:#a12a2a;font-size:13px;margin:0;min-height:18px}
+.linha{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.perigo{color:#a12a2a;background:none;border:0;cursor:pointer;font-weight:700}
+.fotos-ed{display:flex;gap:8px;flex-wrap:wrap}
+.fotos-ed .f{position:relative;width:76px;height:76px}
+.fotos-ed img{width:100%;height:100%;object-fit:cover;border-radius:8px}
+.fotos-ed .f button{position:absolute;top:3px;right:3px;background:rgba(0,0,0,.72);color:#fff;border:0;border-radius:999px;width:22px;height:22px;cursor:pointer;line-height:1}
+
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;background:var(--ink);color:var(--surface);padding:11px 18px;border-radius:999px;font-size:13px;transition:.25s;pointer-events:none;z-index:70;max-width:90vw;text-align:center}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.rod{border-top:1px solid var(--line);padding-block:22px;font-size:13px;color:var(--muted);text-align:center}
+
+/* ---------- telas pequenas ---------- */
+@media (max-width:980px){
+  .layout .wrap{grid-template-columns:minmax(0,1fr);gap:0;padding-block:14px 44px}
+  .bar{position:static}
+  .btn-f{display:inline-flex}
+  .bar .ord{margin-left:0}
+  .sheet-h,.sheet-f{display:flex}
+  .filtros{position:fixed;left:0;right:0;bottom:0;top:auto;max-height:84vh;border:0;border-radius:18px 18px 0 0;
+    padding:0 max(16px,env(safe-area-inset-left,0px)) max(16px,env(safe-area-inset-bottom,0px));
+    transform:translateY(102%);transition:transform .25s ease;z-index:55;box-shadow:0 -10px 34px rgba(0,0,0,.22)}
+  .filtros.aberto{transform:none}
+  .sheet-h{justify-content:space-between;align-items:center;padding-block:15px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--surface);z-index:1}
+  .sheet-h b{font-family:var(--display);letter-spacing:.06em;font-size:17px}
+  .sheet-f{position:sticky;bottom:0;background:var(--surface);padding-block:12px;border-top:1px solid var(--line)}
+  .sheet-f .btn{padding:13px}
+  .hero .wrap{grid-template-columns:minmax(0,1fr);gap:18px;padding-block:26px 0}
+  .hero-img{gap:8px}
+  .hero-img img:last-child{margin-top:20px}
+  .hnav{justify-content:flex-start;margin-top:10px;padding-block:11px}
+  .hnav button{padding:8px 15px;font-size:12px}
+  .caixa.xg{grid-template-columns:minmax(0,1fr);max-height:92vh}
+  .mfoto img{max-height:48vh}
+}
+@media (max-width:640px){
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+  .info{padding:9px 10px 10px}
+  .nome{font-size:13px}
+  .preco{font-size:18px}
+  .sw{width:32px;height:32px}
+  .acoes select,.btn{padding:9px 8px;font-size:14px}
+  .g2{grid-template-columns:1fr}
+  .caixa{padding:20px}
+  .brand small{display:none}
+  .tbtn{padding:7px 11px;font-size:13px}
+}
+@media (prefers-reduced-motion:reduce){.drawer,.filtros,.toast{transition:none}}
+</style>
+</head>
+<body>
+
+<header class="top"><div class="wrap">
+  <a class="brand" href="#"><span class="mark" aria-hidden="true"></span><span><b>RM STORE</b><small>Calçados</small></span></a>
+  <span class="spacer"></span>
+  <button class="tbtn" id="btnAdm" type="button" hidden>Admin</button>
+  <button class="tbtn cheio" id="abrirSacola" type="button">Sacola <span class="n" id="qtd">0</span></button>
+</div></header>
+
+<div class="admbar" id="admbar" hidden>
+  <div class="wrap">
+    <span class="admtag">Modo administrador</span>
+    <button type="button" class="abtn" id="novoProd">+ Novo produto</button>
+    <label>Desconto <input type="number" id="promoPct" min="1" max="90" inputmode="numeric" placeholder="%" aria-label="Percentual de desconto"> % em todos</label>
+    <button type="button" class="abtn" id="aplicarPromo">Aplicar</button>
+    <button type="button" class="abtn vazio" id="removerPromo">Tirar promoção</button>
+    <span class="spacer"></span>
+    <button type="button" class="abtn vazio" id="soSemFoto" aria-pressed="false">Ver só sem foto</button>
+    <button type="button" class="abtn vazio" id="btnTextos">Textos do site</button>
+    <button type="button" class="abtn vazio" id="sairAdm">Sair</button>
+  </div>
+</div>
+
+<section class="hero"><div class="wrap">
+  <div>
+    <span class="hero-k">Calçados · RM Store</span>
+    <h1 id="heroTitulo">RM<br>STORE</h1>
+    <p id="heroTexto">Tênis para homem, mulher e infantil. Escolha a cor e feche o pedido pelo WhatsApp.</p>
+  </div>
+  <div class="hero-img" aria-hidden="true"><img src="fotos/p001_1.jpg" alt=""><img src="fotos/p019_1.jpg" alt=""></div>
+  <nav class="hnav" id="hnav" aria-label="Categorias"></nav>
+</div></section>
+
+<div class="bar"><div class="wrap">
+  <input type="search" id="busca" class="busca" placeholder="Buscar tênis, modelo ou cor" aria-label="Buscar produto">
+  <button class="btn-f" id="abrirFiltros" type="button" aria-expanded="false" aria-controls="filtros">Filtros <span class="n" id="nFiltros" hidden></span></button>
+  <span class="conta" id="conta" role="status"></span>
+  <label class="ord">Ordenar
+    <select id="ord" aria-label="Ordenar produtos">
+      <option value="rel">Destaques</option>
+      <option value="menor">Menor preço</option>
+      <option value="maior">Maior preço</option>
+      <option value="nome">Nome A-Z</option>
+    </select>
+  </label>
+</div></div>
+
+<main class="layout"><div class="wrap">
+  <aside class="filtros" id="filtros" aria-label="Filtros">
+    <div class="sheet-h"><b>Filtros</b><button class="x" id="fecharFiltros" type="button" aria-label="Fechar filtros">×</button></div>
+    <div class="grupo"><h3>Marca</h3><select id="fMarca" aria-label="Filtrar por marca"></select></div>
+    <div class="grupo"><h3>Gênero</h3><div id="fGenero"></div></div>
+    <div class="grupo"><h3>Modelo</h3><input type="search" id="buscaModelo" placeholder="Buscar modelo" aria-label="Buscar modelo"><div class="lista" id="fModelo"></div></div>
+    <div class="grupo"><h3>Numeração</h3><div class="chips" id="fTam"></div></div>
+    <div class="grupo"><h3>Preço à vista</h3><div id="fFaixa"></div></div>
+    <button class="limpar" id="limpar" type="button">Limpar filtros</button>
+    <div class="sheet-f"><button class="btn" id="verProdutos" type="button">Ver produtos</button></div>
+  </aside>
+  <section><div class="grid" id="grid"></div></section>
+</div></main>
+
+<footer class="rod"><div class="wrap">RM Store · WhatsApp <span id="zapTxt">(48) 9637-4837</span> · <span id="horario">Atendimento de segunda a sexta, das 8h às 18h</span></div></footer>
+
+<div class="ov" id="ov" hidden></div>
+
+<aside class="drawer" id="drawer" aria-label="Sacola" aria-hidden="true">
+  <div class="dh"><b>Sua sacola</b><button class="x" id="fecharSacola" type="button" aria-label="Fechar sacola">×</button></div>
+  <div class="dcorpo">
+    <ul class="itens" id="itens"></ul>
+    <div class="dform" id="dadosPedido">
+      <label>Seu nome<input id="cliNome" autocomplete="name" placeholder="Como devemos te chamar"></label>
+      <label>Entrega<select id="cliEntrega"><option>Retirada na loja</option><option>Entrega</option></select></label>
+      <label>Pagamento<select id="cliPagto"><option>Pix</option><option>Cartão</option><option>Dinheiro</option></select></label>
+    </div>
+  </div>
+  <div class="dpe">
+    <div class="dtot"><span>Total à vista</span><b id="total">R$ 0,00</b></div>
+    <a class="wa" id="zap" target="_blank" rel="noopener" href="#">Enviar pedido pelo WhatsApp</a>
+    <button class="copiar" id="copiar" type="button">Copiar pedido</button>
+    <p class="aviso">O pedido vai para o WhatsApp <span class="zapTxt">(48) 9637-4837</span>. Se o botão não abrir, copie o texto e mande no número.</p>
+  </div>
+</aside>
+
+<div class="modal" id="mProduto" hidden>
+  <div class="caixa xg" role="dialog" aria-modal="true" aria-labelledby="mNome">
+    <button class="fechar" id="mFechar" type="button" aria-label="Fechar">×</button>
+    <div class="mfoto">
+      <img id="mImg" src="" alt="">
+      <button class="seta" id="mAnt" type="button" aria-label="Foto anterior">‹</button>
+      <button class="seta" id="mProx" type="button" aria-label="Próxima foto">›</button>
+      <span class="mcont" id="mCont"></span>
+    </div>
+    <div class="minfo" id="mInfo"></div>
+  </div>
+</div>
+
+<div class="modal" id="mLogin" hidden>
+  <div class="caixa" role="dialog" aria-modal="true" aria-labelledby="tLogin">
+    <button class="fechar" id="lFechar" type="button" aria-label="Fechar">×</button>
+    <h2 class="ctit" id="tLogin">Entrar no painel</h2>
+    <form id="formLogin" class="campos">
+      <label>E-mail<input type="email" id="admEmail" required autocomplete="username"></label>
+      <label>Senha<input type="password" id="admSenha" required autocomplete="current-password"></label>
+      <button class="btn" type="submit" id="btnEntrar">Entrar</button>
+      <p class="erro" id="admErro" role="alert"></p>
+    </form>
+  </div>
+</div>
+
+<div class="modal" id="mTextos" hidden>
+  <div class="caixa" role="dialog" aria-modal="true" aria-labelledby="txTitulo">
+    <button class="fechar" id="txFechar" type="button" aria-label="Fechar">×</button>
+    <h2 class="ctit" id="txTitulo">Textos do site</h2>
+    <form id="formTextos" class="campos">
+      <label>WhatsApp (só números, com 55 e DDD)<input id="txZap" inputmode="numeric" placeholder="554896374837"></label>
+      <label>Horário de atendimento<input id="txHorario" placeholder="Atendimento de segunda a sexta, das 8h às 18h"></label>
+      <label>Título da capa (use uma linha por parte)<textarea id="txTitulo2" rows="2" placeholder="RM&#10;STORE"></textarea></label>
+      <label>Texto da capa<textarea id="txTexto" rows="2"></textarea></label>
+      <div class="linha">
+        <button class="btn" type="submit" style="width:auto">Salvar textos</button>
+        <button class="limpar" type="button" id="txCancelar" style="width:auto;margin:0">Cancelar</button>
+      </div>
+      <p class="erro" id="txMsg" role="status"></p>
+    </form>
+  </div>
+</div>
+
+<div class="modal" id="mEditor" hidden>
+  <div class="caixa g" role="dialog" aria-modal="true" aria-labelledby="edTitulo">
+    <button class="fechar" id="edFechar" type="button" aria-label="Fechar">×</button>
+    <h2 class="ctit" id="edTitulo">Novo produto</h2>
+    <form id="formEd" class="campos">
+      <div class="g2">
+        <label>Marca<input id="edMarca" required></label>
+        <label>Modelo<input id="edModelo" required></label>
+        <label>Nome do produto<input id="edNome" required></label>
+        <label>Cor<input id="edCor" placeholder="ex: preto/branco"></label>
+        <label>Gênero<select id="edGenero"><option>Masculino</option><option>Feminino</option><option>Kids</option><option>Unissex</option></select></label>
+        <label>Numeração (separe por vírgula)<input id="edSizes" placeholder="34,35,36,37" inputmode="numeric"></label>
+        <label>Preço de tabela<input id="edPreco" type="number" step="0.01" min="0" inputmode="decimal"></label>
+        <label>Preço à vista<input id="edAvista" type="number" step="0.01" min="0" required inputmode="decimal"></label>
+      </div>
+      <label>Descrição<textarea id="edDesc" rows="2"></textarea></label>
+      <label class="linha" style="gap:8px"><input type="checkbox" id="edAtivo" style="width:auto"> <span>Mostrar na loja</span></label>
+      <div>
+        <b>Fotos</b> <span class="muted">a foto é reduzida automaticamente antes de subir</span>
+        <div class="fotos-ed" id="edFotos" style="margin:9px 0"></div>
+        <input type="file" id="edUpload" accept="image/*" multiple>
+      </div>
+      <div class="linha">
+        <button class="btn" type="submit" style="width:auto">Salvar produto</button>
+        <button class="limpar" type="button" id="edCancelar" style="width:auto;margin:0">Cancelar</button>
+        <span class="spacer"></span>
+        <button class="perigo" type="button" id="edExcluir" hidden>Excluir produto</button>
+      </div>
+      <p class="erro" id="edMsg" role="status"></p>
+    </form>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+const SB_URL = 'https://xlucsopiwgpqhoziwoxp.supabase.co';
+const SB_KEY = 'sb_publishable_5FQ4YE8q7dvFSISkedckaQ_84I880h4';
+let WA = '554896374837';
+let P = [{"id":"p001","marca":"New Balance","colecao":"New Balance 9060","modelo":"9060","nome":"New balance 9060 luxo","cor":"off/creme","genero":"Unissex","fotos":["fotos/p001_1.jpg","fotos/p001_2.jpg","fotos/p001_3.jpg","fotos/p001_4.jpg","fotos/p001_5.jpg","fotos/p001_6.jpg","fotos/p001_7.jpg","fotos/p001_8.jpg","fotos/p001_9.jpg","fotos/p001_10.jpg","fotos/p001_11.jpg"],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":349.9,"avista":330.0,"parcela":58.32,"desc":"","promo":0,"ativo":true},{"id":"p002","marca":"New Balance","colecao":"New Balance 9060","modelo":"9060","nome":"New balance 9060 luxo","cor":"creme","genero":"Unissex","fotos":["fotos/p002_1.jpg","fotos/p002_2.jpg","fotos/p002_3.jpg","fotos/p002_4.jpg","fotos/p002_5.jpg","fotos/p002_6.jpg","fotos/p002_7.jpg","fotos/p002_8.jpg","fotos/p002_9.jpg","fotos/p002_10.jpg","fotos/p002_11.jpg"],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":349.9,"avista":330.0,"parcela":58.32,"desc":"","promo":0,"ativo":true},{"id":"p003","marca":"New Balance","colecao":"New Balance 9060","modelo":"9060","nome":"New balance 9060 luxo","cor":"branco/cinza","genero":"Feminino","fotos":["fotos/p003_1.jpg","fotos/p003_2.jpg","fotos/p003_3.jpg","fotos/p003_4.jpg","fotos/p003_5.jpg","fotos/p003_6.jpg","fotos/p003_7.jpg","fotos/p003_8.jpg","fotos/p003_9.jpg","fotos/p003_10.jpg","fotos/p003_11.jpg"],"sizes":[34,35,36,37,38,39],"preco":349.9,"avista":330.0,"parcela":58.32,"desc":"","promo":0,"ativo":true},{"id":"p004","marca":"New Balance","colecao":"New Balance 9060","modelo":"9060","nome":"New balance 9060 luxo","cor":"creme/marrom","genero":"Feminino","fotos":["fotos/p004_1.jpg","fotos/p004_2.jpg","fotos/p004_3.jpg","fotos/p004_4.jpg","fotos/p004_5.jpg","fotos/p004_6.jpg","fotos/p004_7.jpg","fotos/p004_8.jpg","fotos/p004_9.jpg","fotos/p004_10.jpg","fotos/p004_11.jpg"],"sizes":[34,35,36,37,38,39],"preco":349.9,"avista":330.0,"parcela":58.32,"desc":"","promo":0,"ativo":true},{"id":"p005","marca":"New Balance","colecao":"New Balance 9060","modelo":"9060","nome":"New balance 9060 luxo","cor":"branco/prata","genero":"Feminino","fotos":["fotos/p005_1.jpg","fotos/p005_2.jpg","fotos/p005_3.jpg","fotos/p005_4.jpg","fotos/p005_5.jpg","fotos/p005_6.jpg","fotos/p005_7.jpg","fotos/p005_8.jpg","fotos/p005_9.jpg","fotos/p005_10.jpg","fotos/p005_11.jpg"],"sizes":[34,35,36,37,38,39],"preco":349.9,"avista":330.0,"parcela":58.32,"desc":"","promo":0,"ativo":true},{"id":"p006","marca":"New Balance","colecao":"New Balance 9060","modelo":"9060","nome":"New balance 9060 luxo","cor":"marrom","genero":"Unissex","fotos":["fotos/p006_1.jpg","fotos/p006_2.jpg","fotos/p006_3.jpg","fotos/p006_4.jpg","fotos/p006_5.jpg","fotos/p006_6.jpg","fotos/p006_7.jpg","fotos/p006_8.jpg","fotos/p006_9.jpg","fotos/p006_10.jpg"],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":349.9,"avista":330.0,"parcela":58.32,"desc":"","promo":0,"ativo":true},{"id":"p007","marca":"New Balance","colecao":"New Balance 9060","modelo":"9060","nome":"New balance 9060 luxo","cor":"cinza","genero":"Feminino","fotos":["fotos/p007_1.jpg","fotos/p007_2.jpg","fotos/p007_3.jpg","fotos/p007_4.jpg","fotos/p007_5.jpg","fotos/p007_6.jpg","fotos/p007_7.jpg","fotos/p007_8.jpg","fotos/p007_9.jpg","fotos/p007_10.jpg"],"sizes":[34,35,36,37,38,39],"preco":349.9,"avista":330.0,"parcela":58.32,"desc":"","promo":0,"ativo":true},{"id":"p008","marca":"New Balance","colecao":"New Balance 9060","modelo":"9060","nome":"New balance 9060 luxo","cor":"creme/menta","genero":"Unissex","fotos":["fotos/p008_1.jpg","fotos/p008_2.jpg","fotos/p008_3.jpg","fotos/p008_4.jpg","fotos/p008_5.jpg","fotos/p008_6.jpg","fotos/p008_7.jpg","fotos/p008_8.jpg","fotos/p008_9.jpg","fotos/p008_10.jpg"],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":349.9,"avista":330.0,"parcela":58.32,"desc":"","promo":0,"ativo":true},{"id":"p009","marca":"New Balance","colecao":"New Balance 9060","modelo":"9060","nome":"New balance 9060 luxo","cor":"rosa","genero":"Unissex","fotos":["fotos/p009_1.jpg","fotos/p009_2.jpg","fotos/p009_3.jpg","fotos/p009_4.jpg","fotos/p009_5.jpg","fotos/p009_6.jpg","fotos/p009_7.jpg","fotos/p009_8.jpg","fotos/p009_9.jpg","fotos/p009_10.jpg"],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":349.9,"avista":330.0,"parcela":58.32,"desc":"","promo":0,"ativo":true},{"id":"p010","marca":"New Balance","colecao":"New Balance 9060","modelo":"9060","nome":"New balance 9060 luxo","cor":"bege/menta","genero":"Feminino","fotos":["fotos/p010_1.jpg","fotos/p010_2.jpg","fotos/p010_3.jpg","fotos/p010_4.jpg","fotos/p010_5.jpg","fotos/p010_6.jpg","fotos/p010_7.jpg","fotos/p010_8.jpg","fotos/p010_9.jpg","fotos/p010_10.jpg"],"sizes":[34,35,36,37,38,39],"preco":349.9,"avista":330.0,"parcela":58.32,"desc":"","promo":0,"ativo":true},{"id":"p011","marca":"New Balance","colecao":"New Balance 9060R","modelo":"9060R","nome":"New balance 9060R","cor":"cinza/azul","genero":"Unissex","fotos":["fotos/p011_1.jpg","fotos/p011_2.jpg","fotos/p011_3.jpg","fotos/p011_4.jpg","fotos/p011_5.jpg","fotos/p011_6.jpg","fotos/p011_7.jpg","fotos/p011_8.jpg","fotos/p011_9.jpg","fotos/p011_10.jpg","fotos/p011_11.jpg","fotos/p011_12.jpg","fotos/p011_13.jpg","fotos/p011_14.jpg"],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":269.9,"avista":250.0,"parcela":44.98,"desc":"","promo":0,"ativo":true},{"id":"p012","marca":"New Balance","colecao":"New Balance 9060R","modelo":"9060R","nome":"New balance 9060R","cor":"creme","genero":"Masculino","fotos":["fotos/p012_1.jpg","fotos/p012_2.jpg","fotos/p012_3.jpg","fotos/p012_4.jpg","fotos/p012_5.jpg","fotos/p012_6.jpg","fotos/p012_7.jpg","fotos/p012_8.jpg","fotos/p012_9.jpg","fotos/p012_10.jpg","fotos/p012_11.jpg","fotos/p012_12.jpg","fotos/p012_13.jpg","fotos/p012_14.jpg"],"sizes":[38,39,40,41,42,43],"preco":269.9,"avista":250.0,"parcela":44.98,"desc":"","promo":0,"ativo":true},{"id":"p013","marca":"New Balance","colecao":"New Balance 9060R","modelo":"9060R","nome":"New balance 9060R","cor":"off/lilás","genero":"Unissex","fotos":["fotos/p013_1.jpg","fotos/p013_2.jpg","fotos/p013_3.jpg","fotos/p013_4.jpg","fotos/p013_5.jpg","fotos/p013_6.jpg","fotos/p013_7.jpg","fotos/p013_8.jpg","fotos/p013_9.jpg","fotos/p013_10.jpg","fotos/p013_11.jpg","fotos/p013_12.jpg","fotos/p013_13.jpg","fotos/p013_14.jpg"],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":269.9,"avista":250.0,"parcela":44.98,"desc":"","promo":0,"ativo":true},{"id":"p014","marca":"New Balance","colecao":"New Balance 9060R","modelo":"9060R","nome":"New balance 9060R","cor":"bege/marrom","genero":"Feminino","fotos":["fotos/p014_1.jpg","fotos/p014_2.jpg","fotos/p014_3.jpg","fotos/p014_4.jpg","fotos/p014_5.jpg","fotos/p014_6.jpg","fotos/p014_7.jpg","fotos/p014_8.jpg","fotos/p014_9.jpg","fotos/p014_10.jpg","fotos/p014_11.jpg","fotos/p014_12.jpg","fotos/p014_13.jpg","fotos/p014_14.jpg"],"sizes":[34,35,36,37,38,39],"preco":269.9,"avista":250.0,"parcela":44.98,"desc":"","promo":0,"ativo":true},{"id":"p015","marca":"New Balance","colecao":"New Balance 9060R","modelo":"9060R","nome":"New balance 9060R","cor":"preto","genero":"Masculino","fotos":["fotos/p015_1.jpg","fotos/p015_2.jpg","fotos/p015_3.jpg","fotos/p015_4.jpg","fotos/p015_5.jpg","fotos/p015_6.jpg","fotos/p015_7.jpg","fotos/p015_8.jpg","fotos/p015_9.jpg","fotos/p015_10.jpg","fotos/p015_11.jpg","fotos/p015_12.jpg","fotos/p015_13.jpg","fotos/p015_14.jpg"],"sizes":[38,39,40,41,42,43],"preco":269.9,"avista":250.0,"parcela":44.98,"desc":"","promo":0,"ativo":true},{"id":"p016","marca":"New Balance","colecao":"New Balance 9060R","modelo":"9060R","nome":"New balance 9060R","cor":"off/preto","genero":"Feminino","fotos":["fotos/p016_1.jpg","fotos/p016_2.jpg","fotos/p016_3.jpg","fotos/p016_4.jpg","fotos/p016_5.jpg","fotos/p016_6.jpg","fotos/p016_7.jpg","fotos/p016_8.jpg","fotos/p016_9.jpg","fotos/p016_10.jpg","fotos/p016_11.jpg","fotos/p016_12.jpg","fotos/p016_13.jpg","fotos/p016_14.jpg"],"sizes":[34,35,36,37,38,39],"preco":269.9,"avista":250.0,"parcela":44.98,"desc":"","promo":0,"ativo":true},{"id":"p017","marca":"New Balance","colecao":"New Balance 9060R","modelo":"9060R","nome":"New balance 9060R","cor":"preto fosco","genero":"Feminino","fotos":["fotos/p017_1.jpg","fotos/p017_2.jpg","fotos/p017_3.jpg","fotos/p017_4.jpg","fotos/p017_5.jpg","fotos/p017_6.jpg","fotos/p017_7.jpg","fotos/p017_8.jpg","fotos/p017_9.jpg","fotos/p017_10.jpg","fotos/p017_11.jpg","fotos/p017_12.jpg","fotos/p017_13.jpg","fotos/p017_14.jpg"],"sizes":[34,35,36,37,38,39],"preco":269.9,"avista":250.0,"parcela":44.98,"desc":"","promo":0,"ativo":true},{"id":"p018","marca":"New Balance","colecao":"New Balance 9060R","modelo":"9060R","nome":"New balance 9060R","cor":"branco/preto","genero":"Feminino","fotos":["fotos/p018_1.jpg","fotos/p018_2.jpg","fotos/p018_3.jpg","fotos/p018_4.jpg","fotos/p018_5.jpg","fotos/p018_6.jpg","fotos/p018_7.jpg","fotos/p018_8.jpg","fotos/p018_9.jpg","fotos/p018_10.jpg","fotos/p018_11.jpg","fotos/p018_12.jpg","fotos/p018_13.jpg"],"sizes":[34,35,36,37,38,39],"preco":269.9,"avista":250.0,"parcela":44.98,"desc":"","promo":0,"ativo":true},{"id":"p019","marca":"New Balance","colecao":"New Balance 530","modelo":"530","nome":"New balance 530 luxo","cor":"branco/marinho","genero":"Unissex","fotos":["fotos/p019_1.jpg","fotos/p019_2.jpg","fotos/p019_3.jpg","fotos/p019_4.jpg","fotos/p019_5.jpg","fotos/p019_6.jpg","fotos/p019_7.jpg","fotos/p019_8.jpg","fotos/p019_9.jpg","fotos/p019_10.jpg","fotos/p019_11.jpg"],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":349.9,"avista":330.0,"parcela":58.32,"desc":"Linha luxo.","promo":0,"ativo":true},{"id":"p020","marca":"New Balance","colecao":"New Balance 530","modelo":"530","nome":"New balance 530 luxo","cor":"branco/rosa","genero":"Unissex","fotos":["fotos/p020_1.jpg","fotos/p020_2.jpg","fotos/p020_3.jpg","fotos/p020_4.jpg","fotos/p020_5.jpg","fotos/p020_6.jpg","fotos/p020_7.jpg","fotos/p020_8.jpg","fotos/p020_9.jpg","fotos/p020_10.jpg","fotos/p020_11.jpg"],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":349.9,"avista":330.0,"parcela":58.32,"desc":"Linha luxo.","promo":0,"ativo":true},{"id":"p021","marca":"New Balance","colecao":"New Balance 530","modelo":"530","nome":"New balance 530 luxo","cor":"branco/cinza","genero":"Feminino","fotos":["fotos/p021_1.jpg","fotos/p021_2.jpg","fotos/p021_3.jpg","fotos/p021_4.jpg","fotos/p021_5.jpg","fotos/p021_6.jpg","fotos/p021_7.jpg","fotos/p021_8.jpg","fotos/p021_9.jpg","fotos/p021_10.jpg"],"sizes":[34,35,36,37,38,39],"preco":349.9,"avista":330.0,"parcela":58.32,"desc":"Linha luxo.","promo":0,"ativo":true},{"id":"p022","marca":"New Balance","colecao":"New Balance 530","modelo":"530","nome":"New balance 530 luxo","cor":"off/cinza","genero":"Feminino","fotos":["fotos/p022_1.jpg","fotos/p022_2.jpg","fotos/p022_3.jpg","fotos/p022_4.jpg","fotos/p022_5.jpg","fotos/p022_6.jpg","fotos/p022_7.jpg","fotos/p022_8.jpg","fotos/p022_9.jpg","fotos/p022_10.jpg"],"sizes":[34,35,36,37,38,39],"preco":349.9,"avista":330.0,"parcela":58.32,"desc":"Linha luxo.","promo":0,"ativo":true},{"id":"p023","marca":"New Balance","colecao":"New Balance 530","modelo":"530","nome":"New balance 530 luxo","cor":"branco/prata","genero":"Feminino","fotos":["fotos/p023_1.jpg","fotos/p023_2.jpg","fotos/p023_3.jpg","fotos/p023_4.jpg","fotos/p023_5.jpg","fotos/p023_6.jpg","fotos/p023_7.jpg","fotos/p023_8.jpg","fotos/p023_9.jpg","fotos/p023_10.jpg"],"sizes":[34,35,36,37,38,39],"preco":349.9,"avista":330.0,"parcela":58.32,"desc":"Linha luxo.","promo":0,"ativo":true},{"id":"p024","marca":"New Balance","colecao":"New Balance 530","modelo":"530","nome":"New balance 530 luxo","cor":"branco/preto","genero":"Feminino","fotos":["fotos/p024_1.jpg","fotos/p024_2.jpg","fotos/p024_3.jpg","fotos/p024_4.jpg","fotos/p024_5.jpg","fotos/p024_6.jpg","fotos/p024_7.jpg","fotos/p024_8.jpg","fotos/p024_9.jpg","fotos/p024_10.jpg"],"sizes":[34,35,36,37,38,39],"preco":349.9,"avista":330.0,"parcela":58.32,"desc":"Linha luxo.","promo":0,"ativo":true},{"id":"p025","marca":"New Balance","colecao":"New Balance 530","modelo":"530","nome":"New balance 530 luxo","cor":"cinza/bege","genero":"Feminino","fotos":["fotos/p025_1.jpg","fotos/p025_2.jpg","fotos/p025_3.jpg","fotos/p025_4.jpg","fotos/p025_5.jpg","fotos/p025_6.jpg","fotos/p025_7.jpg","fotos/p025_8.jpg","fotos/p025_9.jpg","fotos/p025_10.jpg"],"sizes":[34,35,36,37,38,39],"preco":349.9,"avista":330.0,"parcela":58.32,"desc":"Linha luxo.","promo":0,"ativo":true},{"id":"p026","marca":"New Balance","colecao":"New Balance 530","modelo":"530","nome":"New balance 530 luxo","cor":"off/preto","genero":"Feminino","fotos":["fotos/p026_1.jpg","fotos/p026_2.jpg","fotos/p026_3.jpg","fotos/p026_4.jpg","fotos/p026_5.jpg","fotos/p026_6.jpg","fotos/p026_7.jpg","fotos/p026_8.jpg","fotos/p026_9.jpg","fotos/p026_10.jpg"],"sizes":[34,35,36,37,38,39],"preco":349.9,"avista":330.0,"parcela":58.32,"desc":"Linha luxo.","promo":0,"ativo":true},{"id":"p027","marca":"New Balance","colecao":"New Balance 530","modelo":"530","nome":"New balance 530 luxo","cor":"off/marrom","genero":"Feminino","fotos":["fotos/p027_1.jpg","fotos/p027_2.jpg","fotos/p027_3.jpg","fotos/p027_4.jpg","fotos/p027_5.jpg","fotos/p027_6.jpg","fotos/p027_7.jpg","fotos/p027_8.jpg","fotos/p027_9.jpg","fotos/p027_10.jpg"],"sizes":[34,35,36,37,38,39],"preco":349.9,"avista":330.0,"parcela":58.32,"desc":"Linha luxo.","promo":0,"ativo":true},{"id":"p028","marca":"New Balance","colecao":"New Balance 530","modelo":"530","nome":"New balance 530 luxo","cor":"branco/grafite","genero":"Feminino","fotos":["fotos/p028_1.jpg","fotos/p028_2.jpg","fotos/p028_3.jpg","fotos/p028_4.jpg","fotos/p028_5.jpg","fotos/p028_6.jpg","fotos/p028_7.jpg","fotos/p028_8.jpg","fotos/p028_9.jpg","fotos/p028_10.jpg"],"sizes":[34,35,36,37,38,39],"preco":349.9,"avista":330.0,"parcela":58.32,"desc":"Linha luxo.","promo":0,"ativo":true},{"id":"p029","marca":"New Balance","colecao":"New Balance 993","modelo":"993","nome":"New balance 993","cor":"preto/cinza","genero":"Masculino","fotos":["fotos/p029_1.jpg","fotos/p029_2.jpg","fotos/p029_3.jpg","fotos/p029_4.jpg","fotos/p029_5.jpg","fotos/p029_6.jpg"],"sizes":[39,40,41,42,43],"preco":269.9,"avista":250.0,"parcela":44.98,"desc":"","promo":0,"ativo":true},{"id":"p030","marca":"New Balance","colecao":"New Balance 993","modelo":"993","nome":"New balance 993","cor":"off/preto","genero":"Masculino","fotos":["fotos/p030_1.jpg","fotos/p030_2.jpg","fotos/p030_3.jpg","fotos/p030_4.jpg","fotos/p030_5.jpg","fotos/p030_6.jpg"],"sizes":[39,40,41,42,43],"preco":269.9,"avista":250.0,"parcela":44.98,"desc":"","promo":0,"ativo":true},{"id":"p031","marca":"New Balance","colecao":"New Balance 993","modelo":"993","nome":"New balance 993","cor":"cinza/marinho","genero":"Masculino","fotos":["fotos/p031_1.jpg","fotos/p031_2.jpg","fotos/p031_3.jpg","fotos/p031_4.jpg","fotos/p031_5.jpg"],"sizes":[39,40,41,42,43],"preco":269.9,"avista":250.0,"parcela":44.98,"desc":"","promo":0,"ativo":true},{"id":"p032","marca":"New Balance","colecao":"New Balance Retrô Abzorb","modelo":"Retrô Abzorb","nome":"New balance retrô abzorb","cor":"creme","genero":"Feminino","fotos":["fotos/p032_1.jpg","fotos/p032_2.jpg","fotos/p032_3.jpg","fotos/p032_4.jpg","fotos/p032_5.jpg","fotos/p032_6.jpg"],"sizes":[34,35,36,37,38,39],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"","promo":0,"ativo":true},{"id":"p033","marca":"New Balance","colecao":"New Balance Retrô Abzorb","modelo":"Retrô Abzorb","nome":"New balance retrô abzorb","cor":"rosa/bordô","genero":"Feminino","fotos":["fotos/p033_1.jpg","fotos/p033_2.jpg","fotos/p033_3.jpg","fotos/p033_4.jpg","fotos/p033_5.jpg","fotos/p033_6.jpg"],"sizes":[34,35,36,37,38,39],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"","promo":0,"ativo":true},{"id":"p034","marca":"New Balance","colecao":"New Balance Retrô Abzorb","modelo":"Retrô Abzorb","nome":"New balance retrô abzorb","cor":"prata","genero":"Feminino","fotos":["fotos/p034_1.jpg","fotos/p034_2.jpg","fotos/p034_3.jpg","fotos/p034_4.jpg","fotos/p034_5.jpg"],"sizes":[34,35,36,37,38,39],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"","promo":0,"ativo":true},{"id":"p035","marca":"New Balance","colecao":"New Balance 204L","modelo":"204L","nome":"New balance 204L prime couro","cor":"off/rosa","genero":"Feminino","fotos":["fotos/p035_1.jpg","fotos/p035_2.jpg","fotos/p035_3.jpg"],"sizes":[34,35,36,37,38,39],"preco":349.9,"avista":330.0,"parcela":58.32,"desc":"","promo":0,"ativo":true},{"id":"p036","marca":"New Balance","colecao":"New Balance 204L","modelo":"204L","nome":"New balance 204L prime couro","cor":"branco/cinza","genero":"Feminino","fotos":["fotos/p036_1.jpg","fotos/p036_2.jpg"],"sizes":[34,35,36,37,38,39],"preco":349.9,"avista":330.0,"parcela":58.32,"desc":"","promo":0,"ativo":true},{"id":"p037","marca":"New Balance","colecao":"New Balance 204L","modelo":"204L","nome":"New balance 204L prime couro","cor":"marrom","genero":"Feminino","fotos":["fotos/p037_1.jpg","fotos/p037_2.jpg"],"sizes":[34,35,36,37,38,39],"preco":349.9,"avista":330.0,"parcela":58.32,"desc":"","promo":0,"ativo":true},{"id":"p038","marca":"New Balance","colecao":"New Balance 204L","modelo":"204L","nome":"New balance 204L prime couro","cor":"verde oliva","genero":"Feminino","fotos":["fotos/p038_1.jpg","fotos/p038_2.jpg"],"sizes":[34,35,36,37,38,39],"preco":349.9,"avista":330.0,"parcela":58.32,"desc":"","promo":0,"ativo":true},{"id":"p039","marca":"New Balance","colecao":"New Balance 204L","modelo":"204L","nome":"New balance 204L prime couro","cor":"verde musgo","genero":"Feminino","fotos":["fotos/p039_1.jpg","fotos/p039_2.jpg"],"sizes":[34,35,36,37,38,39],"preco":349.9,"avista":330.0,"parcela":58.32,"desc":"","promo":0,"ativo":true},{"id":"p040","marca":"New Balance","colecao":"New Balance 204L","modelo":"204L","nome":"New balance 204L","cor":"bronze","genero":"Feminino","fotos":["fotos/p040_1.jpg","fotos/p040_2.jpg"],"sizes":[34,35,36,37,38,39],"preco":279.9,"avista":260.0,"parcela":46.65,"desc":"","promo":0,"ativo":true},{"id":"p041","marca":"New Balance","colecao":"New Balance 204L","modelo":"204L","nome":"New balance 204L","cor":"off/verde","genero":"Feminino","fotos":["fotos/p041_1.jpg","fotos/p041_2.jpg"],"sizes":[34,35,36,37,38,39],"preco":279.9,"avista":260.0,"parcela":46.65,"desc":"","promo":0,"ativo":true},{"id":"p042","marca":"New Balance","colecao":"New Balance 204L","modelo":"204L","nome":"New balance 204L","cor":"creme/rosa","genero":"Feminino","fotos":["fotos/p042_1.jpg","fotos/p042_2.jpg"],"sizes":[34,35,36,37,38,39],"preco":279.9,"avista":260.0,"parcela":46.65,"desc":"","promo":0,"ativo":true},{"id":"p043","marca":"New Balance","colecao":"New Balance 520 V9","modelo":"520 V9","nome":"New balance 520 V9","cor":"cinza/prata","genero":"Unissex","fotos":["fotos/p043_1.jpg","fotos/p043_2.jpg"],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":269.9,"avista":250.0,"parcela":44.98,"desc":"Cabedal em mesh respirável. Solado EVA, extremamente leve e confortável.","promo":0,"ativo":true},{"id":"p044","marca":"New Balance","colecao":"New Balance 520 V9","modelo":"520 V9","nome":"New balance 520 V9","cor":"prata/preto","genero":"Feminino","fotos":["fotos/p044_1.jpg","fotos/p044_2.jpg"],"sizes":[34,35,36,37,38,39],"preco":269.9,"avista":250.0,"parcela":44.98,"desc":"Cabedal em mesh respirável. Solado EVA, extremamente leve e confortável.","promo":0,"ativo":true},{"id":"p045","marca":"New Balance","colecao":"New Balance 520 V9","modelo":"520 V9","nome":"New balance 520 V9","cor":"prata/marinho","genero":"Unissex","fotos":["fotos/p045_1.jpg"],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":269.9,"avista":250.0,"parcela":44.98,"desc":"Cabedal em mesh respirável. Solado EVA, extremamente leve e confortável.","promo":0,"ativo":true},{"id":"p046","marca":"New Balance","colecao":"New Balance 520 V9","modelo":"520 V9","nome":"New balance 520 V9","cor":"cinza/preto","genero":"Feminino","fotos":["fotos/p046_1.jpg"],"sizes":[34,35,36,37,38,39],"preco":269.9,"avista":250.0,"parcela":44.98,"desc":"Cabedal em mesh respirável. Solado EVA, extremamente leve e confortável.","promo":0,"ativo":true},{"id":"p047","marca":"New Balance","colecao":"New Balance 327","modelo":"327","nome":"New balance 327","cor":"rosa/off","genero":"Feminino","fotos":["fotos/p047_1.jpg","fotos/p047_2.jpg","fotos/p047_3.jpg"],"sizes":[34,35,36,37,38,39],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"","promo":0,"ativo":true},{"id":"p048","marca":"New Balance","colecao":"New Balance 327","modelo":"327","nome":"New balance 327","cor":"creme","genero":"Feminino","fotos":["fotos/p048_1.jpg","fotos/p048_2.jpg","fotos/p048_3.jpg"],"sizes":[34,35,36,37,38,39],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"","promo":0,"ativo":true},{"id":"p049","marca":"New Balance","colecao":"New Balance 327","modelo":"327","nome":"New balance 327","cor":"off/bege","genero":"Feminino","fotos":["fotos/p049_1.jpg","fotos/p049_2.jpg"],"sizes":[34,35,36,37,38,39],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"","promo":0,"ativo":true},{"id":"p050","marca":"New Balance","colecao":"New Balance 327","modelo":"327","nome":"New balance 327","cor":"bege/caramelo","genero":"Feminino","fotos":["fotos/p050_1.jpg","fotos/p050_2.jpg"],"sizes":[34,35,36,37,38,39],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"","promo":0,"ativo":true},{"id":"p051","marca":"New Balance","colecao":"New Balance 327","modelo":"327","nome":"New balance 327","cor":"bege/dourado","genero":"Feminino","fotos":["fotos/p051_1.jpg","fotos/p051_2.jpg"],"sizes":[34,35,36,37,38,39],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"","promo":0,"ativo":true},{"id":"p052","marca":"New Balance","colecao":"New Balance Ct 330","modelo":"Ct 330","nome":"New balance CT 330","cor":"marrom","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":239.9,"avista":220.0,"parcela":39.98,"desc":"","promo":0,"ativo":true},{"id":"p053","marca":"New Balance","colecao":"New Balance Ct 330","modelo":"Ct 330","nome":"New balance CT 330","cor":"off/bordô","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":239.9,"avista":220.0,"parcela":39.98,"desc":"","promo":0,"ativo":true},{"id":"p054","marca":"New Balance","colecao":"New Balance Ct 330","modelo":"Ct 330","nome":"New balance CT 330","cor":"off/bronze","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":239.9,"avista":220.0,"parcela":39.98,"desc":"","promo":0,"ativo":true},{"id":"p055","marca":"New Balance","colecao":"New Balance Fuelcell Rebel","modelo":"Fuelcell Rebel","nome":"New balance fuelcell rebel prime","cor":"preto/branco","genero":"Unissex","fotos":["fotos/p055_1.jpg","fotos/p055_2.jpg"],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":289.9,"avista":270.0,"parcela":48.32,"desc":"Solado em EVA, extremamente leve e confortável.","promo":0,"ativo":true},{"id":"p056","marca":"New Balance","colecao":"New Balance Fuelcell Rebel","modelo":"Fuelcell Rebel","nome":"New balance fuelcell rebel prime","cor":"preto","genero":"Feminino","fotos":["fotos/p056_1.jpg","fotos/p056_2.jpg"],"sizes":[34,35,36,37,38,39],"preco":289.9,"avista":270.0,"parcela":48.32,"desc":"Solado em EVA, extremamente leve e confortável.","promo":0,"ativo":true},{"id":"p057","marca":"New Balance","colecao":"New Balance Fuelcell Rebel","modelo":"Fuelcell Rebel","nome":"New balance fuelcell rebel prime","cor":"preto/cinza","genero":"Feminino","fotos":["fotos/p057_1.jpg"],"sizes":[34,35,36,37,38,39],"preco":289.9,"avista":270.0,"parcela":48.32,"desc":"Solado em EVA, extremamente leve e confortável.","promo":0,"ativo":true},{"id":"p058","marca":"New Balance","colecao":"New Balance Fuelcell Rebel","modelo":"Fuelcell Rebel","nome":"New balance fuelcell rebel prime","cor":"preto/off","genero":"Feminino","fotos":["fotos/p058_1.jpg"],"sizes":[34,35,36,37,38,39],"preco":289.9,"avista":270.0,"parcela":48.32,"desc":"Solado em EVA, extremamente leve e confortável.","promo":0,"ativo":true},{"id":"p059","marca":"New Balance","colecao":"New Balance Fuelcell Rebel","modelo":"Fuelcell Rebel","nome":"New balance fuelcell rebel prime","cor":"preto/marinho","genero":"Masculino","fotos":["fotos/p059_1.jpg"],"sizes":[38,39,40,41,42,43],"preco":289.9,"avista":270.0,"parcela":48.32,"desc":"Solado em EVA, extremamente leve e confortável.","promo":0,"ativo":true},{"id":"p060","marca":"New Balance","colecao":"New Balance Fuelcell Rebel","modelo":"Fuelcell Rebel","nome":"New balance fuelcell rebel prime","cor":"preto/grafite","genero":"Feminino","fotos":["fotos/p060_1.jpg"],"sizes":[34,35,36,37,38,39],"preco":289.9,"avista":270.0,"parcela":48.32,"desc":"off/preto. Solado em EVA, extremamente leve e confortável.","promo":0,"ativo":true},{"id":"p061","marca":"New Balance","colecao":"New Balance Fuelcell Rebel","modelo":"Fuelcell Rebel","nome":"New balance fuelcell rebel prime","cor":"bege","genero":"Masculino","fotos":["fotos/p061_1.jpg"],"sizes":[38,39,40,41,42,43],"preco":289.9,"avista":270.0,"parcela":48.32,"desc":"Solado em EVA, extremamente leve e confortável.","promo":0,"ativo":true},{"id":"p062","marca":"New Balance","colecao":"New Balance Fuelcell Supercomp","modelo":"Fuelcell Supercomp","nome":"New balance fuelcell supercomp elite V5","cor":"bege","genero":"Feminino","fotos":["fotos/p062_1.jpg","fotos/p062_2.jpg"],"sizes":[34,35,36,37,38,39],"preco":289.9,"avista":270.0,"parcela":48.32,"desc":"Linha luxo. Solado em EVA, extremamente leve e confortável.","promo":0,"ativo":true},{"id":"p063","marca":"New Balance","colecao":"New Balance Fuelcell Supercomp","modelo":"Fuelcell Supercomp","nome":"New balance fuelcell supercomp elite V5","cor":"bege/marrom","genero":"Feminino","fotos":["fotos/p063_1.jpg","fotos/p063_2.jpg"],"sizes":[34,35,36,37,38,39],"preco":289.9,"avista":270.0,"parcela":48.32,"desc":"Linha luxo. Solado em EVA, extremamente leve e confortável.","promo":0,"ativo":true},{"id":"p064","marca":"Alexander McQueen","colecao":"Alexander Mcqueen","modelo":"Alexander Mcqueen","nome":"Alexander McQueen","cor":"branco/preto","genero":"Masculino","fotos":[],"sizes":[38,39,40,41,42,43],"preco":249.9,"avista":230.0,"parcela":41.65,"desc":"Muito confortável.","promo":0,"ativo":true},{"id":"p065","marca":"Alexander McQueen","colecao":"Alexander Mcqueen","modelo":"Alexander Mcqueen","nome":"Alexander McQueen couro","cor":"preto","genero":"Masculino","fotos":[],"sizes":[38,39,40,41,42,43],"preco":339.9,"avista":320.0,"parcela":56.65,"desc":"Extrema qualidade e conforto. Couro.","promo":0,"ativo":true},{"id":"p066","marca":"Alexander McQueen","colecao":"Alexander Mcqueen","modelo":"Alexander Mcqueen","nome":"Alexander McQueen","cor":"preto/branco","genero":"Masculino","fotos":[],"sizes":[38,39,40,41,42,43],"preco":249.9,"avista":230.0,"parcela":41.65,"desc":"Muito confortável.","promo":0,"ativo":true},{"id":"p067","marca":"Alexander McQueen","colecao":"Alexander Mcqueen","modelo":"Alexander Mcqueen","nome":"Alexander McQueen","cor":"branco","genero":"Masculino","fotos":[],"sizes":[38,39,40,41,42,43],"preco":249.9,"avista":230.0,"parcela":41.65,"desc":"Muito confortável.","promo":0,"ativo":true},{"id":"p068","marca":"Alexander McQueen","colecao":"Alexander Mcqueen","modelo":"Alexander Mcqueen","nome":"Alexander McQueen couro","cor":"branco/preto 2","genero":"Masculino","fotos":[],"sizes":[38,39,40,41,42,43],"preco":339.9,"avista":320.0,"parcela":56.65,"desc":"Extrema qualidade e conforto. Couro.","promo":0,"ativo":true},{"id":"p069","marca":"Alexander McQueen","colecao":"Alexander Mcqueen","modelo":"Alexander Mcqueen","nome":"Alexander McQueen couro","cor":"branco 2","genero":"Masculino","fotos":[],"sizes":[38,39,40,41,42,43],"preco":339.9,"avista":320.0,"parcela":56.65,"desc":"Extrema qualidade e conforto. Couro.","promo":0,"ativo":true},{"id":"p070","marca":"Alexander McQueen","colecao":"Alexander Mcqueen","modelo":"Alexander Mcqueen","nome":"Alexander McQueen couro","cor":"preto 2","genero":"Masculino","fotos":[],"sizes":[38,39,40,41,42,43],"preco":339.9,"avista":320.0,"parcela":56.65,"desc":"Extrema qualidade e conforto. Couro.","promo":0,"ativo":true},{"id":"p071","marca":"Puma","colecao":"Puma Speedcat","modelo":"Speedcat","nome":"Puma speedcat","cor":"Cor 1","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":249.9,"avista":230.0,"parcela":41.65,"desc":"","promo":0,"ativo":true},{"id":"p072","marca":"Puma","colecao":"Puma Speedcat","modelo":"Speedcat","nome":"Puma speedcat","cor":"Cor 2","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":249.9,"avista":230.0,"parcela":41.65,"desc":"","promo":0,"ativo":true},{"id":"p073","marca":"Alo","colecao":"Alo Runner","modelo":"Runner","nome":"Alo runner","cor":"Cor 1","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":279.9,"avista":260.0,"parcela":46.65,"desc":"Solado em EVA, super leve e extremamente macio.","promo":0,"ativo":true},{"id":"p074","marca":"Alo","colecao":"Alo Runner","modelo":"Runner","nome":"Alo runner","cor":"Cor 2","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":279.9,"avista":260.0,"parcela":46.65,"desc":"Solado em EVA, super leve e extremamente macio.","promo":0,"ativo":true},{"id":"p075","marca":"Alo","colecao":"Alo Runner","modelo":"Runner","nome":"Alo runner","cor":"Cor 3","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":279.9,"avista":260.0,"parcela":46.65,"desc":"Solado em EVA, super leve e extremamente macio.","promo":0,"ativo":true},{"id":"p076","marca":"Onitsuka Tiger","colecao":"Onitsuka Tiger","modelo":"Onitsuka Tiger","nome":"Onitsuka tiger couro","cor":"branco/preto","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":339.9,"avista":320.0,"parcela":56.65,"desc":"Couro.","promo":0,"ativo":true},{"id":"p077","marca":"Onitsuka Tiger","colecao":"Onitsuka Tiger","modelo":"Onitsuka Tiger","nome":"Onitsuka tiger couro","cor":"Cor 2","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":339.9,"avista":320.0,"parcela":56.65,"desc":"Couro.","promo":0,"ativo":true},{"id":"p078","marca":"Onitsuka Tiger","colecao":"Onitsuka Tiger","modelo":"Onitsuka Tiger","nome":"Onitsuka tiger couro","cor":"amarelo/preto","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":339.9,"avista":320.0,"parcela":56.65,"desc":"Couro.","promo":0,"ativo":true},{"id":"p079","marca":"Mizuno","colecao":"Mizuno Neo Vista 2","modelo":"Neo Vista 2","nome":"Mizuno neo vista 2","cor":"Cor 1","genero":"Unissex","fotos":[],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":279.9,"avista":260.0,"parcela":46.65,"desc":"Extremamente confortável.","promo":0,"ativo":true},{"id":"p080","marca":"Mizuno","colecao":"Mizuno Neo Vista 2","modelo":"Neo Vista 2","nome":"Mizuno neo vista 2","cor":"Cor 2","genero":"Unissex","fotos":[],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":279.9,"avista":260.0,"parcela":46.65,"desc":"Extremamente confortável.","promo":0,"ativo":true},{"id":"p081","marca":"Mizuno","colecao":"Mizuno Neo Vista 2","modelo":"Neo Vista 2","nome":"Mizuno neo vista 2","cor":"Cor 3","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38],"preco":279.9,"avista":260.0,"parcela":46.65,"desc":"Extremamente confortável.","promo":0,"ativo":true},{"id":"p082","marca":"Adidas","colecao":"Adidas Hyperboost Edge","modelo":"Hyperboost Edge","nome":"Adidas hyperboost edge","cor":"branco/prata","genero":"Unissex","fotos":[],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"","promo":0,"ativo":true},{"id":"p083","marca":"Adidas","colecao":"Adidas Hyperboost Edge","modelo":"Hyperboost Edge","nome":"Adidas hyperboost edge","cor":"branco/preto","genero":"Unissex","fotos":[],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"","promo":0,"ativo":true},{"id":"p084","marca":"Adidas","colecao":"Adidas Adizero Evo Sl","modelo":"Adizero Evo Sl","nome":"Adidas adizero EVO SL","cor":"branco/preto","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":289.9,"avista":270.0,"parcela":48.32,"desc":"","promo":0,"ativo":true},{"id":"p085","marca":"Adidas","colecao":"Adidas Adizero Evo Sl","modelo":"Adizero Evo Sl","nome":"Adidas adizero EVO SL","cor":"marsala","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":289.9,"avista":270.0,"parcela":48.32,"desc":"","promo":0,"ativo":true},{"id":"p086","marca":"Adidas","colecao":"Adidas Adizero Evo Sl","modelo":"Adizero Evo Sl","nome":"Adidas adizero EVO SL","cor":"preto/branco","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":289.9,"avista":270.0,"parcela":48.32,"desc":"","promo":0,"ativo":true},{"id":"p087","marca":"Adidas","colecao":"Adidas Adizero Adios Pro 3","modelo":"Adizero Adios Pro 3","nome":"Adidas adizero adios pro 3","cor":"Cor 1","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":389.9,"avista":370.0,"parcela":64.98,"desc":"Tênis de alta performance, leve e confortável, ideal para treinos e provas. Cabedal em mesh respirável, com estrutura que garante ajuste e estabilidade. Solado em PU com soleta em TPU, oferecendo boa absorção de impacto, aderência e resposta rápida.","promo":0,"ativo":true},{"id":"p088","marca":"Adidas","colecao":"Adidas Adizero Adios Pro 3","modelo":"Adizero Adios Pro 3","nome":"Adidas adizero adios pro 3","cor":"bordô","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":389.9,"avista":370.0,"parcela":64.98,"desc":"Tênis de alta performance, leve e confortável, ideal para treinos e provas. Cabedal em mesh respirável, com estrutura que garante ajuste e estabilidade. Solado em PU com soleta em TPU, oferecendo boa absorção de impacto, aderência e resposta rápida.","promo":0,"ativo":true},{"id":"p089","marca":"Adidas","colecao":"Adidas Adizero Adios Pro 3","modelo":"Adizero Adios Pro 3","nome":"Adidas adizero adios pro 3","cor":"Cor 3","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":389.9,"avista":370.0,"parcela":64.98,"desc":"Tênis de alta performance, leve e confortável, ideal para treinos e provas. Cabedal em mesh respirável, com estrutura que garante ajuste e estabilidade. Solado em PU com soleta em TPU, oferecendo boa absorção de impacto, aderência e resposta rápida.","promo":0,"ativo":true},{"id":"p090","marca":"Adidas","colecao":"Adidas Adizero Adios Pro Evo 1","modelo":"Adizero Adios Pro Evo 1","nome":"Adidas adizero adios pro evo 1","cor":"Cor 1","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"","promo":0,"ativo":true},{"id":"p091","marca":"Adidas","colecao":"Adidas Adizero Adios Pro Evo 1","modelo":"Adizero Adios Pro Evo 1","nome":"Adidas adizero adios pro evo 1","cor":"Cor 2","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"","promo":0,"ativo":true},{"id":"p092","marca":"Adidas","colecao":"Adidas Adizero Adios Pro Evo 1","modelo":"Adizero Adios Pro Evo 1","nome":"Adidas adizero adios pro evo 1","cor":"Cor 3","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"","promo":0,"ativo":true},{"id":"p093","marca":"Adidas","colecao":"Adidas Adizero Boston 11","modelo":"Adizero Boston 11","nome":"Adidas adizero boston 11 prime","cor":"vinho/branco","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":249.9,"avista":230.0,"parcela":41.65,"desc":"","promo":0,"ativo":true},{"id":"p094","marca":"Adidas","colecao":"Adidas Adizero Boston 11","modelo":"Adizero Boston 11","nome":"Adidas adizero boston 11","cor":"maizena/café","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":239.9,"avista":220.0,"parcela":39.98,"desc":"","promo":0,"ativo":true},{"id":"p095","marca":"Adidas","colecao":"Adidas Adizero Boston 11","modelo":"Adizero Boston 11","nome":"Adidas adizero boston 11 prime","cor":"rosa/laranja","genero":"Feminino","fotos":[],"sizes":[38,39],"preco":249.9,"avista":230.0,"parcela":41.65,"desc":"","promo":0,"ativo":true},{"id":"p096","marca":"Adidas","colecao":"Adidas Adizero Boston 13","modelo":"Adizero Boston 13","nome":"Adidas Adizero Boston 13","cor":"marrom/preto","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"Super leve e confortável.","promo":0,"ativo":true},{"id":"p097","marca":"Adidas","colecao":"Adidas Adizero Boston 13","modelo":"Adizero Boston 13","nome":"Adidas adizero boston 13","cor":"azul","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"Super confortável.","promo":0,"ativo":true},{"id":"p098","marca":"Adidas","colecao":"Adidas Adizero Boston 13","modelo":"Adizero Boston 13","nome":"Adidas adizero boston 13","cor":"preto/branco","genero":"Unissex","fotos":[],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"Super confortável.","promo":0,"ativo":true},{"id":"p099","marca":"Adidas","colecao":"Adidas Slip On","modelo":"Slip On","nome":"Adidas slip on","cor":"off","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":199.9,"avista":180.0,"parcela":33.32,"desc":"Calce fácil.","promo":0,"ativo":true},{"id":"p100","marca":"Adidas","colecao":"Adidas Slip On","modelo":"Slip On","nome":"Adidas slip on","cor":"café","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":199.9,"avista":180.0,"parcela":33.32,"desc":"Calce fácil.","promo":0,"ativo":true},{"id":"p101","marca":"Adidas","colecao":"Adidas Slip On","modelo":"Slip On","nome":"Adidas slip on","cor":"preto","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":199.9,"avista":180.0,"parcela":33.32,"desc":"Calce fácil.","promo":0,"ativo":true},{"id":"p102","marca":"Adidas","colecao":"Adidas Sl 72","modelo":"Sl 72","nome":"Adidas SL 72 prime couro","cor":"castor/pink","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":339.9,"avista":320.0,"parcela":56.65,"desc":"Couro.","promo":0,"ativo":true},{"id":"p103","marca":"Adidas","colecao":"Adidas Sl 72","modelo":"Sl 72","nome":"Adidas SL 72 prime couro","cor":"off/café","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":339.9,"avista":320.0,"parcela":56.65,"desc":"Couro.","promo":0,"ativo":true},{"id":"p104","marca":"Adidas","colecao":"Adidas Sl 72","modelo":"Sl 72","nome":"Adidas SL 72","cor":"marrom","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"","promo":0,"ativo":true},{"id":"p105","marca":"Adidas","colecao":"Adidas Samba Og","modelo":"Samba Og","nome":"Adidas samba og textura luxo","cor":"Cor 1","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"","promo":0,"ativo":true},{"id":"p106","marca":"Adidas","colecao":"Adidas Samba Og","modelo":"Samba Og","nome":"Adidas samba og prime","cor":"Cor 2","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":249.9,"avista":230.0,"parcela":41.65,"desc":"","promo":0,"ativo":true},{"id":"p107","marca":"Adidas","colecao":"Adidas Samba Og","modelo":"Samba Og","nome":"Adidas samba og prime","cor":"marrom/rosé","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":249.9,"avista":230.0,"parcela":41.65,"desc":"","promo":0,"ativo":true},{"id":"p108","marca":"Adidas","colecao":"Adidas Samba Jane","modelo":"Samba Jane","nome":"Adidas samba jane","cor":"branco","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":249.9,"avista":230.0,"parcela":41.65,"desc":"Frente em couro.","promo":0,"ativo":true},{"id":"p109","marca":"Adidas","colecao":"Adidas Samba Jane","modelo":"Samba Jane","nome":"Adidas samba jane","cor":"marinho","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":249.9,"avista":230.0,"parcela":41.65,"desc":"Frente em couro.","promo":0,"ativo":true},{"id":"p110","marca":"Adidas","colecao":"Adidas Samba Jane","modelo":"Samba Jane","nome":"Adidas samba jane","cor":"preto","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":249.9,"avista":230.0,"parcela":41.65,"desc":"Frente em couro.","promo":0,"ativo":true},{"id":"p111","marca":"Adidas","colecao":"Adidas Gazelle","modelo":"Gazelle","nome":"Adidas gazelle","cor":"Cor 1","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":269.9,"avista":250.0,"parcela":44.98,"desc":"Solado de borracha. Leve e confortável.","promo":0,"ativo":true},{"id":"p112","marca":"Adidas","colecao":"Adidas Gazelle","modelo":"Gazelle","nome":"Gazelle texture luxo","cor":"areia","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":269.9,"avista":250.0,"parcela":44.98,"desc":"Solado de borracha. Leve e confortável.","promo":0,"ativo":true},{"id":"p113","marca":"Adidas","colecao":"Adidas Gazelle","modelo":"Gazelle","nome":"Adidas gazelle","cor":"Cor 3","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":269.9,"avista":250.0,"parcela":44.98,"desc":"Solado de borracha. leve e confortável.","promo":0,"ativo":true},{"id":"p114","marca":"Adidas","colecao":"Adidas Handball Spezial","modelo":"Handball Spezial","nome":"Adidas handball spezial","cor":"Cor 1","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"","promo":0,"ativo":true},{"id":"p115","marca":"Adidas","colecao":"Adidas Handball Spezial","modelo":"Handball Spezial","nome":"Adidas handball spezial","cor":"cinza/renda","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"","promo":0,"ativo":true},{"id":"p116","marca":"Adidas","colecao":"Adidas Handball Spezial","modelo":"Handball Spezial","nome":"Adidas handball spezial","cor":"Cor 3","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"","promo":0,"ativo":true},{"id":"p117","marca":"Adidas","colecao":"Adidas Tokyo","modelo":"Tokyo","nome":"Adidas tokyo","cor":"caramelo","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"","promo":0,"ativo":true},{"id":"p118","marca":"Adidas","colecao":"Adidas Tokyo","modelo":"Tokyo","nome":"Adidas tokyo","cor":"off/preto","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"","promo":0,"ativo":true},{"id":"p119","marca":"Adidas","colecao":"Adidas Tokyo","modelo":"Tokyo","nome":"Adidas tokyo","cor":"preto/branco","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"","promo":0,"ativo":true},{"id":"p120","marca":"Adidas","colecao":"Adidas Samba Xlg","modelo":"Samba Xlg","nome":"R$259.90","cor":"Cor 1","genero":"Unissex","fotos":[],"sizes":[],"preco":259.9,"avista":259.9,"parcela":0,"desc":"","promo":0,"ativo":true},{"id":"p121","marca":"Adidas","colecao":"Adidas Sambae","modelo":"Sambae","nome":"Adidas sambae tricote","cor":"Cor 1","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"","promo":0,"ativo":true},{"id":"p122","marca":"Adidas","colecao":"Adidas Sambae","modelo":"Sambae","nome":"Adidas sambae tricote","cor":"off","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"","promo":0,"ativo":true},{"id":"p123","marca":"Adidas","colecao":"Adidas Sambae","modelo":"Sambae","nome":"Adidas sambae tricote","cor":"Cor 3","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"","promo":0,"ativo":true},{"id":"p124","marca":"Adidas","colecao":"Adidas Fórum Low","modelo":"Fórum Low","nome":"Adidas fórum low","cor":"Cor 1","genero":"Unissex","fotos":[],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":249.9,"avista":230.0,"parcela":41.65,"desc":"","promo":0,"ativo":true},{"id":"p125","marca":"Adidas","colecao":"Adidas Fórum Low","modelo":"Fórum Low","nome":"Adidas fórum low couro","cor":"Cor 2","genero":"Masculino","fotos":[],"sizes":[38,39,40,41,42,43],"preco":269.9,"avista":240.0,"parcela":43.32,"desc":"Couro.","promo":0,"ativo":true},{"id":"p126","marca":"Adidas","colecao":"Adidas Fórum Low","modelo":"Fórum Low","nome":"Adidas fórum low","cor":"Cor 3","genero":"Unissex","fotos":[],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":249.9,"avista":230.0,"parcela":41.65,"desc":"","promo":0,"ativo":true},{"id":"p127","marca":"Adidas","colecao":"Adidas Campus","modelo":"Campus","nome":"Campus 00s luxo","cor":"cromo","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"02 opções de cadarço. Linha luxo.","promo":0,"ativo":true},{"id":"p128","marca":"Adidas","colecao":"Adidas Campus","modelo":"Campus","nome":"Campus 00s luxo","cor":"off/bordô","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"02 opções de cadarço. Linha luxo.","promo":0,"ativo":true},{"id":"p129","marca":"Adidas","colecao":"Adidas Campus","modelo":"Campus","nome":"Campus 00s luxo","cor":"grafite","genero":"Masculino","fotos":[],"sizes":[38,39,40,41,42,43],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"Linha luxo.","promo":0,"ativo":true},{"id":"p130","marca":"Olympikus","colecao":"Olympikus","modelo":"Olympikus","nome":"Olympikus corre","cor":"off/cinza","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":229.9,"avista":210.0,"parcela":38.32,"desc":"","promo":0,"ativo":true},{"id":"p131","marca":"Olympikus","colecao":"Olympikus","modelo":"Olympikus","nome":"Olympikus corre 4","cor":"Cor 2","genero":"Masculino","fotos":[],"sizes":[38,39,40,41,42,43],"preco":229.9,"avista":210.0,"parcela":38.32,"desc":"","promo":0,"ativo":true},{"id":"p132","marca":"Olympikus","colecao":"Olympikus","modelo":"Olympikus","nome":"Olympikus corre","cor":"off/caramelo","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":229.9,"avista":210.0,"parcela":38.32,"desc":"","promo":0,"ativo":true},{"id":"p133","marca":"Nike","colecao":"Nike Mind 02","modelo":"Mind 02","nome":"Nike mind 02 prime","cor":"preto","genero":"Masculino","fotos":[],"sizes":[38,39,40,41,42,43],"preco":299.9,"avista":280.0,"parcela":49.98,"desc":"Extremamente leve e macio.","promo":0,"ativo":true},{"id":"p134","marca":"Nike","colecao":"Nike Mind 02","modelo":"Mind 02","nome":"Nike mind 02 prime","cor":"jeans","genero":"Masculino","fotos":[],"sizes":[38,39,40,41,42,43],"preco":299.9,"avista":280.0,"parcela":49.98,"desc":"Extremamente leve e macio.","promo":0,"ativo":true},{"id":"p135","marca":"Nike","colecao":"Nike Mind 02","modelo":"Mind 02","nome":"Nike mind 02 prime","cor":"off","genero":"Masculino","fotos":[],"sizes":[38,39,40,41,42,43],"preco":299.9,"avista":280.0,"parcela":49.98,"desc":"Extremamente leve e macio.","promo":0,"ativo":true},{"id":"p136","marca":"Nike","colecao":"Nike V5 Rnr","modelo":"V5 Rnr","nome":"Nike V5 RNR luxo","cor":"off/prata","genero":"Feminino","fotos":[],"sizes":[35,36,37,38,39,40],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"Linha luxo.","promo":0,"ativo":true},{"id":"p137","marca":"Nike","colecao":"Nike V5 Rnr","modelo":"V5 Rnr","nome":"Nike V5 RNR luxo","cor":"grafite/preto","genero":"Masculino","fotos":[],"sizes":[38,39,40,41,42,43],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"Linha luxo.","promo":0,"ativo":true},{"id":"p138","marca":"Nike","colecao":"Nike V5 Rnr","modelo":"V5 Rnr","nome":"Nike V5 RNR luxo","cor":"off/caramelo","genero":"Feminino","fotos":[],"sizes":[35,36,37,38,39,40],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"Linha luxo.","promo":0,"ativo":true},{"id":"p139","marca":"Nike","colecao":"Nike Dunk","modelo":"Dunk","nome":"Dunk low pro P&B luxo","cor":"Cor 1","genero":"Unissex","fotos":[],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":249.9,"avista":230.0,"parcela":41.65,"desc":"Linha luxo.","promo":0,"ativo":true},{"id":"p140","marca":"Nike","colecao":"Nike Dunk","modelo":"Dunk","nome":"Dunk low pro luxo","cor":"Cor 2","genero":"Unissex","fotos":[],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":249.9,"avista":230.0,"parcela":41.65,"desc":"Linha luxo.","promo":0,"ativo":true},{"id":"p141","marca":"Nike","colecao":"Nike Dunk","modelo":"Dunk","nome":"Dunk low pro luxo","cor":"Cor 3","genero":"Unissex","fotos":[],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":249.9,"avista":230.0,"parcela":41.65,"desc":"Linha luxo.","promo":0,"ativo":true},{"id":"p142","marca":"Nike","colecao":"Nike Air Jordan","modelo":"Air Jordan","nome":"Air jordan low prime","cor":"Cor 1","genero":"Unissex","fotos":[],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":249.9,"avista":230.0,"parcela":41.65,"desc":"Linha prime.","promo":0,"ativo":true},{"id":"p143","marca":"Nike","colecao":"Nike Air Jordan","modelo":"Air Jordan","nome":"Air jordan low prime","cor":"Cor 2","genero":"Unissex","fotos":[],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":249.9,"avista":230.0,"parcela":41.65,"desc":"Linha prime.","promo":0,"ativo":true},{"id":"p144","marca":"Nike","colecao":"Nike Air Jordan","modelo":"Air Jordan","nome":"Air Jordan low P&B prime","cor":"Cor 3","genero":"Unissex","fotos":[],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":249.9,"avista":230.0,"parcela":41.65,"desc":"Linha prime.","promo":0,"ativo":true},{"id":"p145","marca":"Nike","colecao":"Nike Bota Air Jordan","modelo":"Bota Air Jordan","nome":"R$259.90","cor":"Cor 1","genero":"Unissex","fotos":[],"sizes":[],"preco":259.9,"avista":259.9,"parcela":0,"desc":"","promo":0,"ativo":true},{"id":"p146","marca":"Nike","colecao":"Nike Air Force","modelo":"Air Force","nome":"Air force nobuk luxo","cor":"Cor 1","genero":"Masculino","fotos":[],"sizes":[38,39,40,41,42,43],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"Linha luxo.","promo":0,"ativo":true},{"id":"p147","marca":"Nike","colecao":"Nike Air Force","modelo":"Air Force","nome":"Air force luxo","cor":"off/branco/rosa verniz","genero":"Masculino","fotos":[],"sizes":[38,39,40,41,42,43],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"Linha luxo.","promo":0,"ativo":true},{"id":"p148","marca":"Nike","colecao":"Nike Air Force","modelo":"Air Force","nome":"Air force luxo","cor":"Cor 3","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"Linha luxo.","promo":0,"ativo":true},{"id":"p149","marca":"Nike","colecao":"Nike Air Max Portal","modelo":"Air Max Portal","nome":"Nike Air max portal","cor":"Cor 1","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":269.9,"avista":250.0,"parcela":44.98,"desc":"","promo":0,"ativo":true},{"id":"p150","marca":"Nike","colecao":"Nike Air Max Portal","modelo":"Air Max Portal","nome":"Nike Air max portal","cor":"Cor 2","genero":"Unissex","fotos":[],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":269.9,"avista":250.0,"parcela":44.98,"desc":"","promo":0,"ativo":true},{"id":"p151","marca":"Nike","colecao":"Nike Air Max Portal","modelo":"Air Max Portal","nome":"Nike Air max portal","cor":"Cor 3","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":269.9,"avista":250.0,"parcela":44.98,"desc":"","promo":0,"ativo":true},{"id":"p152","marca":"Nike","colecao":"Nike Structure","modelo":"Structure","nome":"Nike structure","cor":"bege/chocolate","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":249.9,"avista":230.0,"parcela":41.65,"desc":"","promo":0,"ativo":true},{"id":"p153","marca":"Nike","colecao":"Nike Structure","modelo":"Structure","nome":"Nike structure prime","cor":"rosa/preto","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"Cabedal knit.","promo":0,"ativo":true},{"id":"p154","marca":"Nike","colecao":"Nike Structure","modelo":"Structure","nome":"Nike structure","cor":"preto/branco","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":249.9,"avista":230.0,"parcela":41.65,"desc":"","promo":0,"ativo":true},{"id":"p155","marca":"Nike","colecao":"Nike Sb Platom","modelo":"Sb Platom","nome":"Nike Sb platom","cor":"Cor 1","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":239.9,"avista":220.0,"parcela":39.98,"desc":"","promo":0,"ativo":true},{"id":"p156","marca":"Nike","colecao":"Nike Sb Platom","modelo":"Sb Platom","nome":"Nike Sb platom","cor":"Cor 2","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":239.9,"avista":220.0,"parcela":39.98,"desc":"","promo":0,"ativo":true},{"id":"p157","marca":"Nike","colecao":"Nike Sb Platom","modelo":"Sb Platom","nome":"Nike Sb platom","cor":"Cor 3","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":239.9,"avista":220.0,"parcela":39.98,"desc":"","promo":0,"ativo":true},{"id":"p158","marca":"Nike","colecao":"Nike Court Legacy Lift","modelo":"Court Legacy Lift","nome":"Nike court legacy lift","cor":"Cor 1","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":239.9,"avista":220.0,"parcela":39.98,"desc":"","promo":0,"ativo":true},{"id":"p159","marca":"Nike","colecao":"Nike Court Legacy Lift","modelo":"Court Legacy Lift","nome":"Nike court legacy lift","cor":"Cor 2","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":239.9,"avista":220.0,"parcela":39.98,"desc":"","promo":0,"ativo":true},{"id":"p160","marca":"Nike","colecao":"Nike Court Legacy Lift","modelo":"Court Legacy Lift","nome":"Nike court legacy lift","cor":"Cor 3","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":239.9,"avista":220.0,"parcela":39.98,"desc":"","promo":0,"ativo":true},{"id":"p161","marca":"Nike","colecao":"Nike Journey Run","modelo":"Journey Run","nome":"R$239.90","cor":"Cor 1","genero":"Unissex","fotos":[],"sizes":[],"preco":239.9,"avista":239.9,"parcela":0,"desc":"","promo":0,"ativo":true},{"id":"p162","marca":"Nike","colecao":"Nike V2K Run","modelo":"V2K Run","nome":"Nike V2K run","cor":"Cor 1","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"","promo":0,"ativo":true},{"id":"p163","marca":"Nike","colecao":"Nike V2K Run","modelo":"V2K Run","nome":"Nike V2K run","cor":"marrom","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"","promo":0,"ativo":true},{"id":"p164","marca":"Nike","colecao":"Nike V2K Run","modelo":"V2K Run","nome":"Nike V2k run","cor":"branco/rosé","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"","promo":0,"ativo":true},{"id":"p165","marca":"Nike","colecao":"Nike Nk 47","modelo":"Nk 47","nome":"Nike Nk 47","cor":"off/marrom","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":239.9,"avista":220.0,"parcela":39.98,"desc":"Leve e confortável.","promo":0,"ativo":true},{"id":"p166","marca":"Nike","colecao":"Nike Nk 47","modelo":"Nk 47","nome":"Nike Nk 47","cor":"caramelo","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":239.9,"avista":220.0,"parcela":39.98,"desc":"Leve e confortável.","promo":0,"ativo":true},{"id":"p167","marca":"Nike","colecao":"Nike Nk 47","modelo":"Nk 47","nome":"Nike Nk 47","cor":"cinza","genero":"Masculino","fotos":[],"sizes":[38,39,40,41,42,43],"preco":239.9,"avista":220.0,"parcela":39.98,"desc":"Leve e confortável.","promo":0,"ativo":true},{"id":"p168","marca":"Nike","colecao":"Nike Vomero Plus","modelo":"Vomero Plus","nome":"Nike vomero plus","cor":"Cor 1","genero":"Feminino","fotos":[],"sizes":[35,36,37,38,39,40],"preco":289.9,"avista":270.0,"parcela":48.32,"desc":"Solado em EVA, extremamente leve e confortável.","promo":0,"ativo":true},{"id":"p169","marca":"Nike","colecao":"Nike Vomero Plus","modelo":"Vomero Plus","nome":"Nike vomero plus","cor":"Cor 2","genero":"Feminino","fotos":[],"sizes":[35,36,37,38,39,40],"preco":289.9,"avista":270.0,"parcela":48.32,"desc":"Solado em EVA, extremamente leve e confortável.","promo":0,"ativo":true},{"id":"p170","marca":"Nike","colecao":"Nike Vomero Plus","modelo":"Vomero Plus","nome":"Nike vomero plus","cor":"Cor 3","genero":"Feminino","fotos":[],"sizes":[35,36,37,38,39,40],"preco":289.9,"avista":270.0,"parcela":48.32,"desc":"Solado em EVA, extremamente leve e confortável.","promo":0,"ativo":true},{"id":"p171","marca":"Nike","colecao":"Nike Running Est 1972","modelo":"Running Est 1972","nome":"Nike running est 1972","cor":"bordô","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":239.9,"avista":220.0,"parcela":39.98,"desc":"Muito leve e confortável.","promo":0,"ativo":true},{"id":"p172","marca":"Nike","colecao":"Nike Running Est 1972","modelo":"Running Est 1972","nome":"Nike running est 1972","cor":"preto/branco","genero":"Unissex","fotos":[],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":239.9,"avista":220.0,"parcela":39.98,"desc":"Muito leve e confortável.","promo":0,"ativo":true},{"id":"p173","marca":"Nike","colecao":"Nike Running Est 1972","modelo":"Running Est 1972","nome":"Nike running est 1972","cor":"bege/dourado","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":239.9,"avista":220.0,"parcela":39.98,"desc":"Muito leve e confortável.","promo":0,"ativo":true},{"id":"p174","marca":"Nike","colecao":"Nike Running Fit 1898","modelo":"Running Fit 1898","nome":"Nike running fit 1989","cor":"café","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":249.9,"avista":230.0,"parcela":41.65,"desc":"","promo":0,"ativo":true},{"id":"p175","marca":"Nike","colecao":"Nike Running Fit 1898","modelo":"Running Fit 1898","nome":"Nike running fit 1989","cor":"off/rosé","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":249.9,"avista":230.0,"parcela":41.65,"desc":"","promo":0,"ativo":true},{"id":"p176","marca":"Nike","colecao":"Nike Running Fit 1898","modelo":"Running Fit 1898","nome":"Nike running fit 1989","cor":"rosé","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":249.9,"avista":230.0,"parcela":41.65,"desc":"","promo":0,"ativo":true},{"id":"p177","marca":"Nike","colecao":"Nike Pegasus Plus","modelo":"Pegasus Plus","nome":"Nike pegasus plus","cor":"pink/ roxo / laranja.","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":249.9,"avista":230.0,"parcela":41.65,"desc":"Leve e confortável.","promo":0,"ativo":true},{"id":"p178","marca":"Nike","colecao":"Nike Pegasus Plus","modelo":"Pegasus Plus","nome":"Nike pegasus plus","cor":"Cor 2","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":249.9,"avista":230.0,"parcela":41.65,"desc":"Leve e confortável.","promo":0,"ativo":true},{"id":"p179","marca":"Nike","colecao":"Nike Pegasus Plus","modelo":"Pegasus Plus","nome":"Nike pegasus plus","cor":"Cor 3","genero":"Masculino","fotos":[],"sizes":[38,39,40,41,42,43],"preco":249.9,"avista":230.0,"parcela":41.65,"desc":"Leve e confortável.","promo":0,"ativo":true},{"id":"p180","marca":"Nike","colecao":"Nike Pegasus Trail 5","modelo":"Pegasus Trail 5","nome":"Nike pegasus trail 5","cor":"café","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":239.9,"avista":220.0,"parcela":39.98,"desc":"","promo":0,"ativo":true},{"id":"p181","marca":"Nike","colecao":"Nike Pegasus Trail 5","modelo":"Pegasus Trail 5","nome":"Nike pegasus trail 5","cor":"off","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":239.9,"avista":220.0,"parcela":39.98,"desc":"","promo":0,"ativo":true},{"id":"p182","marca":"Nike","colecao":"Nike Pegasus 39","modelo":"Pegasus 39","nome":"Nike Pegasus 39","cor":"cappuccino","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":239.9,"avista":220.0,"parcela":39.98,"desc":"Muito leve e confortável.","promo":0,"ativo":true},{"id":"p183","marca":"Nike","colecao":"Nike Pegasus 39","modelo":"Pegasus 39","nome":"Nike pegasus 39","cor":"off/ouro","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":239.9,"avista":220.0,"parcela":39.98,"desc":"Muito leve e confortável.","promo":0,"ativo":true},{"id":"p184","marca":"Nike","colecao":"Nike Pegasus 39","modelo":"Pegasus 39","nome":"Nike pegasus 39","cor":"off/rosé","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":239.9,"avista":220.0,"parcela":39.98,"desc":"Muito leve e confortável.","promo":0,"ativo":true},{"id":"p185","marca":"Nike","colecao":"Nike Pegasus 40","modelo":"Pegasus 40","nome":"Nike pegasus 40","cor":"branco/goiaba","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":249.9,"avista":220.0,"parcela":39.98,"desc":"Solado em EVA, extremamente leve e confortável.","promo":0,"ativo":true},{"id":"p186","marca":"Nike","colecao":"Nike Pegasus 40","modelo":"Pegasus 40","nome":"Nike pegasus 40","cor":"rosa","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":249.9,"avista":220.0,"parcela":39.98,"desc":"Solado em EVA, extremamente leve e confortável.","promo":0,"ativo":true},{"id":"p187","marca":"Nike","colecao":"Nike Pegasus 40","modelo":"Pegasus 40","nome":"Nike pegasus 40","cor":"preto/branco","genero":"Unissex","fotos":[],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":249.9,"avista":220.0,"parcela":39.98,"desc":"Solado em EVA, extremamente leve e confortável.","promo":0,"ativo":true},{"id":"p188","marca":"Nike","colecao":"Nike Air Zoom Pegasus 41","modelo":"Air Zoom Pegasus 41","nome":"Nike Air zoom Pegasus 41","cor":"marrom/bege","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":249.9,"avista":230.0,"parcela":41.65,"desc":"Leve e confortável.","promo":0,"ativo":true},{"id":"p189","marca":"Nike","colecao":"Nike Air Zoom Pegasus 41","modelo":"Air Zoom Pegasus 41","nome":"Nike Air zoom pegasus 41","cor":"Cor 2","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":249.9,"avista":230.0,"parcela":41.65,"desc":"Leve e confortável.","promo":0,"ativo":true},{"id":"p190","marca":"Nike","colecao":"Nike Air Zoom Pegasus 41","modelo":"Air Zoom Pegasus 41","nome":"Nike Air zoom pegasus 41","cor":"off/chocolate","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":249.9,"avista":230.0,"parcela":41.65,"desc":"Leve e confortável.","promo":0,"ativo":true},{"id":"p191","marca":"Nike","colecao":"Nike Pegasus 42","modelo":"Pegasus 42","nome":"Nike pegasus 42 prime","cor":"branco/verde","genero":"Masculino","fotos":[],"sizes":[38,39,40,41,42,43],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"","promo":0,"ativo":true},{"id":"p192","marca":"Nike","colecao":"Nike Pegasus 42","modelo":"Pegasus 42","nome":"Nike pegasus 42 prime","cor":"salmão/roxo","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"","promo":0,"ativo":true},{"id":"p193","marca":"Nike","colecao":"Nike Pegasus 42","modelo":"Pegasus 42","nome":"Nike pegasus 42 prime","cor":"branco/preto/vermelho","genero":"Masculino","fotos":[],"sizes":[38,39,40,41,42,43],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"","promo":0,"ativo":true},{"id":"p194","marca":"Nike","colecao":"Nike Zoom Revolution","modelo":"Zoom Revolution","nome":"R$239.90","cor":"Cor 1","genero":"Unissex","fotos":[],"sizes":[],"preco":239.9,"avista":239.9,"parcela":0,"desc":"","promo":0,"ativo":true},{"id":"p195","marca":"Nike","colecao":"Nike Zoom Invincible Run 3","modelo":"Zoom Invincible Run 3","nome":"Nike zoom invincible run 3","cor":"Cor 1","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":249.9,"avista":230.0,"parcela":41.65,"desc":"Leve e confortável.","promo":0,"ativo":true},{"id":"p196","marca":"Nike","colecao":"Nike Zoom Invincible Run 3","modelo":"Zoom Invincible Run 3","nome":"Nike zoom invincible run 3","cor":"Cor 2","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":249.9,"avista":230.0,"parcela":41.65,"desc":"Leve e confortável.","promo":0,"ativo":true},{"id":"p197","marca":"Nike","colecao":"Nike Zoom Invincible Run 3","modelo":"Zoom Invincible Run 3","nome":"Nike zoom invincible run 3 prime","cor":"Cor 3","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"Linha prime. Leve e confortável.","promo":0,"ativo":true},{"id":"p198","marca":"Vans","colecao":"Vans Hylane","modelo":"Hylane","nome":"Vans hylane prime","cor":"manteiga/rosa","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":269.9,"avista":250.0,"parcela":44.98,"desc":"","promo":0,"ativo":true},{"id":"p199","marca":"Vans","colecao":"Vans Hylane","modelo":"Hylane","nome":"Vans hylane prime","cor":"panda","genero":"Unissex","fotos":[],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":269.9,"avista":250.0,"parcela":44.98,"desc":"","promo":0,"ativo":true},{"id":"p200","marca":"Vans","colecao":"Vans Hylane","modelo":"Hylane","nome":"Vans hylane prime","cor":"off","genero":"Unissex","fotos":[],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":269.9,"avista":250.0,"parcela":44.98,"desc":"","promo":0,"ativo":true},{"id":"p201","marca":"Vans","colecao":"Vans Upland","modelo":"Upland","nome":"Vans upland","cor":"Cor 1","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":279.9,"avista":260.0,"parcela":46.65,"desc":"","promo":0,"ativo":true},{"id":"p202","marca":"Vans","colecao":"Vans Upland","modelo":"Upland","nome":"Vans upland","cor":"Cor 2","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":279.9,"avista":260.0,"parcela":46.65,"desc":"","promo":0,"ativo":true},{"id":"p203","marca":"Vans","colecao":"Vans Upland","modelo":"Upland","nome":"Vans upland","cor":"Cor 3","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":279.9,"avista":260.0,"parcela":46.65,"desc":"","promo":0,"ativo":true},{"id":"p204","marca":"Vans","colecao":"Vans Ultrarange Neo Prime","modelo":"Ultrarange Neo Prime","nome":"Vans ultrarange neo prime","cor":"Cor 1","genero":"Unissex","fotos":[],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":249.9,"avista":230.0,"parcela":41.65,"desc":"","promo":0,"ativo":true},{"id":"p205","marca":"Vans","colecao":"Vans Ultrarange Neo Prime","modelo":"Ultrarange Neo Prime","nome":"Vans ultrarange neo prime","cor":"Cor 2","genero":"Unissex","fotos":[],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":249.9,"avista":230.0,"parcela":41.65,"desc":"","promo":0,"ativo":true},{"id":"p206","marca":"Vans","colecao":"Vans Ultrarange Neo Prime","modelo":"Ultrarange Neo Prime","nome":"Vans ultrarange neo prime","cor":"Cor 3","genero":"Unissex","fotos":[],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":249.9,"avista":230.0,"parcela":41.65,"desc":"","promo":0,"ativo":true},{"id":"p207","marca":"Vans","colecao":"Vans Neo 2.0","modelo":"Neo 2.0","nome":"Vans neo 2.0","cor":"Cor 1","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":239.9,"avista":220.0,"parcela":39.98,"desc":"","promo":0,"ativo":true},{"id":"p208","marca":"Vans","colecao":"Vans Neo 2.0","modelo":"Neo 2.0","nome":"Vans neo 2.0","cor":"Cor 2","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":239.9,"avista":220.0,"parcela":39.98,"desc":"","promo":0,"ativo":true},{"id":"p209","marca":"Vans","colecao":"Vans Neo 2.0","modelo":"Neo 2.0","nome":"Vans neo 2.0","cor":"Cor 3","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":239.9,"avista":220.0,"parcela":39.98,"desc":"","promo":0,"ativo":true},{"id":"p210","marca":"Vans","colecao":"Vans Ultrarange Vr3","modelo":"Ultrarange Vr3","nome":"Vans ultrarange VR3","cor":"Cor 1","genero":"Unissex","fotos":[],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":229.9,"avista":210.0,"parcela":38.32,"desc":"Solado em EVA, super leve.","promo":0,"ativo":true},{"id":"p211","marca":"Vans","colecao":"Vans Ultrarange Vr3","modelo":"Ultrarange Vr3","nome":"Vans ultrarange VR3","cor":"Cor 2","genero":"Unissex","fotos":[],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":229.9,"avista":210.0,"parcela":38.32,"desc":"Solado em EVA, super leve.","promo":0,"ativo":true},{"id":"p212","marca":"Vans","colecao":"Vans Knu Prime","modelo":"Knu Prime","nome":"Vans KNU prime","cor":"preto/branco","genero":"Unissex","fotos":[],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":249.9,"avista":230.0,"parcela":41.65,"desc":"","promo":0,"ativo":true},{"id":"p213","marca":"Vans","colecao":"Vans Knu Prime","modelo":"Knu Prime","nome":"Vans KNU prime","cor":"preto/off","genero":"Unissex","fotos":[],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":249.9,"avista":230.0,"parcela":41.65,"desc":"","promo":0,"ativo":true},{"id":"p214","marca":"Vans","colecao":"Vans Knu Prime","modelo":"Knu Prime","nome":"Vans KNU prime","cor":"branco","genero":"Unissex","fotos":[],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":249.9,"avista":230.0,"parcela":41.65,"desc":"","promo":0,"ativo":true},{"id":"p215","marca":"Vans","colecao":"Vans Ultrarange 3D","modelo":"Ultrarange 3D","nome":"Vans ultrarange 3d","cor":"Cor 1","genero":"Unissex","fotos":[],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":239.9,"avista":220.0,"parcela":39.98,"desc":"","promo":0,"ativo":true},{"id":"p216","marca":"Vans","colecao":"Vans Ultrarange 3D","modelo":"Ultrarange 3D","nome":"Vans ultrarange 3d","cor":"Cor 2","genero":"Unissex","fotos":[],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":239.9,"avista":220.0,"parcela":39.98,"desc":"","promo":0,"ativo":true},{"id":"p217","marca":"Vans","colecao":"Vans Ultrarange 3D","modelo":"Ultrarange 3D","nome":"Vans ultrarange 3d","cor":"Cor 3","genero":"Unissex","fotos":[],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":239.9,"avista":220.0,"parcela":39.98,"desc":"","promo":0,"ativo":true},{"id":"p218","marca":"Vans","colecao":"Vans Ultrarange Rapidweld","modelo":"Ultrarange Rapidweld","nome":"R$239.90","cor":"Cor 1","genero":"Unissex","fotos":[],"sizes":[],"preco":239.9,"avista":239.9,"parcela":0,"desc":"","promo":0,"ativo":true},{"id":"p219","marca":"On","colecao":"On Running X Z5","modelo":"Running X Z5","nome":"On running X Z5","cor":"preto","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":279.9,"avista":260.0,"parcela":46.65,"desc":"","promo":0,"ativo":true},{"id":"p220","marca":"On","colecao":"On Running X Z5","modelo":"Running X Z5","nome":"On running X Z5","cor":"off","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":279.9,"avista":260.0,"parcela":46.65,"desc":"","promo":0,"ativo":true},{"id":"p221","marca":"On","colecao":"On Cloud Swiss Engineering","modelo":"Cloud Swiss Engineering","nome":"On cloud swiss engineering","cor":"off","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39,40],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"","promo":0,"ativo":true},{"id":"p222","marca":"On","colecao":"On Cloud Swiss Engineering","modelo":"Cloud Swiss Engineering","nome":"On cloud swiss engineering","cor":"off/rosê","genero":"Feminino","fotos":[],"sizes":[35,36,37,38,39,40],"preco":259.9,"avista":240.0,"parcela":43.32,"desc":"","promo":0,"ativo":true},{"id":"p223","marca":"On","colecao":"On Cloudsurfer","modelo":"Cloudsurfer","nome":"On cloudsurfer","cor":"Cor 1","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":279.9,"avista":260.0,"parcela":46.65,"desc":"","promo":0,"ativo":true},{"id":"p224","marca":"On","colecao":"On Cloudsurfer","modelo":"Cloudsurfer","nome":"On cloudsurfer","cor":"off/bordô","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":279.9,"avista":260.0,"parcela":46.65,"desc":"","promo":0,"ativo":true},{"id":"p225","marca":"On","colecao":"On Cloudsurfer","modelo":"Cloudsurfer","nome":"On cloudsurfer","cor":"preto/off","genero":"Feminino","fotos":[],"sizes":[34,35,36,37,38,39],"preco":279.9,"avista":260.0,"parcela":46.65,"desc":"","promo":0,"ativo":true},{"id":"p226","marca":"Puma","colecao":"Puma Suede Xl","modelo":"Suede Xl","nome":"R$229.90","cor":"Cor 1","genero":"Unissex","fotos":[],"sizes":[],"preco":229.9,"avista":229.9,"parcela":0,"desc":"","promo":0,"ativo":true},{"id":"p227","marca":"Puma","colecao":"Puma Park","modelo":"Park","nome":"Puma park","cor":"Cor 1","genero":"Unissex","fotos":[],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":239.9,"avista":220.0,"parcela":39.98,"desc":"","promo":0,"ativo":true},{"id":"p228","marca":"Puma","colecao":"Puma Park","modelo":"Park","nome":"Puma park","cor":"Cor 2","genero":"Unissex","fotos":[],"sizes":[34,35,36,37,38,39,40,41,42,43],"preco":239.9,"avista":220.0,"parcela":39.98,"desc":"","promo":0,"ativo":true}];
+
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const BRL = v => Number(v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+const chaveGrupo = p => `${p.marca}|${p.colecao}`;
+// Busca sem acento: "bordo" encontra "bordô", "lilas" encontra "lilás".
+const semAcento = s => String(s).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+
+let TAMS = [], MARCAS = [];
+function recalc(){
+  TAMS = [...new Set(P.flatMap(p => p.sizes || []))].sort((a, b) => a - b);
+  MARCAS = [...new Set(P.map(p => p.marca))].sort((a, b) => a.localeCompare(b, 'pt'));
+}
+
+const FAIXAS = {
+  a: [0, 200, 'Até R$ 200'],
+  b: [200, 260, 'R$ 200 a R$ 260'],
+  c: [260, 320, 'R$ 260 a R$ 320'],
+  d: [320, 1e9, 'Acima de R$ 320'],
+};
+const GENEROS = [['Masculino','Homem'], ['Feminino','Mulher'], ['Kids','Infantil'], ['Unissex','Unissex']];
+// Tira a marca do nome do modelo: a marca já tem filtro próprio.
+const curto = m => { const b = MARCAS.find(x => m.startsWith(x)); return b ? (m.slice(b.length).trim() || m) : m; };
+
+const S = { marca:'', genero:new Set(), modelo:new Set(), tam:'', faixa:'', q:'', ord:'rel' };
+
+// Homem e Mulher incluem o que é unissex; Unissex sozinho mostra só o unissex.
+function generoBate(p){
+  if (!S.genero.size) return true;
+  if (S.genero.has(p.genero)) return true;
+  return p.genero === 'Unissex' && (S.genero.has('Masculino') || S.genero.has('Feminino'));
+}
+
+// pular = filtro a ignorar, para a contagem mostrar o que cada opção acrescenta
+function passa(p, pular){
+  if (S.q){
+    const alvo = semAcento(`${p.nome} ${p.colecao} ${p.marca} ${p.cor || ''} ${p.genero}`);
+    if (!S.q.split(/\s+/).every(t => alvo.includes(t))) return false;
+  }
+  if (pular !== 'marca'  && S.marca && p.marca !== S.marca) return false;
+  if (pular !== 'genero' && !generoBate(p)) return false;
+  if (pular !== 'modelo' && S.modelo.size && !S.modelo.has(p.colecao)) return false;
+  if (pular !== 'tam'    && S.tam && !(p.sizes || []).includes(+S.tam)) return false;
+  if (pular !== 'faixa'  && S.faixa){ const [a, b] = FAIXAS[S.faixa]; if (!(p.avista >= a && p.avista < b)) return false; }
+  if (SO_SEM_FOTO && (p.fotos || []).length) return false;
+  return true;
+}
+
+function filtrados(){ return P.filter(p => passa(p, '')); }
+
+function grupos(lista){
+  const m = new Map();
+  lista.forEach(p => { const k = chaveGrupo(p); if (!m.has(k)) m.set(k, []); m.get(k).push(p); });
+  return [...m.values()];
+}
+
+// ---------------------------------------------------------------- filtros
+function renderFiltros(){
+  $('#fMarca').innerHTML = '<option value="">Todas as marcas</option>' + MARCAS.map(m => {
+    const n = P.filter(p => p.marca === m && passa(p, 'marca')).length;
+    return `<option value="${esc(m)}"${S.marca === m ? ' selected' : ''}>${esc(m)} (${n})</option>`;
+  }).join('');
+
+  $('#fGenero').innerHTML = GENEROS.map(([g, rot]) => {
+    const n = P.filter(p => p.genero === g && passa(p, 'genero')).length;
+    if (!n && !S.genero.has(g)) return '';
+    return `<label class="opt"><input type="checkbox" data-g="${g}"${S.genero.has(g) ? ' checked' : ''}><span class="t">${rot}</span><span class="n">${n}</span></label>`;
+  }).join('');
+
+  const q = semAcento($('#buscaModelo').value.trim());
+  const cont = new Map();
+  P.forEach(p => { if (passa(p, 'modelo')) cont.set(p.colecao, (cont.get(p.colecao) || 0) + 1); });
+  S.modelo.forEach(m => { if (!cont.has(m)) cont.set(m, 0); });
+  const lista = [...cont.entries()]
+    .filter(([m]) => !q || semAcento(m).includes(q))
+    .sort((a, b) => a[0].localeCompare(b[0], 'pt'));
+  $('#fModelo').innerHTML = lista.length
+    ? lista.map(([m, n]) => `<label class="opt" title="${esc(m)}"><input type="checkbox" data-m="${esc(m)}"${S.modelo.has(m) ? ' checked' : ''}><span class="t">${esc(curto(m))}</span><span class="n">${n}</span></label>`).join('')
+    : '<p class="muted">Nenhum modelo com esse nome.</p>';
+
+  $('#fTam').innerHTML = TAMS.map(t => `<button type="button" class="chip" data-t="${t}" aria-pressed="${S.tam == t}">${t}</button>`).join('');
+
+  $('#fFaixa').innerHTML = Object.entries(FAIXAS).map(([k, [, , rot]]) =>
+    `<label class="opt"><input type="radio" name="faixa" value="${k}"${S.faixa === k ? ' checked' : ''}><span class="t">${rot}</span></label>`).join('');
+
+  $('#hnav').innerHTML = [['', 'Todos'], ...GENEROS.filter(([g]) => P.some(p => p.genero === g))]
+    .map(([g, rot]) => {
+      const on = g ? (S.genero.size === 1 && S.genero.has(g)) : S.genero.size === 0;
+      return `<button type="button" data-hg="${g}" aria-pressed="${on}">${rot || 'Todos'}</button>`;
+    }).join('');
+
+  const n = (S.marca ? 1 : 0) + S.genero.size + S.modelo.size + (S.tam ? 1 : 0) + (S.faixa ? 1 : 0);
+  const alvo = $('#nFiltros');
+  alvo.hidden = !n; alvo.textContent = n || '';
+}
+
+// ---------------------------------------------------------------- cartões
+const SEL = {};   // chave do grupo -> id da cor escolhida
+const TAM = {};   // id da cor -> numeração escolhida
+
+function escolhido(vars){
+  const k = chaveGrupo(vars[0]);
+  const id = SEL[k];
+  return vars.find(v => v.id === id) || vars[0];
+}
+
+function titulo(p){
+  return p.genero && p.genero !== 'Unissex' ? `${p.nome} · ${p.genero}` : p.nome;
+}
+
+function swatches(vars, idAtivo, todas){
+  if (vars.length < 2) return '';
+  const LIM = 6;
+  const mostra = todas ? vars : vars.slice(0, LIM);
+  const sobra = todas ? 0 : vars.length - mostra.length;
+  const extra = sobra ? `<button type="button" class="sw vazio mais" data-abrir="${esc(idAtivo)}" title="Ver as ${vars.length} cores" aria-label="Ver as ${vars.length} cores deste modelo">+${sobra}</button>` : '';
+  return `<div class="cores" role="group" aria-label="Cores">` + mostra.map(v => {
+    const f = (v.fotos || [])[0];
+    const rot = `${v.cor || 'cor'} — ${v.nome}`;
+    return f
+      ? `<button type="button" class="sw" data-cor="${esc(v.id)}" aria-pressed="${v.id === idAtivo}" title="${esc(rot)}" aria-label="${esc(rot)}"><img src="${esc(f)}" alt="" loading="lazy"></button>`
+      : `<button type="button" class="sw vazio" data-cor="${esc(v.id)}" aria-pressed="${v.id === idAtivo}" title="${esc(rot)}" aria-label="${esc(rot)}">${esc((v.cor || '?').slice(0, 3))}</button>`;
+  }).join('') + extra + `</div>`;
+}
+
+function miolo(p, vars){
+  const fotos = p.fotos || [];
+  const capa = fotos.length
+    ? `<img src="${esc(fotos[0])}" alt="${esc(titulo(p))} na cor ${esc(p.cor)}" loading="lazy">`
+    : `<div class="ph"><b>RM</b>${esc(p.marca)}<br>foto em breve</div>`;
+  const tams = p.sizes || [];
+  const escolha = TAM[p.id];
+  const selTam = tams.length
+    ? `<select class="tam" data-tam="${esc(p.id)}" aria-label="Numeração de ${esc(p.nome)}">
+         <option value="">Numeração</option>
+         ${tams.map(t => `<option value="${t}"${String(escolha) === String(t) ? ' selected' : ''}>${t}</option>`).join('')}
+       </select>`
+    : '<p class="muted" style="margin:0">Numeração sob consulta</p>';
+
+  return `
+    <div class="foto" data-abrir="${esc(p.id)}">${capa}</div>
+    ${swatches(vars, p.id)}
+    <div class="info">
+      <span class="tagm">${esc(p.marca)} · ${esc(p.colecao.replace(p.marca, '').trim() || p.colecao)}</span>
+      <h3 class="nome" data-abrir="${esc(p.id)}">${esc(titulo(p))}</h3>
+      ${p.cor ? `<span class="corat">${esc(p.cor)}</span>` : ''}
+      ${p.promo ? `<span class="tag promo">−${p.promo}%</span>` : ''}
+      ${ADMIN && !p.ativo ? '<span class="tag oculto">Oculto na loja</span>' : ''}
+      ${ADMIN && !fotos.length ? '<span class="tag oculto">Sem foto</span>' : ''}
+      <div class="preco">${BRL(p.avista)}</div>
+      ${p.preco > p.avista ? `<span class="de">${BRL(p.preco)}</span>` : ''}
+      ${p.parcela ? `<span class="parc">ou 6x de ${BRL(p.parcela)} sem juros</span>` : ''}
+      <div class="acoes">
+        ${ADMIN ? `<button class="btn-ed" type="button" data-editar="${esc(p.id)}">Editar produto</button>` : ''}
+        ${selTam}
+        <button class="btn" type="button" data-add="${esc(p.id)}">Adicionar à sacola</button>
+      </div>
+    </div>`;
+}
+
+function card(vars){
+  const p = escolhido(vars);
+  return `<article class="card" data-grupo="${esc(chaveGrupo(p))}">${miolo(p, vars)}</article>`;
+}
+
+function varsDoGrupo(chave){
+  return filtrados().filter(p => chaveGrupo(p) === chave);
+}
+
+// Troca a cor repintando só aquele cartão, sem redesenhar a vitrine inteira.
+function trocarCor(chave, id){
+  SEL[chave] = id;
+  const el = document.querySelector(`.card[data-grupo="${CSS.escape(chave)}"]`);
+  const vars = varsDoGrupo(chave);
+  if (!el || !vars.length) return;
+  el.innerHTML = miolo(escolhido(vars), vars);
+}
+
+function renderGrid(){
+  // Em "Destaques" os produtos com foto vêm primeiro: a loja abre cheia.
+  const lista = filtrados().sort((a, b) =>
+    S.ord === 'menor' ? a.avista - b.avista :
+    S.ord === 'maior' ? b.avista - a.avista :
+    S.ord === 'nome'  ? a.nome.localeCompare(b.nome, 'pt') :
+    ((b.fotos || []).length ? 1 : 0) - ((a.fotos || []).length ? 1 : 0));
+
+  const gs = grupos(lista);
+  const nCores = lista.length;
+  $('#conta').textContent = gs.length
+    ? `${gs.length} ${gs.length === 1 ? 'modelo' : 'modelos'} · ${nCores} ${nCores === 1 ? 'cor' : 'cores'}`
+    : 'Nenhum produto';
+  $('#grid').innerHTML = gs.length
+    ? gs.map(card).join('')
+    : `<div class="nada"><b>Nenhum produto com esses filtros.</b>Tente tirar um filtro ou buscar outro nome.<br><button class="chip" id="limpar2" type="button" style="margin-top:14px">Limpar filtros</button></div>`;
+}
+
+function refresh(){ renderFiltros(); renderGrid(); }
+
+function limparFiltros(){
+  S.marca = ''; S.genero.clear(); S.modelo.clear(); S.tam = ''; S.faixa = ''; S.q = '';
+  $('#busca').value = ''; $('#buscaModelo').value = '';
+  refresh();
+}
+
+// ---------------------------------------------------------------- janela do produto
+let MP = null, MI = 0, ultimoFoco = null;
+
+function abrirProduto(id, i = 0){
+  const p = P.find(x => x.id === id);
+  if (!p) return;
+  ultimoFoco = document.activeElement;
+  MP = p; MI = i;
+  pintarProduto();
+  $('#mProduto').hidden = false;
+  document.body.style.overflow = 'hidden';
+  $('#mFechar').focus();
+}
+function fecharProduto(){
+  $('#mProduto').hidden = true;
+  document.body.style.overflow = '';
+  MP = null;
+  if (ultimoFoco && document.contains(ultimoFoco)) ultimoFoco.focus();
+}
+function pintarProduto(){
+  const p = MP, fotos = p.fotos || [];
+  const temFoto = fotos.length > 0;
+  $('#mImg').src = temFoto ? fotos[MI] : '';
+  $('#mImg').alt = temFoto ? `${titulo(p)} na cor ${p.cor}` : '';
+  $('#mImg').style.display = temFoto ? '' : 'none';
+  $('#mCont').textContent = temFoto ? `${MI + 1} / ${fotos.length}` : 'Foto em breve';
+  $('#mAnt').hidden = $('#mProx').hidden = fotos.length < 2;
+
+  const vars = P.filter(v => chaveGrupo(v) === chaveGrupo(p) && (ADMIN || v.ativo !== false));
+  const tams = p.sizes || [];
+  $('#mInfo').innerHTML = `
+    <span class="tagm">${esc(p.marca)} · ${esc(p.colecao.replace(p.marca, '').trim() || p.colecao)}</span>
+    <h3 class="ctit" id="mNome" style="margin:4px 0 2px;font-size:24px">${esc(titulo(p))}</h3>
+    ${p.cor ? `<span class="muted">Cor: <b style="color:var(--ink)">${esc(p.cor)}</b></span>` : ''}
+    ${vars.length > 1 ? `<div style="margin:12px 0 4px"><span class="muted">Cores deste modelo (${vars.length})</span>${swatches(vars, p.id, true).replace('class="cores"', 'class="cores mthumbs"')}</div>` : ''}
+    ${fotos.length > 1 ? `<div style="margin:12px 0 4px"><span class="muted">Fotos desta cor (${fotos.length})</span><div class="mthumbs">${fotos.map((f, i) => `<button type="button" class="sw" data-foto="${i}" aria-pressed="${i === MI}" aria-label="Foto ${i + 1}"><img src="${esc(f)}" alt="" loading="lazy"></button>`).join('')}</div></div>` : ''}
+    <div class="preco" style="font-size:28px">${BRL(p.avista)}</div>
+    ${p.preco > p.avista ? `<span class="de">${BRL(p.preco)}</span>` : ''}
+    ${p.parcela ? `<span class="parc">ou 6x de ${BRL(p.parcela)} sem juros</span>` : ''}
+    ${p.desc ? `<p class="muted" style="margin:10px 0 0">${esc(p.desc)}</p>` : ''}
+    <div class="acoes" style="margin-top:18px">
+      ${tams.length
+        ? `<select id="mTam" aria-label="Numeração"><option value="">Escolha a numeração</option>${tams.map(t => `<option value="${t}"${String(TAM[p.id]) === String(t) ? ' selected' : ''}>${t}</option>`).join('')}</select>`
+        : '<p class="muted" style="margin:0">Numeração sob consulta</p>'}
+      <button class="btn" type="button" data-madd="${esc(p.id)}">Adicionar à sacola</button>
+    </div>`;
+}
+function passoFoto(d){
+  const n = (MP.fotos || []).length;
+  if (n < 2) return;
+  MI = (MI + d + n) % n;
+  pintarProduto();
+}
+
+// ---------------------------------------------------------------- sacola
+const CHAVE = 'rm_sacola';
+let SACOLA = [];
+try { SACOLA = JSON.parse(localStorage.getItem(CHAVE) || '[]'); } catch { SACOLA = []; }
+
+function salvarSacola(){
+  try { localStorage.setItem(CHAVE, JSON.stringify(SACOLA)); } catch {}
+}
+function addSacola(id, tam){
+  const p = P.find(x => x.id === id);
+  if (!p) return;
+  if ((p.sizes || []).length && !tam){ toast('Escolha a numeração antes de adicionar.'); return false; }
+  const ja = SACOLA.find(i => i.id === id && i.tam === tam);
+  if (ja) ja.q++;
+  else SACOLA.push({ id, tam: tam || '', q: 1 });
+  salvarSacola(); renderSacola();
+  toast(`${p.nome}${tam ? ' · ' + tam : ''} na sacola.`);
+  return true;
+}
+function totalSacola(){
+  return SACOLA.reduce((s, i) => {
+    const p = P.find(x => x.id === i.id);
+    return s + (p ? p.avista * i.q : 0);
+  }, 0);
+}
+function renderSacola(){
+  const n = SACOLA.reduce((s, i) => s + i.q, 0);
+  $('#qtd').textContent = n;
+  const lista = SACOLA.map((i, idx) => {
+    const p = P.find(x => x.id === i.id);
+    if (!p) return '';
+    const f = (p.fotos || [])[0];
+    return `<li class="item">
+      ${f ? `<img src="${esc(f)}" alt="">` : '<img alt="" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=">'}
+      <div class="item-c">
+        <div class="item-n">${esc(titulo(p))}</div>
+        <div class="muted">${esc(p.cor || '')}${i.tam ? ' · nº ' + esc(i.tam) : ''}</div>
+        <div class="qtd" style="margin-top:6px">
+          <button type="button" data-menos="${idx}" aria-label="Diminuir">−</button>
+          <span>${i.q}</span>
+          <button type="button" data-mais="${idx}" aria-label="Aumentar">+</button>
+        </div>
+      </div>
+      <div class="item-r"><b>${BRL(p.avista * i.q)}</b><button class="rm" type="button" data-rm="${idx}">remover</button></div>
+    </li>`;
+  }).join('');
+  $('#itens').innerHTML = lista || '<li class="vazio-sac">Sua sacola está vazia.<br><span class="muted">Escolha a cor e a numeração de um tênis.</span></li>';
+  $('#dadosPedido').hidden = !SACOLA.length;
+  $('#total').textContent = BRL(totalSacola());
+  const link = $('#zap');
+  link.setAttribute('aria-disabled', SACOLA.length ? 'false' : 'true');
+  link.href = SACOLA.length ? `https://wa.me/${WA}?text=${encodeURIComponent(textoPedido())}` : '#';
+}
+function textoPedido(){
+  const linhas = SACOLA.map(i => {
+    const p = P.find(x => x.id === i.id);
+    if (!p) return '';
+    return `• ${i.q}x ${titulo(p)}${p.cor ? ' (' + p.cor + ')' : ''}${i.tam ? ' — nº ' + i.tam : ''} — ${BRL(p.avista * i.q)}`;
+  }).filter(Boolean);
+  const nome = $('#cliNome').value.trim();
+  return [
+    'Olá! Quero fazer um pedido na RM Store.', '',
+    ...linhas, '',
+    `Total à vista: ${BRL(totalSacola())}`,
+    `Entrega: ${$('#cliEntrega').value}`,
+    `Pagamento: ${$('#cliPagto').value}`,
+    nome ? `Nome: ${nome}` : null,
+  ].filter(l => l !== null).join('\n');
+}
+function abrirSacola(aberta){
+  $('#drawer').classList.toggle('aberto', aberta);
+  $('#drawer').setAttribute('aria-hidden', String(!aberta));
+  $('#ov').hidden = !aberta && !$('#filtros').classList.contains('aberto');
+  document.body.style.overflow = aberta ? 'hidden' : '';
+  if (aberta) $('#fecharSacola').focus();
+}
+function abrirFiltros(aberta){
+  const f = $('#filtros');
+  f.classList.toggle('aberto', aberta);
+  $('#abrirFiltros').setAttribute('aria-expanded', String(aberta));
+  $('#ov').hidden = !aberta && !$('#drawer').classList.contains('aberto');
+  document.body.style.overflow = aberta ? 'hidden' : '';
+  if (aberta) $('#fecharFiltros').focus();
+}
+
+let tToast;
+function toast(msg){
+  const t = $('#toast');
+  t.textContent = msg; t.classList.add('on');
+  clearTimeout(tToast);
+  tToast = setTimeout(() => t.classList.remove('on'), 2600);
+}
+
+// ---------------------------------------------------------------- textos editáveis
+function aplicarConfig(c){
+  CONFIG = c;
+  if (c.whatsapp){
+    WA = String(c.whatsapp).replace(/\D/g, '');
+    const bonito = WA.replace(/^55(\d{2})(\d{4,5})(\d{4})$/, '($1) $2-$3');
+    $('#zapTxt').textContent = bonito;
+    $$('.zapTxt').forEach(e => e.textContent = bonito);
+  }
+  if (c.horario) $('#horario').textContent = c.horario;
+  if (c.hero_titulo) $('#heroTitulo').innerHTML = esc(c.hero_titulo).replace(/\n/g, '<br>');
+  if (c.hero_texto) $('#heroTexto').textContent = c.hero_texto;
+}
+
+// ---------------------------------------------------------------- cliques
+document.addEventListener('click', e => {
+  const t = e.target;
+
+  const sw = t.closest('[data-cor]');
+  if (sw){
+    const card = sw.closest('.card');
+    if (card) return trocarCor(card.dataset.grupo, sw.dataset.cor);
+    MP = P.find(x => x.id === sw.dataset.cor) || MP; MI = 0; return pintarProduto();
+  }
+  const fo = t.closest('[data-foto]');
+  if (fo){ MI = +fo.dataset.foto; return pintarProduto(); }
+
+  const ed = t.closest('[data-editar]');
+  if (ed) return abrirEditor(ed.dataset.editar);
+
+  const ab = t.closest('[data-abrir]');
+  if (ab) return abrirProduto(ab.dataset.abrir, 0);
+
+  const add = t.closest('[data-add]');
+  if (add){
+    const card = add.closest('.card');
+    const sel = card && card.querySelector('[data-tam]');
+    return addSacola(add.dataset.add, sel ? sel.value : '');
+  }
+  const madd = t.closest('[data-madd]');
+  if (madd){
+    const sel = $('#mTam');
+    if (addSacola(madd.dataset.madd, sel ? sel.value : '')) fecharProduto();
+    return;
+  }
+
+  const chip = t.closest('[data-t]');
+  if (chip){ S.tam = S.tam == chip.dataset.t ? '' : chip.dataset.t; return refresh(); }
+
+  const hg = t.closest('[data-hg]');
+  if (hg){
+    S.genero.clear();
+    if (hg.dataset.hg) S.genero.add(hg.dataset.hg);
+    refresh();
+    document.querySelector('.layout').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return;
+  }
+
+  const mais = t.closest('[data-mais]'); if (mais){ SACOLA[+mais.dataset.mais].q++; salvarSacola(); return renderSacola(); }
+  const menos = t.closest('[data-menos]');
+  if (menos){ const i = +menos.dataset.menos; SACOLA[i].q--; if (SACOLA[i].q < 1) SACOLA.splice(i, 1); salvarSacola(); return renderSacola(); }
+  const rm = t.closest('[data-rm]'); if (rm){ SACOLA.splice(+rm.dataset.rm, 1); salvarSacola(); return renderSacola(); }
+
+  if (t.id === 'limpar' || t.id === 'limpar2') return limparFiltros();
+  if (t.id === 'abrirFiltros') return abrirFiltros(true);
+  if (t.id === 'fecharFiltros' || t.id === 'verProdutos') return abrirFiltros(false);
+  if (t.id === 'abrirSacola') return abrirSacola(true);
+  if (t.id === 'fecharSacola') return abrirSacola(false);
+  if (t.id === 'ov'){ abrirSacola(false); abrirFiltros(false); return; }
+  if (t.id === 'mFechar') return fecharProduto();
+  if (t.id === 'mAnt') return passoFoto(-1);
+  if (t.id === 'mProx') return passoFoto(1);
+});
+
+document.addEventListener('change', e => {
+  const t = e.target;
+  if (t.dataset && t.dataset.tam){ TAM[t.dataset.tam] = t.value; return; }
+  if (t.id === 'mTam' && MP){ TAM[MP.id] = t.value; return; }
+  if (t.id === 'fMarca'){ S.marca = t.value; return refresh(); }
+  if (t.dataset && t.dataset.g){ t.checked ? S.genero.add(t.dataset.g) : S.genero.delete(t.dataset.g); return refresh(); }
+  if (t.dataset && t.dataset.m){ t.checked ? S.modelo.add(t.dataset.m) : S.modelo.delete(t.dataset.m); return refresh(); }
+  if (t.name === 'faixa'){ S.faixa = t.value; return refresh(); }
+  if (t.id === 'ord'){ S.ord = t.value; return renderGrid(); }
+});
+
+let tBusca;
+$('#busca').addEventListener('input', e => {
+  clearTimeout(tBusca);
+  tBusca = setTimeout(() => { S.q = semAcento(e.target.value.trim()); refresh(); }, 200);
+});
+$('#buscaModelo').addEventListener('input', renderFiltros);
+
+$('#copiar').addEventListener('click', async () => {
+  if (!SACOLA.length) return toast('Sua sacola está vazia.');
+  try { await navigator.clipboard.writeText(textoPedido()); toast('Pedido copiado.'); }
+  catch { toast('Não foi possível copiar. Abra o WhatsApp pelo botão verde.'); }
+});
+$$('#cliNome,#cliEntrega,#cliPagto').forEach(el => el.addEventListener('input', renderSacola));
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape'){
+    if (!$('#mEditor').hidden) return fecharEditor();
+    if (!$('#mTextos').hidden) return ($('#mTextos').hidden = true);
+    if (!$('#mLogin').hidden) return ($('#mLogin').hidden = true);
+    if (!$('#mProduto').hidden) return fecharProduto();
+    if ($('#drawer').classList.contains('aberto')) return abrirSacola(false);
+    if ($('#filtros').classList.contains('aberto')) return abrirFiltros(false);
+  }
+  if (!$('#mProduto').hidden){
+    if (e.key === 'ArrowLeft') passoFoto(-1);
+    if (e.key === 'ArrowRight') passoFoto(1);
+  }
+});
+
+// ---------------------------------------------------------------- banco de dados
+let ADMIN = false, SO_SEM_FOTO = false, SBC = null, TODOS = [], edAtual = null, edNovoId = null, edFotos = [];
+
+function cliente(){
+  if (!SBC && window.supabase) SBC = window.supabase.createClient(SB_URL, SB_KEY);
+  return SBC;
+}
+
+// Lê produtos e textos do banco. Se não der, segue com os dados do próprio arquivo.
+async function carregar(){
+  const sb = cliente();
+  if (!sb) return;
+  try {
+    let q = sb.from('produtos').select('*').order('id');
+    if (!ADMIN) q = q.eq('ativo', true);
+    const [r, c] = await Promise.all([q, sb.from('config').select('*')]);
+    if (!r.error && r.data && r.data.length){
+      TODOS = r.data;
+      P = r.data.map(x => {
+        const base = +x.avista || 0, pct = +x.promo || 0;
+        return {
+          id: x.id, marca: x.marca, colecao: x.colecao || `${x.marca} ${x.modelo}`.trim(),
+          modelo: x.modelo, nome: x.nome, cor: x.cor || '', genero: x.genero || 'Unissex',
+          fotos: x.fotos || [], sizes: x.sizes || [], preco: +x.preco || 0,
+          avista: pct ? Math.round(base * (100 - pct)) / 100 : base,
+          parcela: +x.parcela || 0, desc: x.descricao || '', promo: pct, ativo: x.ativo !== false,
+        };
+      });
+      recalc();
+    }
+    if (!c.error && c.data) aplicarConfig(Object.fromEntries(c.data.map(x => [x.chave, x.valor])));
+    refresh(); renderSacola();
+  } catch {}
+}
+
+// O botão Admin fica fora da vista do cliente: só aparece com #admin no
+// endereço (rmsstore.com.br/#admin) ou quando já existe uma sessão aberta.
+function querAdmin(){
+  try { return location.hash.toLowerCase() === '#admin'; } catch { return false; }
+}
+function modoAdmin(){
+  $('#admbar').hidden = !ADMIN;
+  $('#btnAdm').hidden = ADMIN || !querAdmin();
+  if (!ADMIN){ SO_SEM_FOTO = false; $('#soSemFoto').setAttribute('aria-pressed', 'false'); }
+}
+async function verSessao(){
+  const sb = cliente();
+  if (sb){ try { const { data } = await sb.auth.getSession(); ADMIN = !!data.session; } catch {} }
+  modoAdmin();
+}
+
+window.addEventListener('hashchange', modoAdmin);
+$('#btnAdm').addEventListener('click', () => { $('#mLogin').hidden = false; $('#admEmail').focus(); });
+$('#lFechar').addEventListener('click', () => { $('#mLogin').hidden = true; });
+$('#formLogin').addEventListener('submit', async e => {
+  e.preventDefault();
+  const b = $('#btnEntrar');
+  b.disabled = true; b.textContent = 'Entrando…'; $('#admErro').textContent = '';
+  const { error } = await cliente().auth.signInWithPassword({ email: $('#admEmail').value.trim(), password: $('#admSenha').value });
+  b.disabled = false; b.textContent = 'Entrar';
+  if (error){ $('#admErro').textContent = 'E-mail ou senha não conferem. Tente de novo.'; $('#admSenha').value = ''; $('#admSenha').focus(); return; }
+  ADMIN = true; $('#mLogin').hidden = true; $('#admSenha').value = '';
+  modoAdmin(); carregar();
+});
+$('#sairAdm').addEventListener('click', async () => {
+  await cliente().auth.signOut(); ADMIN = false;
+  try { history.replaceState(null, '', location.pathname + location.search); } catch {}
+  modoAdmin(); carregar(); toast('Você saiu do painel.');
+});
+$('#soSemFoto').addEventListener('click', e => {
+  SO_SEM_FOTO = !SO_SEM_FOTO;
+  e.currentTarget.setAttribute('aria-pressed', String(SO_SEM_FOTO));
+  e.currentTarget.textContent = SO_SEM_FOTO ? 'Ver todos' : 'Ver só sem foto';
+  refresh();
+});
+
+// ---------------------------------------------------------------- promoção geral
+async function setPromo(pct){
+  const { error } = await cliente().from('produtos').update({ promo: pct }).neq('id', '');
+  if (error){ toast('Não deu para atualizar as promoções: ' + error.message); return false; }
+  await carregar(); return true;
+}
+$('#aplicarPromo').addEventListener('click', async () => {
+  const pct = Math.round(+$('#promoPct').value);
+  if (!(pct >= 1 && pct <= 90)) return toast('Informe um desconto de 1% a 90%.');
+  if (!confirm(`Aplicar ${pct}% de desconto em todos os produtos? O preço à vista muda na loja na hora.`)) return;
+  if (await setPromo(pct)) toast(`Promoção de ${pct}% aplicada em todos os produtos.`);
+});
+$('#removerPromo').addEventListener('click', async () => {
+  if (!confirm('Tirar a promoção de todos os produtos? Os preços voltam ao valor cadastrado.')) return;
+  if (await setPromo(null)) toast('Promoções removidas.');
+});
+
+// ---------------------------------------------------------------- textos do site
+let CONFIG = {};
+$('#btnTextos').addEventListener('click', () => {
+  $('#txZap').value = CONFIG.whatsapp || WA;
+  $('#txHorario').value = CONFIG.horario || $('#horario').textContent.trim();
+  $('#txTitulo2').value = CONFIG.hero_titulo || $('#heroTitulo').innerHTML.replace(/<br\s*\/?>/gi, '\n').trim();
+  $('#txTexto').value = CONFIG.hero_texto || $('#heroTexto').textContent.trim();
+  $('#txMsg').textContent = '';
+  $('#mTextos').hidden = false;
+  $('#txZap').focus();
+});
+$('#txFechar').addEventListener('click', () => { $('#mTextos').hidden = true; });
+$('#txCancelar').addEventListener('click', () => { $('#mTextos').hidden = true; });
+$('#formTextos').addEventListener('submit', async e => {
+  e.preventDefault();
+  const zap = $('#txZap').value.replace(/\D/g, '');
+  if (zap && zap.length < 12){ $('#txMsg').textContent = 'O WhatsApp precisa do 55, do DDD e do número. Ex: 554896374837.'; return; }
+  const linhas = [
+    { chave: 'whatsapp', valor: zap },
+    { chave: 'horario', valor: $('#txHorario').value.trim() },
+    { chave: 'hero_titulo', valor: $('#txTitulo2').value.trim() },
+    { chave: 'hero_texto', valor: $('#txTexto').value.trim() },
+  ].filter(l => l.valor);
+  $('#txMsg').textContent = 'Salvando…';
+  const { error } = await cliente().from('config').upsert(linhas);
+  if (error){ $('#txMsg').textContent = 'Não deu para salvar: ' + error.message; return; }
+  $('#mTextos').hidden = true; await carregar(); toast('Textos do site atualizados.');
+});
+
+// ---------------------------------------------------------------- editor de produto
+function fecharEditor(){ $('#mEditor').hidden = true; edAtual = null; }
+function pintarFotosEd(){
+  $('#edFotos').innerHTML = edFotos.map((u, i) =>
+    `<div class="f"><img src="${esc(u)}" alt=""><button type="button" data-tirar="${i}" aria-label="Tirar foto ${i + 1}">×</button></div>`).join('')
+    || '<span class="muted">Nenhuma foto ainda.</span>';
+}
+function abrirEditor(id){
+  const r = id ? TODOS.find(x => x.id === id) : null;
+  edAtual = r; edNovoId = r ? null : 'p' + Date.now().toString(36);
+  edFotos = r ? [...(r.fotos || [])] : [];
+  $('#edTitulo').textContent = r ? 'Editar produto' : 'Novo produto';
+  $('#edMarca').value = r?.marca || '';
+  $('#edModelo').value = r?.modelo || '';
+  $('#edNome').value = r?.nome || '';
+  $('#edCor').value = r?.cor || '';
+  $('#edGenero').value = r?.genero || 'Unissex';
+  $('#edSizes').value = (r?.sizes || []).join(',');
+  $('#edPreco').value = r?.preco ?? '';
+  $('#edAvista').value = r?.avista ?? '';
+  $('#edDesc').value = r?.descricao || '';
+  $('#edAtivo').checked = r ? r.ativo !== false : true;
+  $('#edExcluir').hidden = !r;
+  $('#edMsg').textContent = '';
+  pintarFotosEd();
+  $('#mEditor').hidden = false;
+  $('#edNome').focus();
+}
+$('#novoProd').addEventListener('click', () => abrirEditor(null));
+$('#edFechar').addEventListener('click', fecharEditor);
+$('#edCancelar').addEventListener('click', fecharEditor);
+$('#edFotos').addEventListener('click', e => {
+  const b = e.target.closest('[data-tirar]');
+  if (!b) return;
+  edFotos.splice(+b.dataset.tirar, 1); pintarFotosEd();
+});
+
+function reduzir(file){
+  return new Promise((ok, falha) => {
+    const img = new Image();
+    img.onload = () => {
+      const k = Math.min(1, 760 / Math.max(img.width, img.height));
+      const c = document.createElement('canvas');
+      c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(img.src);
+      c.toBlob(b => b ? ok(b) : falha(new Error('não deu para reduzir a foto')), 'image/jpeg', 0.75);
+    };
+    img.onerror = () => falha(new Error('arquivo de imagem inválido'));
+    img.src = URL.createObjectURL(file);
+  });
+}
+$('#edUpload').addEventListener('change', async e => {
+  const id = edAtual?.id || edNovoId;
+  for (const f of [...e.target.files]){
+    try {
+      $('#edMsg').textContent = `Enviando foto ${edFotos.length + 1}…`;
+      const blob = await reduzir(f);
+      const caminho = `${id}/${Date.now()}_${edFotos.length + 1}.jpg`;
+      const { error } = await cliente().storage.from('fotos').upload(caminho, blob, { contentType: 'image/jpeg' });
+      if (error) throw error;
+      edFotos.push(cliente().storage.from('fotos').getPublicUrl(caminho).data.publicUrl);
+      pintarFotosEd();
+    } catch (err){ $('#edMsg').textContent = 'Não deu para enviar esta foto: ' + err.message; return; }
+  }
+  $('#edMsg').textContent = '';
+  e.target.value = '';
+});
+$('#formEd').addEventListener('submit', async e => {
+  e.preventDefault();
+  const sizes = $('#edSizes').value.split(',').map(s => Number(s.trim())).filter(n => n > 0);
+  const avista = Number($('#edAvista').value);
+  if (!(avista > 0)){ $('#edMsg').textContent = 'Informe o preço à vista.'; $('#edAvista').focus(); return; }
+  if (!edFotos.length && !confirm('Este produto não tem foto. Na loja ele aparece sem imagem. Salvar assim mesmo?')) return;
+  const num = v => v === '' ? null : Number(v);
+  const marca = $('#edMarca').value.trim(), modelo = $('#edModelo').value.trim();
+  const linha = {
+    id: edAtual?.id || edNovoId, marca, modelo,
+    nome: $('#edNome').value.trim(), cor: $('#edCor').value.trim(), genero: $('#edGenero').value,
+    sizes, preco: num($('#edPreco').value), avista, parcela: Math.round(avista / 6 * 100) / 100,
+    descricao: $('#edDesc').value.trim(), fotos: edFotos, ativo: $('#edAtivo').checked,
+  };
+  $('#edMsg').textContent = 'Salvando…';
+  const { error } = await cliente().from('produtos').upsert(linha);
+  if (error){ $('#edMsg').textContent = 'Não deu para salvar: ' + error.message + '. Nada foi perdido, tente de novo.'; return; }
+  fecharEditor(); await carregar(); toast(`"${linha.nome}" salvo.`);
+});
+$('#edExcluir').addEventListener('click', async () => {
+  if (!edAtual) return;
+  if (!confirm(`Excluir "${edAtual.nome}"? Não dá para desfazer. Se quiser só tirar da loja, desmarque "Mostrar na loja".`)) return;
+  const { error } = await cliente().from('produtos').delete().eq('id', edAtual.id);
+  if (error){ $('#edMsg').textContent = 'Não deu para excluir: ' + error.message; return; }
+  const nome = edAtual.nome;
+  fecharEditor(); await carregar(); toast(`"${nome}" excluído.`);
+});
+
+// ---------------------------------------------------------------- início
+recalc();
+modoAdmin();
+refresh();
+renderSacola();
+verSessao().then(carregar);
+
+</script>
+</body>
+</html>
