@@ -119,6 +119,7 @@ header.top .wrap{display:flex;align-items:center;gap:10px;padding-block:12px}
 .tag{display:inline-block;align-self:flex-start;border-radius:999px;padding:2px 9px;font-size:11px;font-weight:700;margin-top:6px}
 .tag.promo{background:var(--accent);color:#fff}
 .tag.oculto{background:#3a3835;color:#f4f1ec}
+.tag.gen{background:var(--soft);color:var(--muted);border:1px solid var(--line)}
 .acoes{margin-top:auto;padding-top:11px;display:grid;gap:7px}
 .acoes select{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);font-variant-numeric:tabular-nums}
 .btn{background:var(--accent);color:var(--accent-ink);border:0;border-radius:8px;padding:10px 12px;font-weight:700;cursor:pointer;width:100%}
@@ -381,9 +382,9 @@ header.top .wrap{display:flex;align-items:center;gap:10px;padding-block:12px}
         <b>Tamanhos</b> <span class="muted">toque para marcar e desmarcar</span>
         <div class="chips" id="edTams" style="margin:9px 0"></div>
         <div class="linha">
-          <button type="button" class="chip" data-faixa="34-39">Feminino 34 a 39</button>
-          <button type="button" class="chip" data-faixa="38-43">Masculino 38 a 43</button>
-          <button type="button" class="chip" data-faixa="34-43">Unissex 34 a 43</button>
+          <button type="button" class="chip" data-faixa="34-39" data-gen="Feminino">Feminino 34 a 39</button>
+          <button type="button" class="chip" data-faixa="38-43" data-gen="Masculino">Masculino 38 a 43</button>
+          <button type="button" class="chip" data-faixa="34-43" data-gen="Unissex">Unissex 34 a 43</button>
           <button type="button" class="chip" data-faixa="">Limpar</button>
         </div>
       </div>
@@ -399,6 +400,7 @@ header.top .wrap{display:flex;align-items:center;gap:10px;padding-block:12px}
         <button class="limpar" type="button" id="edCancelar" style="width:auto;margin:0">Cancelar</button>
         <span class="spacer"></span>
         <button class="perigo" type="button" id="edExcluir" hidden>Excluir produto</button>
+        <button class="perigo" type="button" id="edExcluirModelo" hidden></button>
       </div>
       <p class="erro" id="edMsg" role="status"></p>
     </form>
@@ -600,6 +602,7 @@ function miolo(p){
       ${p.promo ? `<span class="tag promo">−${p.promo}%</span>` : ''}
       ${ADMIN && !p.ativo ? '<span class="tag oculto">Oculto na loja</span>' : ''}
       ${ADMIN && !fotos.length ? '<span class="tag oculto">Sem foto</span>' : ''}
+      ${ADMIN ? `<span class="tag gen">${esc(p.genero || 'Unissex')}</span>` : ''}
       <div class="preco">${BRL(p.avista)}</div>
       ${p.preco > p.avista ? `<span class="de">${BRL(p.preco)}</span>` : ''}
       <span class="parc">ou até 6x de ${BRL(p.parcela || (p.preco || p.avista) / 6)} sem juros</span>
@@ -1144,6 +1147,9 @@ $('#formEd').addEventListener('click', e => {
   const f = b.dataset.faixa;
   if (!f) edTams = [];
   else { const [a, z] = f.split('-').map(Number); edTams = TAMANHOS_ED.filter(t => t >= a && t <= z); }
+  // O atalho diz um gênero no próprio nome, então marca o gênero junto:
+  // marcar só os tamanhos e deixar "Unissex" fazia o produto sumir do filtro.
+  if (b.dataset.gen) $('#edGenero').value = b.dataset.gen;
   pintarTamanhos();
 });
 
@@ -1172,6 +1178,12 @@ function abrirEditor(id){
   $('#edDesc').value = r?.descricao || '';
   $('#edAtivo').checked = r ? r.ativo !== false : true;
   $('#edExcluir').hidden = !r;
+  const bm = $('#edExcluirModelo');
+  if (r){
+    const n = TODOS.filter(x => chaveDeLinha(x) === chaveDeLinha(r)).length;
+    bm.hidden = n < 2;
+    bm.textContent = `Excluir o modelo inteiro (${n})`;
+  } else bm.hidden = true;
   $('#edMsg').textContent = '';
   pintarFotosEd();
   $('#mEditor').hidden = false;
@@ -1241,6 +1253,22 @@ $('#formEd').addEventListener('submit', async e => {
   if (error){ $('#edMsg').textContent = 'Não deu para salvar: ' + error.message + '. Nada foi perdido, tente de novo.'; return; }
   fecharEditor(); await carregar(); toast(`"${linha.nome}" salvo.`);
 });
+// Chave do grupo a partir de uma linha do banco (que não tem a coluna colecao).
+const chaveDeLinha = x => semAcento(`${x.marca}|${x.colecao || `${x.marca} ${x.modelo}`.trim()}`);
+
+$('#edExcluirModelo').addEventListener('click', async () => {
+  if (!edAtual) return;
+  const chave = chaveDeLinha(edAtual);
+  const irmaos = TODOS.filter(x => chaveDeLinha(x) === chave);
+  const nome = `${edAtual.marca} ${edAtual.modelo}`.trim();
+  if (!irmaos.length) return;
+  if (!confirm(`Excluir o modelo "${nome}" inteiro?\n\nIsso apaga ${irmaos.length} ${irmaos.length === 1 ? 'produto' : 'produtos'} (todas as cores) e não tem volta.\n\nPara só tirar da loja, cancele e desmarque "Mostrar na loja" em cada cor.`)) return;
+  $('#edMsg').textContent = 'Excluindo…';
+  const { error } = await cliente().from('produtos').delete().in('id', irmaos.map(x => x.id));
+  if (error){ $('#edMsg').textContent = 'Não deu para excluir: ' + error.message; return; }
+  fecharEditor(); await carregar(); toast(`Modelo "${nome}" excluído (${irmaos.length}).`);
+});
+
 $('#edExcluir').addEventListener('click', async () => {
   if (!edAtual) return;
   if (!confirm(`Excluir "${edAtual.nome}"? Não dá para desfazer. Se quiser só tirar da loja, desmarque "Mostrar na loja".`)) return;
