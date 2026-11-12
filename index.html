@@ -184,6 +184,12 @@ header.top .wrap{display:flex;align-items:center;gap:10px;padding-block:12px}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .erro{color:#a12a2a;font-size:13px;margin:0;min-height:18px}
 .linha{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.campo-gen{display:grid;gap:4px}
+.campo-gen .rot{font-size:13px;color:var(--muted)}
+.campo-gen .linha{gap:6px;padding-top:3px}
+.cx{display:inline-flex!important;align-items:center;gap:7px;border:1px solid var(--line);border-radius:8px;padding:9px 13px;cursor:pointer;color:var(--ink)!important;font-size:14px;background:#fff;user-select:none}
+.cx input{width:17px!important;height:17px;flex:0 0 auto;accent-color:var(--accent);padding:0!important;margin:0}
+.cx:has(input:checked){border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
 .perigo{color:#a12a2a;background:none;border:0;cursor:pointer;font-weight:700}
 .fotos-ed{display:flex;gap:8px;flex-wrap:wrap}
 .fotos-ed .f{position:relative;width:76px;height:76px}
@@ -375,12 +381,13 @@ header.top .wrap{display:flex;align-items:center;gap:10px;padding-block:12px}
         </label>
         <label>Nome do produto<input id="edNome" required></label>
         <label>Cor<input id="edCor" placeholder="ex: preto/branco"></label>
-        <label>Aparece para<select id="edGenero">
-          <option value="Feminino">Só feminino</option>
-          <option value="Masculino">Só masculino</option>
-          <option value="Unissex">Masculino e feminino</option>
-          <option value="Kids">Infantil</option>
-        </select></label>
+        <div class="campo-gen">
+          <span class="rot">Aparece para</span>
+          <div class="linha">
+            <label class="cx"><input type="checkbox" id="edGenF"> Feminino</label>
+            <label class="cx"><input type="checkbox" id="edGenM"> Masculino</label>
+          </div>
+        </div>
         <label>Preço de tabela<input id="edPreco" type="number" step="0.01" min="0" inputmode="decimal" placeholder="259,90"></label>
         <label>Preço à vista<input id="edAvista" type="number" step="0.01" min="0" required inputmode="decimal" placeholder="240,00"></label>
       </div>
@@ -449,19 +456,20 @@ const FAIXAS = {
   c: [260, 320, 'R$ 260 a R$ 320'],
   d: [320, 1e9, 'Acima de R$ 320'],
 };
-const GENEROS = [['Masculino','Masculinos'], ['Feminino','Femininos'], ['Kids','Infantis'], ['Unissex','Unissex']];
+// Duas listas, só. Um produto que serve aos dois é gravado como 'Unissex'
+// no banco e aparece nas duas; a palavra não existe mais na tela.
+const GENEROS = [['Masculino','Masculinos'], ['Feminino','Femininos']];
+const serveA = g => g === 'Unissex' ? ['Masculino','Feminino'] : [g];
+const deCaixas = (m, f) => m && f ? 'Unissex' : m ? 'Masculino' : 'Feminino';
 // Tira a marca do nome do modelo: a marca já tem filtro próprio.
 const curto = m => { const b = MARCAS.find(x => m.startsWith(x)); return b ? (m.slice(b.length).trim() || m) : m; };
 
 // A loja abre na seleção feminina, que é a maior parte do catálogo.
 const S = { marca:'', genero:new Set(['Feminino']), modelo:new Set(), tam:'', faixa:'', q:'', ord:'rel' };
 
-// O cadastro manda, sem exceção: "Só masculino" aparece em MASCULINOS,
-// "Só feminino" em FEMININOS, e "Masculino e feminino" aparece nos dois,
-// mais a lista UNISSEX. Quem decide é ela, pelo campo Gênero do produto.
+// O cadastro manda: o produto aparece exatamente nas listas que ela marcou.
 function cabeEm(genero, opcao){
-  if (genero === opcao) return true;
-  return genero === 'Unissex' && (opcao === 'Masculino' || opcao === 'Feminino');
+  return serveA(genero).includes(opcao);
 }
 function generoBate(p){
   return !S.genero.size || [...S.genero].some(g => cabeEm(p.genero, g));
@@ -530,7 +538,7 @@ function renderFiltros(){
   $('#fFaixa').innerHTML = Object.entries(FAIXAS).map(([k, [, , rot]]) =>
     `<label class="opt"><input type="radio" name="faixa" value="${k}"${S.faixa === k ? ' checked' : ''}><span class="t">${rot}</span></label>`).join('');
 
-  $('#hnav').innerHTML = [['', 'Todos'], ...GENEROS.filter(([g]) => P.some(p => p.genero === g))]
+  $('#hnav').innerHTML = [['', 'Todos'], ...GENEROS.filter(([g]) => P.some(p => cabeEm(p.genero, g)))]
     .map(([g, rot]) => {
       const on = g ? (S.genero.size === 1 && S.genero.has(g)) : S.genero.size === 0;
       return `<button type="button" data-hg="${g}" aria-pressed="${on}">${rot || 'Todos'}</button>`;
@@ -576,7 +584,7 @@ function escolhido(vars){
 }
 
 function titulo(p){
-  return p.genero && p.genero !== 'Unissex' ? `${p.nome} · ${p.genero}` : p.nome;
+  return p.genero === 'Masculino' || p.genero === 'Feminino' ? `${p.nome} · ${p.genero}` : p.nome;
 }
 
 function swatches(vars, idAtivo, todas){
@@ -621,7 +629,7 @@ function miolo(p){
       ${p.promo ? `<span class="tag promo">−${p.promo}%</span>` : ''}
       ${ADMIN && !p.ativo ? '<span class="tag oculto">Oculto na loja</span>' : ''}
       ${ADMIN && !fotos.length ? '<span class="tag oculto">Sem foto</span>' : ''}
-      ${ADMIN ? `<span class="tag gen">${esc(p.genero || 'Unissex')}</span>` : ''}
+      ${ADMIN ? `<span class="tag gen">${esc(serveA(p.genero || 'Unissex').join(' e '))}</span>` : ''}
       <div class="preco">${BRL(p.avista)}</div>
       ${p.preco > p.avista ? `<span class="de">${BRL(p.preco)}</span>` : ''}
       <span class="parc">ou até 6x de ${BRL(p.parcela || (p.preco || p.avista) / 6)} sem juros</span>
@@ -1008,7 +1016,7 @@ function avisarBanco(nBanco, importado){
       : `O catálogo ainda não foi importado por completo: ${nBanco} de ${CATALOGO_ARQUIVO.length} cores estão no banco. Rode o importar_catalogo.sql no Supabase.`;
 }
 
-const VERSAO = '12/11/2026 03h02';
+const VERSAO = '12/11/2026 12h18';
 function modoAdmin(){
   $('#admbar').hidden = !ADMIN;
   $('#admVer').textContent = 'versão ' + VERSAO;
@@ -1136,17 +1144,26 @@ function pintarTamanhos(){
     `<button type="button" class="chip" data-tam-ed="${t}" aria-pressed="${edTams.includes(t)}">${t}</button>`).join('');
 }
 // Diz, antes de salvar, em qual lista do menu o produto vai cair.
+// Lê as duas caixas e devolve o valor que vai para o banco.
+function generoDoEditor(){
+  return deCaixas($('#edGenM').checked, $('#edGenF').checked);
+}
 function pintarOnde(){
-  const g = $('#edGenero').value;
-  const listas = GENEROS.filter(([k]) => cabeEm(g, k)).map(([, rot]) => rot.toUpperCase());
   const alvo = $('#edOnde');
+  if (!$('#edGenM').checked && !$('#edGenF').checked){
+    alvo.textContent = 'Marque Feminino, Masculino, ou os dois. Sem isso o produto não entra em nenhuma lista da loja.';
+    return;
+  }
+  const g = generoDoEditor();
+  const listas = GENEROS.filter(([k]) => cabeEm(g, k)).map(([, rot]) => rot.toUpperCase());
   if (!listas.length){ alvo.textContent = ''; return; }
   const onde = listas.length === 1
     ? listas[0]
     : listas.slice(0, -1).join(', ') + ' e ' + listas[listas.length - 1];
   alvo.textContent = `No menu da loja ele vai aparecer em ${onde}. Pode mudar quando quiser.`;
 }
-$('#edGenero').addEventListener('change', pintarOnde);
+$('#edGenF').addEventListener('change', pintarOnde);
+$('#edGenM').addEventListener('change', pintarOnde);
 
 // O parcelamento sai do preço de tabela, não do à vista: quem parcela paga o cheio.
 function pintarParcela(){
@@ -1183,7 +1200,10 @@ $('#formEd').addEventListener('click', e => {
   else { const [a, z] = f.split('-').map(Number); edTams = TAMANHOS_ED.filter(t => t >= a && t <= z); }
   // O atalho diz um gênero no próprio nome, então marca o gênero junto:
   // marcar só os tamanhos e deixar "Unissex" fazia o produto sumir do filtro.
-  if (b.dataset.gen){ $('#edGenero').value = b.dataset.gen; pintarOnde(); }
+  if (b.dataset.gen){ const q = serveA(b.dataset.gen);
+    $('#edGenM').checked = q.includes('Masculino');
+    $('#edGenF').checked = q.includes('Feminino');
+    pintarOnde(); }
   pintarTamanhos();
 });
 
@@ -1205,7 +1225,9 @@ function abrirEditor(id){
   pintarTamanhos();
   $('#edNome').value = r?.nome || '';
   $('#edCor').value = r?.cor || '';
-  $('#edGenero').value = r?.genero || 'Feminino';
+  const serve = serveA(r?.genero || 'Feminino');
+  $('#edGenM').checked = serve.includes('Masculino');
+  $('#edGenF').checked = serve.includes('Feminino');
   $('#edPreco').value = r?.preco ?? '';
   $('#edAvista').value = r?.avista ?? '';
   pintarParcela();
@@ -1269,6 +1291,9 @@ $('#formEd').addEventListener('submit', async e => {
   const marca = marcaEscolhida(), modelo = modeloEscolhido();
   if (!marca){ $('#edMsg').textContent = 'Escolha a marca, ou crie uma nova.'; $('#edMarca').focus(); return; }
   if (!modelo){ $('#edMsg').textContent = 'Escolha o modelo, ou crie um novo.'; $('#edModelo').focus(); return; }
+  if (!$('#edGenM').checked && !$('#edGenF').checked){
+    $('#edMsg').textContent = 'Em "Aparece para", marque Feminino, Masculino, ou os dois.'; $('#edGenF').focus(); return;
+  }
   const sizes = [...edTams].sort((a, b) => a - b);
   const avista = Number($('#edAvista').value);
   if (!(avista > 0)){ $('#edMsg').textContent = 'Informe o preço à vista.'; $('#edAvista').focus(); return; }
@@ -1278,7 +1303,7 @@ $('#formEd').addEventListener('submit', async e => {
   const tabela = num($('#edPreco').value);
   const linha = {
     id: edAtual?.id || edNovoId, marca, modelo,
-    nome: $('#edNome').value.trim(), cor: $('#edCor').value.trim(), genero: $('#edGenero').value,
+    nome: $('#edNome').value.trim(), cor: $('#edCor').value.trim(), genero: generoDoEditor(),
     sizes, preco: tabela, avista,
     parcela: Math.round((tabela || avista) / 6 * 100) / 100,
     descricao: $('#edDesc').value.trim(), fotos: edFotos, ativo: $('#edAtivo').checked,
